@@ -11,7 +11,7 @@ module.exports = function (api) {
           alias: {
             '@components': './src/components',
             '@navigations': './src/navigations',
-            '@sreens': './src/screens',
+            '@screens': './src/screens',
           },
         },
       ],
