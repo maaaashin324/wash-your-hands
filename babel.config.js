@@ -9,9 +9,9 @@ module.exports = function (api) {
           root: ['./src'],
           extensions: ['.ios.ts', '.android.ts', '.js', '.ts', '.tsx', '.json'],
           alias: {
-            '@components': ['components/*'],
-            '@navigations': ['navigations/*'],
-            '@sreens': ['sreens/*'],
+            '@components': './src/components',
+            '@navigations': './src/navigations',
+            '@sreens': './src/screens',
           },
         },
       ],
