@@ -24,3 +24,5 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
 });
+
+export default HomeScreen;
