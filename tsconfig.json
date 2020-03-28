@@ -9,9 +9,8 @@
     "resolveJsonModule": true,
     "baseUrl": "./src",
     "paths": {
-      "@components": ["components/*"],
-      "@navigations": ["navigations/*"],
-      "@sreens": ["sreens/*"]
+      "@navigations/*": ["navigations/*"],
+      "@screens/*": ["screens/*"]
     }
   }
 }
