@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, ViewStyle } from 'react-native';
-import { DataTable, Subheading } from 'react-native-paper';
+import { DataTable, Headline } from 'react-native-paper';
 
 const DataAboutChildren: React.FC<{ style?: ViewStyle }> = ({ style }) => (
   <View style={style}>
-    <Subheading>Data about children</Subheading>
+    <Headline>Data about children</Headline>
     <DataTable>
       <DataTable.Header>
         <DataTable.Title>Label</DataTable.Title>
