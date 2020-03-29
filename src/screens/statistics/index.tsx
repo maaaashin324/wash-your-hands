@@ -10,11 +10,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: Constants.statusBarHeight,
+    marginBottom: 20,
   },
   scrollView: {
     marginHorizontal: 10,
   },
   childrenView: {
+    marginTop: 20,
+  },
+  antibioticsResitanceView: {
+    marginTop: 20,
+  },
+  quotesView: {
     marginTop: 20,
   },
 });
@@ -24,8 +31,8 @@ const StatisticsScreen: React.FC<{}> = () => (
     <ScrollView style={styles.scrollView}>
       <PreventionData />
       <ChildrenData style={styles.childrenView} />
-      <AntibioticResistanceData />
-      <Quotes />
+      <AntibioticResistanceData style={styles.antibioticsResitanceView} />
+      <Quotes style={styles.quotesView} />
     </ScrollView>
   </SafeAreaView>
 );
