@@ -1,16 +1,18 @@
 import { Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 
-const askPermitNotifications = async (
+export const getNotificationPermission = async (): Promise<string> => {
+  const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  return status;
+};
+
+export const askPermitNotifications = async (
   canAsk: boolean,
   status?: string
 ): Promise<void> => {
   let currentStatus = '';
   if (!status) {
-    const { status: statusGot } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
-    currentStatus = statusGot;
+    currentStatus = await getNotificationPermission();
   }
   if (currentStatus !== 'granted' && canAsk) {
     const { status: statusGot } = await Permissions.askAsync(
@@ -35,5 +37,3 @@ const askPermitNotifications = async (
     );
   }
 };
-
-export default askPermitNotifications;
