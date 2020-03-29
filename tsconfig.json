@@ -6,6 +6,11 @@
     "moduleResolution": "node",
     "noEmit": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@navigations/*": ["navigations/*"],
+      "@screens/*": ["screens/*"]
+    }
   }
 }
