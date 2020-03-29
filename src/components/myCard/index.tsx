@@ -8,12 +8,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cover: {
-    height: 150,
-  },
-  content: {
-    paddingTop: 5,
-  },
 });
 
 interface MyCardInterface {
@@ -34,8 +28,8 @@ const MyCard: React.FC<MyCardInterface> = ({
   style,
 }) => (
   <Card style={{ ...styles.container, ...style }}>
-    <Card.Cover source={{ uri: thumbnail }} style={styles.cover} />
-    <Card.Content style={styles.content}>
+    <Card.Cover source={{ uri: thumbnail }} />
+    <Card.Content>
       <Title>{title}</Title>
       <Paragraph>{content}</Paragraph>
       <Divider />

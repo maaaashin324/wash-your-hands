@@ -10,11 +10,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scroll: {
-    marginHorizontal: 5,
-  },
   myCard: {
-    marginTop: 20,
+    marginBottom: 20,
+    marginHorizontal: 0,
   },
 });
 
@@ -46,7 +44,7 @@ const videoListsWithYoutubeURL = videoLists.map((eachVideoItem) => ({
 
 const HowToWashScreen: React.FC<{}> = () => (
   <SafeAreaView style={styles.container}>
-    <ScrollView style={styles.scroll}>
+    <ScrollView>
       {videoListsWithYoutubeURL.map((eachVideo) => (
         <MyCard
           key={eachVideo.title}
