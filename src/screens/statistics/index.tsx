@@ -1,5 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import PreventionData from './prevention';
+import ChildrenData from './children';
+import AntibioticResistanceData from './antibioticResistance';
+import Quotes from './quotes';
 
 const styles = StyleSheet.create({
   container: {
@@ -7,18 +11,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    fontSize: 100,
-  },
-  sentence: {
-    fontSize: 50,
-  },
 });
 
 const StatisticsScreen: React.FC<{}> = () => (
   <View style={styles.container}>
-    <Text style={styles.header}>Statistics</Text>
-    <Text style={styles.sentence}>手を洗うことでこんな効果がある</Text>
+    <PreventionData />
+    <ChildrenData />
+    <AntibioticResistanceData />
+    <Quotes />
   </View>
 );
 
