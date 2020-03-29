@@ -42,7 +42,7 @@ const videoListsWithYoutubeURL = videoLists.map((eachVideoItem) => ({
   thumbnailURL: createThumbnailURL(eachVideoItem.videoID),
 }));
 
-const HowToWashScreen: React.FC<{}> = () => (
+const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
   <SafeAreaView style={styles.container}>
     <ScrollView>
       {videoListsWithYoutubeURL.map((eachVideo) => (
@@ -52,7 +52,11 @@ const HowToWashScreen: React.FC<{}> = () => (
           content={eachVideo.subTitle}
           thumbnail={eachVideo.thumbnailURL}
           buttonTitle="Watch"
-          callback={() => console.log('Hello!')}
+          callback={(): void => {
+            navigation.navigate('YouTube', {
+              uri: eachVideo.youtubeURL,
+            });
+          }}
           style={styles.myCard}
         />
       ))}
