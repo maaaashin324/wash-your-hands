@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
+import { Divider } from 'react-native-paper';
 import PreventionData from './prevention';
 import ChildrenData from './children';
 import AntibioticResistanceData from './antibioticResistance';
@@ -21,6 +22,9 @@ const styles = StyleSheet.create({
   antibioticsResitanceView: {
     marginTop: 20,
   },
+  divider: {
+    marginTop: 20,
+  },
   quotesView: {
     marginTop: 20,
   },
@@ -32,6 +36,7 @@ const StatisticsScreen: React.FC<{}> = () => (
       <PreventionData />
       <ChildrenData style={styles.childrenView} />
       <AntibioticResistanceData style={styles.antibioticsResitanceView} />
+      <Divider style={styles.divider} />
       <Quotes style={styles.quotesView} />
     </ScrollView>
   </SafeAreaView>
