@@ -22,6 +22,7 @@ module.exports = {
           '@components': './src/components',
           '@navigations': './src/navigations',
           '@screens': './src/screens',
+          '@utils': './src/utils',
         },
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
