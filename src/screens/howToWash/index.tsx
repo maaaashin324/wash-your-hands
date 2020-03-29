@@ -1,6 +1,6 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import MyCard from '@components/myCard';
 
 const styles = StyleSheet.create({
@@ -10,9 +10,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  scroll: {
+    marginHorizontal: 5,
+  },
   myCard: {
     marginTop: 20,
-    height: 200,
   },
 });
 
@@ -43,19 +45,21 @@ const videoListsWithYoutubeURL = videoLists.map((eachVideoItem) => ({
 }));
 
 const HowToWashScreen: React.FC<{}> = () => (
-  <View style={styles.container}>
-    {videoListsWithYoutubeURL.map((eachVideo) => (
-      <MyCard
-        key={eachVideo.title}
-        title={eachVideo.title}
-        content={eachVideo.subTitle}
-        thumbnail={eachVideo.thumbnailURL}
-        buttonTitle="Watch"
-        callback={() => console.log('Hello!')}
-        style={styles.myCard}
-      />
-    ))}
-  </View>
+  <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.scroll}>
+      {videoListsWithYoutubeURL.map((eachVideo) => (
+        <MyCard
+          key={eachVideo.title}
+          title={eachVideo.title}
+          content={eachVideo.subTitle}
+          thumbnail={eachVideo.thumbnailURL}
+          buttonTitle="Watch"
+          callback={() => console.log('Hello!')}
+          style={styles.myCard}
+        />
+      ))}
+    </ScrollView>
+  </SafeAreaView>
 );
 
 export default HowToWashScreen;
