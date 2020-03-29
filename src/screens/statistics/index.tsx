@@ -1,25 +1,45 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import Constants from 'expo-constants';
+import { Divider } from 'react-native-paper';
+import PreventionData from './prevention';
+import ChildrenData from './children';
+import AntibioticResistanceData from './antibioticResistance';
+import Quotes from './quotes';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: Constants.statusBarHeight,
+    marginBottom: 20,
   },
-  header: {
-    fontSize: 100,
+  scrollView: {
+    marginHorizontal: 10,
   },
-  sentence: {
-    fontSize: 50,
+  childrenView: {
+    marginTop: 20,
+  },
+  antibioticsResitanceView: {
+    marginTop: 20,
+  },
+  divider: {
+    marginTop: 20,
+  },
+  quotesView: {
+    marginTop: 20,
   },
 });
 
 const StatisticsScreen: React.FC<{}> = () => (
-  <View style={styles.container}>
-    <Text style={styles.header}>Statistics</Text>
-    <Text style={styles.sentence}>手を洗うことでこんな効果がある</Text>
-  </View>
+  <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.scrollView}>
+      <PreventionData />
+      <ChildrenData style={styles.childrenView} />
+      <AntibioticResistanceData style={styles.antibioticsResitanceView} />
+      <Divider style={styles.divider} />
+      <Quotes style={styles.quotesView} />
+    </ScrollView>
+  </SafeAreaView>
 );
 
 export default StatisticsScreen;
