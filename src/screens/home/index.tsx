@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { askPermitLocation } from '@utils/askPermitLocation';
-import askPermitNotifications from '@utils/askPermitNotifications';
+import { askPermitNotifications } from '@utils/askPermitNotifications';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
 const styles = StyleSheet.create({
