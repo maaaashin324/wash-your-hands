@@ -1,14 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-
-const HomeScreen: React.FC<{}> = () => (
-  <View style={styles.container}>
-    <Text style={styles.header}>Wash your hands</Text>
-    <Text style={styles.sentence}>
-      Why not wash your hands to guard you from COVID19?
-    </Text>
-  </View>
-);
+import askPermitNotifications from '@utils/askPermitNotifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,5 +16,20 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
 });
+
+const HomeScreen: React.FC<{}> = () => {
+  useEffect(() => {
+    askPermitNotifications(true);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Wash your hands</Text>
+      <Text style={styles.sentence}>
+        Why not wash your hands to guard you from COVID19?
+      </Text>
+    </View>
+  );
+};
 
 export default HomeScreen;
