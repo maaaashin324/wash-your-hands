@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-const DetailsScreen: React.FC<{}> = () => (
+const HowToWashScreen: React.FC<{}> = () => (
   <View style={styles.container}>
     <Text style={styles.header}>Details Screen</Text>
   </View>
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsScreen;
+export default HowToWashScreen;
