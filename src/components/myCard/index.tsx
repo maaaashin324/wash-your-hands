@@ -1,12 +1,28 @@
 import React from 'react';
-import { Button, Card, Title, Paragraph } from 'react-native-paper';
+import { StyleSheet, ViewStyle } from 'react-native';
+import { Button, Card, Title, Paragraph, Divider } from 'react-native-paper';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cover: {
+    height: 150,
+  },
+  content: {
+    paddingTop: 5,
+  },
+});
 
 interface MyCardInterface {
   title: string;
   content: string;
   thumbnail?: string;
   buttonTitle: string;
-  callback: () => {};
+  callback: () => void;
+  style: ViewStyle;
 }
 
 const MyCard: React.FC<MyCardInterface> = ({
@@ -15,16 +31,18 @@ const MyCard: React.FC<MyCardInterface> = ({
   thumbnail,
   buttonTitle,
   callback,
+  style,
 }) => (
-  <Card>
-    {!thumbnail ? null : <Card.Cover source={{ uri: thumbnail }} />}
-    <Card.Content>
+  <Card style={{ ...styles.container, ...style }}>
+    <Card.Cover source={{ uri: thumbnail }} style={styles.cover} />
+    <Card.Content style={styles.content}>
       <Title>{title}</Title>
       <Paragraph>{content}</Paragraph>
+      <Divider />
+      <Card.Actions>
+        <Button onPress={callback}>{!buttonTitle ? 'OK' : buttonTitle}</Button>
+      </Card.Actions>
     </Card.Content>
-    <Card.Actions>
-      <Button onPress={callback}>{buttonTitle}</Button>
-    </Card.Actions>
   </Card>
 );
 
