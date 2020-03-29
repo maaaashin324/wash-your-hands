@@ -1,16 +1,18 @@
 import { Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 
-const askPermitLocation = async (
+export const getLocationPermission = async (): Promise<string> => {
+  const { status } = await Permissions.getAsync(Permissions.LOCATION);
+  return status;
+};
+
+export const askPermitLocation = async (
   canAsk: boolean,
   status?: string
 ): Promise<void> => {
   let currentStatus = '';
   if (!status) {
-    const { status: statusGot } = await Permissions.getAsync(
-      Permissions.LOCATION
-    );
-    currentStatus = statusGot;
+    currentStatus = await getLocationPermission();
   }
   if (currentStatus !== 'granted' && canAsk) {
     const { status: statusGot } = await Permissions.askAsync(
@@ -35,5 +37,3 @@ const askPermitLocation = async (
     );
   }
 };
-
-export default askPermitLocation;
