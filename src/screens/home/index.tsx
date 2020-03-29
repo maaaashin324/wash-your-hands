@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import askPermitLocation from '@utils/askPermitLocation';
 import askPermitNotifications from '@utils/askPermitNotifications';
 
 const styles = StyleSheet.create({
@@ -19,6 +20,7 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   useEffect(() => {
+    askPermitLocation(true);
     askPermitNotifications(true);
   }, []);
 
