@@ -14,13 +14,16 @@ const styles = StyleSheet.create({
   scrollView: {
     marginHorizontal: 10,
   },
+  childrenView: {
+    marginTop: 20,
+  },
 });
 
 const StatisticsScreen: React.FC<{}> = () => (
   <SafeAreaView style={styles.container}>
     <ScrollView style={styles.scrollView}>
       <PreventionData />
-      <ChildrenData />
+      <ChildrenData style={styles.childrenView} />
       <AntibioticResistanceData />
       <Quotes />
     </ScrollView>
