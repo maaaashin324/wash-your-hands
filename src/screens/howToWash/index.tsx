@@ -1,11 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-
-const HowToWashScreen: React.FC<{}> = () => (
-  <View style={styles.container}>
-    <Text style={styles.header}>Details Screen</Text>
-  </View>
-);
+import { StyleSheet, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,5 +12,15 @@ const styles = StyleSheet.create({
     fontSize: 100,
   },
 });
+
+const HowToWashScreen: React.FC<{}> = () => (
+  <View style={styles.container}>
+    <WebView
+      source={{
+        uri: 'https://www.youtube.com/watch?v=IisgnbMfKvI&autoplay=1',
+      }}
+    />
+  </View>
+);
 
 export default HowToWashScreen;
