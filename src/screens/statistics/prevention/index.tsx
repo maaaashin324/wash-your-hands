@@ -1,8 +1,9 @@
 import React from 'react';
+import { View, ViewStyle } from 'react-native';
 import { DataTable, Subheading } from 'react-native-paper';
 
-const DataAboutPrevention: React.FC<{}> = () => (
-  <>
+const DataAboutPrevention: React.FC<{ style?: ViewStyle }> = ({ style }) => (
+  <View style={style}>
     <Subheading>Data about Prevention</Subheading>
     <DataTable>
       <DataTable.Header>
@@ -30,7 +31,7 @@ const DataAboutPrevention: React.FC<{}> = () => (
         <DataTable.Cell numeric>29-57%</DataTable.Cell>
       </DataTable.Row>
     </DataTable>
-  </>
+  </View>
 );
 
 export default DataAboutPrevention;

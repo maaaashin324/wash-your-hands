@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { DataTable, Subheading } from 'react-native-paper';
 
-const DataAboutChildren: React.FC<{ style: ViewStyle }> = ({ style }) => (
+const DataAboutChildren: React.FC<{ style?: ViewStyle }> = ({ style }) => (
   <View style={style}>
     <Subheading>Data about children</Subheading>
     <DataTable>
