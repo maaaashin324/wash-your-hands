@@ -13,8 +13,12 @@ import {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginHorizontal: 20,
+  },
+  listSection: {
+    alignSelf: 'stretch',
   },
 });
 
@@ -50,8 +54,7 @@ const SettingScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <List.Section>
-        <List.Subheader>Permission</List.Subheader>
+      <List.Section style={styles.listSection} title="Permission">
         <List.Item
           title="Notification"
           right={(): React.ReactNode => (
