@@ -7,9 +7,9 @@ import {
 // eslint-disable-next-line
 import { MaterialIcons } from '@expo/vector-icons';
 import HomeScreen from '@screens/home';
-import SettingScreen from '@screens/setting';
 import HowToWashStackScreen from './howToWash';
 import StatisticsStackScreen from './statistics';
+import SettingsStackScreen from './settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ const Navigator: React.FC<{}> = () => (
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="How To Wash" component={HowToWashStackScreen} />
       <Tab.Screen name="Statistics" component={StatisticsStackScreen} />
-      <Tab.Screen name="Setting" component={SettingScreen} />
+      <Tab.Screen name="Setting" component={SettingsStackScreen} />
     </Tab.Navigator>
   </NavigationContainer>
 );
