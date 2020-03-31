@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
-import { enableLocationPermission } from '@utils/PermissionLocation';
-import { enableNotificationPermission } from '@utils/PermissionNotification';
+import * as Permissions from 'expo-permissions';
+import { enableLocationPermission } from '@utils/permissionLocation';
+import { enableNotificationPermission } from '@utils/permissionNotification';
+import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
 const styles = StyleSheet.create({
@@ -21,6 +23,8 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
+  let locationPermission = '';
+  let notificationPermission = '';
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -28,28 +32,36 @@ const HomeScreen: React.FC<{}> = () => {
   };
 
   const changePermissionFromDialog = async (): Promise<void> => {
-    await enableLocationPermission(true);
+    const isLocationGranted = await enableLocationPermission(
+      true,
+      locationPermission
+    );
+    const isNotificcationGranted = await enableNotificationPermission(
+      true,
+      notificationPermission
+    );
+    if (isLocationGranted) {
+      locationPermission = 'granted';
+    }
+    if (isNotificcationGranted) {
+      notificationPermission = 'granted';
+    }
     setDialogOpen(false);
   };
 
-  const judgeLocationPermissionWhenRendered = async (): Promise<void> => {
-    const result = await enableLocationPermission(true);
-    if (!result) {
-      setDialogOpen(result);
-    }
-  };
-
-  const judgeNotificationPermissionWhenRendered = async (): Promise<void> => {
-    const result = await enableNotificationPermission(true);
-    if (!result) {
-      setDialogOpen(result);
+  const judgePermissionWhenRendered = async (): Promise<void> => {
+    const result = await getNecessaryPermissions();
+    if (!result.isGranted) {
+      locationPermission = result.detail[Permissions.LOCATION];
+      notificationPermission = result.detail[Permissions.NOTIFICATIONS];
+      setDialogOpen(true);
     }
   };
 
   useEffect(() => {
-    judgeNotificationPermissionWhenRendered();
-    judgeLocationPermissionWhenRendered();
+    judgePermissionWhenRendered();
     startLocationUpdates();
+    // eslint-disable-next-line
   }, []);
 
   return (
