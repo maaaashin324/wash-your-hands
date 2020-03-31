@@ -6,10 +6,17 @@ import {
 } from '@react-navigation/bottom-tabs';
 // eslint-disable-next-line
 import { MaterialIcons } from '@expo/vector-icons';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import TRANSLATIONS from '@constants/translations';
 import HomeStackScreen from './home';
 import HowToWashStackScreen from './howToWash';
 import StatisticsStackScreen from './statistics';
 import SettingsStackScreen from './settings';
+
+i18n.translations = TRANSLATIONS;
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const Tab = createBottomTabNavigator();
 
@@ -43,10 +50,19 @@ const Navigator: React.FC<{}> = () => (
         inactiveTintColor: 'grey',
       }}
     >
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="How To Wash" component={HowToWashStackScreen} />
-      <Tab.Screen name="Statistics" component={StatisticsStackScreen} />
-      <Tab.Screen name="Setting" component={SettingsStackScreen} />
+      <Tab.Screen name={i18n.t('tab.home')} component={HomeStackScreen} />
+      <Tab.Screen
+        name={i18n.t('tab.howToWash')}
+        component={HowToWashStackScreen}
+      />
+      <Tab.Screen
+        name={i18n.t('tab.statistics')}
+        component={StatisticsStackScreen}
+      />
+      <Tab.Screen
+        name={i18n.t('tab.settings')}
+        component={SettingsStackScreen}
+      />
     </Tab.Navigator>
   </NavigationContainer>
 );

@@ -1,5 +1,11 @@
 export default {
   en: {
+    tab: {
+      home: 'Home',
+      howToWash: 'How To Wash',
+      statistics: 'Statistics',
+      settings: 'Settings',
+    },
     home: {
       title: "Today's wash hands Times",
       dialogTitle: 'Permission not granted',
