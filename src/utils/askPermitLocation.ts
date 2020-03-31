@@ -6,7 +6,12 @@ export const getLocationPermission = async (): Promise<string> => {
   return status;
 };
 
-export const askPermitLocation = async (
+export const askLocationPermission = async (): Promise<string> => {
+  const { status } = await Permissions.askAsync(Permissions.LOCATION);
+  return status;
+};
+
+export const enableLocationPermission = async (
   canAsk: boolean,
   status?: string
 ): Promise<void> => {
@@ -15,10 +20,8 @@ export const askPermitLocation = async (
     currentStatus = await getLocationPermission();
   }
   if (currentStatus !== 'granted' && canAsk) {
-    const { status: statusGot } = await Permissions.askAsync(
-      Permissions.LOCATION
-    );
-    await askPermitLocation(false, statusGot);
+    const result = await askLocationPermission();
+    await enableLocationPermission(false, result);
   }
   if (currentStatus !== 'granted' && !canAsk) {
     Alert.alert(
@@ -31,7 +34,7 @@ export const askPermitLocation = async (
         },
         {
           text: 'OK',
-          onPress: (): Promise<void> => askPermitLocation(true),
+          onPress: (): Promise<void> => enableLocationPermission(true),
         },
       ]
     );
