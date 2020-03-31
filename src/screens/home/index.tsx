@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
-import { enableLocationPermission } from '@utils/askPermitLocation';
-import { askPermitNotifications } from '@utils/askPermitNotifications';
+import { enableLocationPermission } from '@utils/PermissionLocation';
+import { askPermitNotifications } from '@utils/PermissionNotification';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
 const styles = StyleSheet.create({

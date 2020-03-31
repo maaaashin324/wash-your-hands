@@ -4,11 +4,11 @@ import { List, Switch } from 'react-native-paper';
 import {
   getLocationPermission,
   askPermitLocation,
-} from '@utils/askPermitLocation';
+} from '@utils/PermissionLocation';
 import {
   getNotificationPermission,
   askPermitNotifications,
-} from '@utils/askPermitNotifications';
+} from '@utils/PermissionNotification';
 
 const styles = StyleSheet.create({
   container: {
