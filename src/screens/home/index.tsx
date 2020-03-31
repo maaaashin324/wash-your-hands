@@ -80,7 +80,7 @@ const HomeScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <Title>Today`&apos;`s wash hands Times</Title>
+      <Title>Today&apos;s wash hands Times</Title>
       <Text>{calculateWashHandsTime()}</Text>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
@@ -99,7 +99,5 @@ const HomeScreen: React.FC<{}> = () => {
     </View>
   );
 };
-
-TaskManager.defineTask(GET_LOCATION_TASK, makeNotifications);
 
 export default HomeScreen;
