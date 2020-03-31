@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
+import {
+  Button,
+  Paragraph,
+  Dialog,
+  Portal,
+  Title,
+  Subheading,
+  Divider,
+  List,
+} from 'react-native-paper';
 import * as TaskManager from 'expo-task-manager';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
@@ -10,20 +19,14 @@ import { GET_LOCATION_TASK } from '@constants/task';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
-  header: {
-    fontSize: 100,
-  },
-  sentence: {
-    fontSize: 50,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
 });
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [washHandsTimeSet, setWashHandsTimeSet] = useState<number[]>([]);
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -36,18 +39,31 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
+  const getWashYourHandsTime = async (): Promise<void> => {
+    const result = await AsyncStorage.getItem('washTimes');
+    setWashHandsTimeSet(JSON.parse(result));
+  };
+
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
+    getWashYourHandsTime();
     // eslint-disable-next-line
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Wash your hands</Text>
-      <Text style={styles.sentence}>
+      <Title>Wash your hands</Title>
+      <Subheading>
         Why not wash your hands to guard you from COVID19?
-      </Text>
+      </Subheading>
+      <Divider />
+      <List.Section>
+        <List.Subheader>When to wash</List.Subheader>
+        {washHandsTimeSet.map((eachTime) => (
+          <List.Item title={eachTime} />
+        ))}
+      </List.Section>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>Permission not granted</Dialog.Title>

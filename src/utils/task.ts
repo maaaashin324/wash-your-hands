@@ -15,11 +15,11 @@ export const makeNotifications = async ({
     await makeNotificationForWash();
 
     const dataSet = await AsyncStorage.getItem('washTimes');
-    let locationsSet = [];
+    let washHandsTimeSet = [];
     if (dataSet) {
-      locationsSet = JSON.parse(dataSet);
+      washHandsTimeSet = JSON.parse(dataSet);
     }
-    locationsSet.push(Date.now());
-    await AsyncStorage.setItem('washTimes', JSON.stringify(locationsSet));
+    washHandsTimeSet.push(Date.now());
+    await AsyncStorage.setItem('washTimes', JSON.stringify(washHandsTimeSet));
   }
 };
