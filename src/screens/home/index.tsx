@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, AsyncStorage } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import { Notifications } from 'expo';
 import * as TaskManager from 'expo-task-manager';
-import { shouldMakeNotification } from '@utils/measureMeters';
+import { findMovement } from '@utils/measureMeters';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 import { GET_LOCATION_TASK } from '@constants/task';
@@ -70,17 +70,24 @@ const HomeScreen: React.FC<{}> = () => {
 TaskManager.defineTask(
   GET_LOCATION_TASK,
   // eslint-disable-next-line
-  // @ts-ignore
-  ({ data: { locations }, error }) => {
+  async ({ data: { locations }, error }): Promise<void> => {
     if (error) {
       return;
     }
-    const result = shouldMakeNotification(locations);
+    const result = findMovement(locations);
     if (result) {
       Notifications.presentLocalNotificationAsync({
         title: 'Wash your hands!',
         body: 'You started to stay somewhere? Wash your hands!',
       });
+
+      const dataSet = await AsyncStorage.getItem('washTimes');
+      let locationsSet = [];
+      if (dataSet) {
+        locationsSet = JSON.parse(dataSet);
+      }
+      locationsSet.push(Date.now());
+      await AsyncStorage.setItem('washTimes', JSON.stringify(locationsSet));
     }
   }
 );
