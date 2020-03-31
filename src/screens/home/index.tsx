@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
+  timesText: {
+    alignSelf: 'center',
+    fontSize: 500,
+  },
 });
 
 const HomeScreen: React.FC<{}> = () => {
@@ -78,7 +82,7 @@ const HomeScreen: React.FC<{}> = () => {
   return (
     <View style={styles.container}>
       <Title>Today&apos;s wash hands Times</Title>
-      <Text>{calculateWashHandsTime()}</Text>
+      <Text style={styles.timesText}>{calculateWashHandsTime()}</Text>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>Permission not granted</Dialog.Title>
