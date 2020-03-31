@@ -19,6 +19,7 @@ module.exports = {
     'import/resolver': {
       'eslint-import-resolver-custom-alias': {
         alias: {
+          '@constants': './src/constants',
           '@components': './src/components',
           '@navigations': './src/navigations',
           '@screens': './src/screens',
