@@ -14,3 +14,21 @@ export const measureMeters = (lat1, lon1, lat2, lon2): number => {
   const d = R * c;
   return d * 1000; // meters
 };
+
+export const shouldMakeNotification = (locations): boolean => {
+  const [firstLocation] = locations;
+  const lastLocation = locations[locations.index - 1];
+  if (lastLocation.speed > 50) {
+    return false;
+  }
+  const meters = measureMeters(
+    firstLocation.latitude,
+    firstLocation.longitude,
+    lastLocation.latitude,
+    lastLocation.longitude
+  );
+  if (meters < 500) {
+    return false;
+  }
+  return true;
+};
