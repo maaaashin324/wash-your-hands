@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import {
-  Button,
-  Paragraph,
-  Dialog,
-  Portal,
-  Title,
-  Subheading,
-  Divider,
-  List,
-} from 'react-native-paper';
+import { Button, Paragraph, Dialog, Portal, List } from 'react-native-paper';
 import * as TaskManager from 'expo-task-manager';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
@@ -21,6 +12,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    marginHorizontal: 20,
+    marginTop: 10,
   },
 });
 
@@ -56,15 +49,13 @@ const HomeScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <Title>Wash your hands</Title>
-      <Subheading>
-        Why not wash your hands to guard you from COVID19?
-      </Subheading>
-      <Divider />
       <List.Section>
         <List.Subheader>When to wash</List.Subheader>
+        {!washHandsTimeSet.length ? (
+          <Paragraph>You don&apos;t need to wash your hands now!</Paragraph>
+        ) : null}
         {washHandsTimeSet.map((eachTime) => (
-          <List.Item title={eachTime} />
+          <List.Item key={eachTime} title={eachTime} />
         ))}
       </List.Section>
       <Portal>
