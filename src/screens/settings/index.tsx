@@ -67,9 +67,9 @@ const SettingScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <List.Section style={styles.listSection} title="Permission">
+      <List.Section style={styles.listSection} title={i18n.t('settings.title')}>
         <List.Item
-          title="Location"
+          title={i18n.t('settings.listItem1')}
           right={(): React.ReactNode => (
             <Switch
               value={isLocationPermitted}
@@ -80,7 +80,7 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <List.Item
-          title="Notification"
+          title={i18n.t('settings.listItem2')}
           right={(): React.ReactNode => (
             <Switch
               value={isNotificationPermitted}
