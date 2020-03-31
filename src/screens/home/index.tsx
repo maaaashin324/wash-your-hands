@@ -4,8 +4,6 @@ import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import { Notifications } from 'expo';
 import * as TaskManager from 'expo-task-manager';
 import { shouldMakeNotification } from '@utils/measureMeters';
-import { askLocationPermission } from '@utils/permissionLocation';
-import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 import { GET_LOCATION_TASK } from '@constants/task';
@@ -27,22 +25,8 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [isAlertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
-    setDialogOpen(false);
-  };
-
-  const hideAlertDialog = (): void => {
-    setAlertDialogOpen(false);
-  };
-
-  const changePermissionFromDialog = async (): Promise<void> => {
-    const isLocationPermitted = await askLocationPermission();
-    const isNotificationPermitted = await askNotificationPermission();
-    if (!isLocationPermitted || !isNotificationPermitted) {
-      setAlertDialogOpen(true);
-    }
     setDialogOpen(false);
   };
 
@@ -75,20 +59,7 @@ const HomeScreen: React.FC<{}> = () => {
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={hideDialog}>Cancel</Button>
-            <Button onPress={changePermissionFromDialog}>Ok</Button>
-          </Dialog.Actions>
-        </Dialog>
-        <Dialog visible={isAlertDialogOpen} onDismiss={hideDialog}>
-          <Dialog.Title>Permission not granted</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>
-              Permission is not enough. Go to settings and change the
-              permissions.
-            </Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideAlertDialog}>Ok</Button>
+            <Button onPress={hideDialog}>Ok</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
