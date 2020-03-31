@@ -8,16 +8,10 @@ import {
   Title,
   Text,
 } from 'react-native-paper';
-import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import TRANSLATIONS from '@constants/translations';
 import { WashHandsTimeType } from 'types/washHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
-
-i18n.translations = TRANSLATIONS;
-i18n.locale = Localization.locale;
-i18n.fallbacks = true;
 
 const styles = StyleSheet.create({
   container: {

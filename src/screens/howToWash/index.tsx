@@ -1,15 +1,9 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import TRANSLATIONS from '@constants/translations';
 import MyCard from '@components/myCard';
 import { videoListsWithYoutubeURL } from './utils';
-
-i18n.translations = TRANSLATIONS;
-i18n.locale = Localization.locale;
-i18n.fallbacks = true;
 
 const styles = StyleSheet.create({
   container: {
