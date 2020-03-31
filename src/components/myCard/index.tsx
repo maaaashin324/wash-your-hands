@@ -5,8 +5,8 @@ import { Button, Card, Title, Paragraph, Divider } from 'react-native-paper';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
 });
 
@@ -28,7 +28,7 @@ const MyCard: React.FC<MyCardInterface> = ({
   style,
 }) => (
   <Card style={{ ...styles.container, ...style }}>
-    <Card.Cover source={{ uri: thumbnail }} />
+    <Card.Cover source={{ uri: thumbnail }} style={{ width: 350 }} />
     <Card.Content>
       <Title>{title}</Title>
       <Paragraph>{content}</Paragraph>

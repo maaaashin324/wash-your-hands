@@ -9,6 +9,7 @@ import {
   List,
   Switch,
 } from 'react-native-paper';
+import i18n from 'i18n-js';
 import { askLocationPermission } from '@utils/permissionLocation';
 import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
@@ -66,9 +67,9 @@ const SettingScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <List.Section style={styles.listSection} title="Permission">
+      <List.Section style={styles.listSection} title={i18n.t('settings.title')}>
         <List.Item
-          title="Location"
+          title={i18n.t('settings.listItem1')}
           right={(): React.ReactNode => (
             <Switch
               value={isLocationPermitted}
@@ -79,7 +80,7 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <List.Item
-          title="Notification"
+          title={i18n.t('settings.listItem2')}
           right={(): React.ReactNode => (
             <Switch
               value={isNotificationPermitted}
@@ -92,12 +93,9 @@ const SettingScreen: React.FC<{}> = () => {
       </List.Section>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
-          <Dialog.Title>Permission not granted</Dialog.Title>
+          <Dialog.Title>{i18n.t('settings.dialogTitle')}</Dialog.Title>
           <Dialog.Content>
-            <Paragraph>
-              Please let this app use notification and location to have you wash
-              your hands
-            </Paragraph>
+            <Paragraph>{i18n.t('settings.dialogContent')}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Ok</Button>

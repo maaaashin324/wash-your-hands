@@ -1,7 +1,9 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import i18n from 'i18n-js';
 import MyCard from '@components/myCard';
+import { videoListsWithYoutubeURL } from './utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,32 +18,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const createYoutubeURL = (youtubeVideoID: string): string =>
-  `https://www.youtube.com/watch?v=${youtubeVideoID}`;
-
-const createThumbnailURL = (youtubeVideoID: string): string =>
-  `https://img.youtube.com/vi/${youtubeVideoID}/default.jpg`;
-
-const videoLists = [
-  {
-    title: 'Coronavirus | How to wash your hands',
-    subTitle: 'Babylon Health',
-    videoID: 'seA1wbXUQTs',
-  },
-  {
-    title: 'Hand-washing Steps Using the WHO Technique',
-    subTitle: 'Johns Hopkins Medicine',
-    videoID: 'IisgnbMfKvI',
-  },
-];
-
-const videoListsWithYoutubeURL = videoLists.map((eachVideoItem) => ({
-  title: eachVideoItem.title,
-  subTitle: eachVideoItem.subTitle,
-  youtubeURL: createYoutubeURL(eachVideoItem.videoID),
-  thumbnailURL: createThumbnailURL(eachVideoItem.videoID),
-}));
-
 const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
   <SafeAreaView style={styles.container}>
     <ScrollView>
@@ -51,7 +27,7 @@ const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
           title={eachVideo.title}
           content={eachVideo.subTitle}
           thumbnail={eachVideo.thumbnailURL}
-          buttonTitle="Watch"
+          buttonTitle={i18n.t('howToWash.watchButton')}
           callback={(): void => {
             navigation.navigate('YouTube', {
               uri: eachVideo.youtubeURL,
