@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import { enableLocationPermission } from '@utils/PermissionLocation';
-import { askPermitNotifications } from '@utils/PermissionNotification';
+import { enableNotificationPermission } from '@utils/PermissionNotification';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
 const styles = StyleSheet.create({
@@ -39,8 +39,15 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
+  const judgeNotificationPermissionWhenRendered = async (): Promise<void> => {
+    const result = await enableNotificationPermission(true);
+    if (!result) {
+      setDialogOpen(result);
+    }
+  };
+
   useEffect(() => {
-    askPermitNotifications(true);
+    judgeNotificationPermissionWhenRendered();
     judgeLocationPermissionWhenRendered();
     startLocationUpdates();
   }, []);
