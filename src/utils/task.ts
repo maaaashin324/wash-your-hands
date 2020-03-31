@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { WashHandsTimeSet } from '@types/WashHandsTime';
+import { WashHandsTimeSet } from '@types/washHandsTime';
 import { makeNotificationForWash } from './notifications';
 import { findMovement } from './measureMeters';
 

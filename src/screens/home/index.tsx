@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import * as TaskManager from 'expo-task-manager';
 import { GET_LOCATION_TASK } from '@constants/task';
-import { WashHandsTime } from '@types/WashHandsTime';
+import { WashHandsTime } from '@types/washHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 import { makeNotifications } from '@utils/task';

@@ -1,1 +1,1 @@
-export * from './WashHandsTime';
+export * from './washHandsTime';
