@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
+import { Notifications } from 'expo';
+import * as TaskManager from 'expo-task-manager';
 import { askLocationPermission } from '@utils/permissionLocation';
 import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
+import { GET_LOCATION_TASK } from '@constants/task';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,6 +55,21 @@ const HomeScreen: React.FC<{}> = () => {
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
+
+    TaskManager.defineTask(
+      GET_LOCATION_TASK,
+      // eslint-disable-next-line
+      // @ts-ignore
+      ({ data: { locations }, error }) => {
+        if (error) {
+          return;
+        }
+        Notifications.presentLocalNotificationAsync({
+          title: 'Wash your hands!',
+          body: 'You started to stay somewhere? Wash your hands!',
+        });
+      }
+    );
     // eslint-disable-next-line
   }, []);
 
