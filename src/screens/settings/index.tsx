@@ -44,21 +44,19 @@ const SettingScreen: React.FC<{}> = () => {
     if (result.detail[Permissions.NOTIFICATIONS]) {
       setNotificationPermitted(true);
     }
-    if (
-      !result.detail[Permissions.LOCATION] ||
-      !result.detail[Permissions.NOTIFICATIONS]
-    ) {
-      setDialogOpen(true);
-    }
   };
 
   const setPermissions = async (whichPermission: string): Promise<void> => {
+    let result = false;
     if (whichPermission === 'location') {
-      const result = await askLocationPermission();
+      result = await askLocationPermission();
       setLocationPermitted(result);
     } else {
-      const result = await askNotificationPermission();
+      result = await askNotificationPermission();
       setNotificationPermitted(result);
+    }
+    if (!result) {
+      setDialogOpen(true);
     }
   };
 
