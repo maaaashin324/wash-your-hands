@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import * as TaskManager from 'expo-task-manager';
 import { GET_LOCATION_TASK } from '@constants/task';
-import { WashHandsTime } from '@types/washHandsTime';
+import { WashHandsTimeType } from 'types/washHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 import { makeNotifications } from '@utils/task';
@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTime>(null);
+  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTimeType>(
+    null
+  );
 
   const hideDialog = (): void => {
     setDialogOpen(false);

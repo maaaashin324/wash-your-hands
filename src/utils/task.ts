@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { WashHandsTimeSet } from '@types/washHandsTime';
+import { WashHandsTimeSetType } from 'types/washHandsTime';
 import { makeNotificationForWash } from './notifications';
 import { findMovement } from './measureMeters';
 
@@ -16,7 +16,7 @@ export const makeNotifications = async ({
     await makeNotificationForWash();
 
     const dataSet = await AsyncStorage.getItem('washTimes');
-    let washHandsTimeSet: WashHandsTimeSet = {};
+    let washHandsTimeSet: WashHandsTimeSetType = {};
     if (dataSet) {
       washHandsTimeSet = JSON.parse(dataSet);
     }

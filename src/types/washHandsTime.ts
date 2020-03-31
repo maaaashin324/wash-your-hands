@@ -1,14 +1,14 @@
-export type WashHandsTime = {
+export type WashHandsTimeType = {
   timestamp: number;
 };
 
-export type WashHandsTimeSet = {
+export type WashHandsTimeSetType = {
   // year
   [key: number]: {
     // month
     [key: number]: {
       // day
-      [key: number]: WashHandsTime[];
+      [key: number]: WashHandsTimeType[];
     };
   };
 };
