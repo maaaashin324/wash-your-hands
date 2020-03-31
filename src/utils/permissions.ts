@@ -1,9 +1,9 @@
 import * as Permissions from 'expo-permissions';
 
 export interface GetNecessaryPermission {
-  isGranted: boolean;
+  granted: boolean;
   detail: {
-    [key: string]: string;
+    [key: string]: boolean;
   };
 }
 
@@ -11,17 +11,16 @@ export interface GetNecessaryPermission {
 export const getNecessaryPermissions = async (): Promise<
   GetNecessaryPermission
 > => {
-  const { status, permissions } = await Permissions.getAsync(
+  const { granted, permissions } = await Permissions.getAsync(
     Permissions.LOCATION,
     Permissions.NOTIFICATIONS
   );
-  const isGranted = status === 'granted';
   return {
-    isGranted,
+    granted,
     detail: {
-      [Permissions.LOCATION]: permissions[Permissions.LOCATION].status,
+      [Permissions.LOCATION]: permissions[Permissions.LOCATION].granted,
       [Permissions.NOTIFICATIONS]:
-        permissions[Permissions.NOTIFICATIONS].status,
+        permissions[Permissions.NOTIFICATIONS].granted,
     },
   };
 };

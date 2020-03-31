@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
-import * as Permissions from 'expo-permissions';
-import { enableLocationPermission } from '@utils/permissionLocation';
-import { enableNotificationPermission } from '@utils/permissionNotification';
+import { askLocationPermission } from '@utils/permissionLocation';
+import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
@@ -23,37 +22,29 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
-  let locationPermission = '';
-  let notificationPermission = '';
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [isAlertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
     setDialogOpen(false);
   };
 
+  const hideAlertDialog = (): void => {
+    setAlertDialogOpen(false);
+  };
+
   const changePermissionFromDialog = async (): Promise<void> => {
-    const isLocationGranted = await enableLocationPermission(
-      true,
-      locationPermission
-    );
-    const isNotificcationGranted = await enableNotificationPermission(
-      true,
-      notificationPermission
-    );
-    if (isLocationGranted) {
-      locationPermission = 'granted';
-    }
-    if (isNotificcationGranted) {
-      notificationPermission = 'granted';
+    const isLocationPermitted = await askLocationPermission();
+    const isNotificationPermitted = await askNotificationPermission();
+    if (!isLocationPermitted || !isNotificationPermitted) {
+      setAlertDialogOpen(true);
     }
     setDialogOpen(false);
   };
 
   const judgePermissionWhenRendered = async (): Promise<void> => {
     const result = await getNecessaryPermissions();
-    if (!result.isGranted) {
-      locationPermission = result.detail[Permissions.LOCATION];
-      notificationPermission = result.detail[Permissions.NOTIFICATIONS];
+    if (!result.granted) {
       setDialogOpen(true);
     }
   };
@@ -82,6 +73,18 @@ const HomeScreen: React.FC<{}> = () => {
           <Dialog.Actions>
             <Button onPress={hideDialog}>Cancel</Button>
             <Button onPress={changePermissionFromDialog}>Ok</Button>
+          </Dialog.Actions>
+        </Dialog>
+        <Dialog visible={isAlertDialogOpen} onDismiss={hideDialog}>
+          <Dialog.Title>Permission not granted</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>
+              Permission is not enough. Go to settings and change the
+              permissions.
+            </Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideAlertDialog}>Ok</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
