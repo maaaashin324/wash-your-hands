@@ -56,24 +56,6 @@ const HomeScreen: React.FC<{}> = () => {
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
-
-    TaskManager.defineTask(
-      GET_LOCATION_TASK,
-      // eslint-disable-next-line
-      // @ts-ignore
-      ({ data: { locations }, error }) => {
-        if (error) {
-          return;
-        }
-        const result = shouldMakeNotification(locations);
-        if (result) {
-          Notifications.presentLocalNotificationAsync({
-            title: 'Wash your hands!',
-            body: 'You started to stay somewhere? Wash your hands!',
-          });
-        }
-      }
-    );
     // eslint-disable-next-line
   }, []);
 
@@ -113,5 +95,23 @@ const HomeScreen: React.FC<{}> = () => {
     </View>
   );
 };
+
+TaskManager.defineTask(
+  GET_LOCATION_TASK,
+  // eslint-disable-next-line
+  // @ts-ignore
+  ({ data: { locations }, error }) => {
+    if (error) {
+      return;
+    }
+    const result = shouldMakeNotification(locations);
+    if (result) {
+      Notifications.presentLocalNotificationAsync({
+        title: 'Wash your hands!',
+        body: 'You started to stay somewhere? Wash your hands!',
+      });
+    }
+  }
+);
 
 export default HomeScreen;
