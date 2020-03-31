@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Button, Paragraph, Dialog, Portal, List } from 'react-native-paper';
+import {
+  Button,
+  Paragraph,
+  Dialog,
+  Portal,
+  Title,
+  Text,
+} from 'react-native-paper';
 import * as TaskManager from 'expo-task-manager';
+import { GET_LOCATION_TASK } from '@constants/task';
+import { WashHandsTime } from '@types/WashHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 import { makeNotifications } from '@utils/task';
-import { GET_LOCATION_TASK } from '@constants/task';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,7 +27,7 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [washHandsTimeSet, setWashHandsTimeSet] = useState<number[]>([]);
+  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTime>(null);
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -32,7 +40,7 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getWashYourHandsTime = async (): Promise<void> => {
+  const getWashHandsTime = async (): Promise<void> => {
     const result = await AsyncStorage.getItem('washTimes');
     if (!result) {
       return;
@@ -40,24 +48,38 @@ const HomeScreen: React.FC<{}> = () => {
     setWashHandsTimeSet(JSON.parse(result));
   };
 
+  const calculateWashHandsTime = (): number => {
+    const now = new Date();
+    if (!washHandsTimeSet) {
+      return 0;
+    }
+    const currentYearSet = washHandsTimeSet[now.getFullYear()];
+    if (!currentYearSet) {
+      return 0;
+    }
+    const currentMonthSet = washHandsTimeSet[now.getFullYear()][now.getMonth()];
+    if (!currentMonthSet) {
+      return 0;
+    }
+    const currentDateSet =
+      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()];
+    if (!currentDateSet) {
+      return 0;
+    }
+    return currentDateSet.length;
+  };
+
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
-    getWashYourHandsTime();
+    getWashHandsTime();
     // eslint-disable-next-line
   }, []);
 
   return (
     <View style={styles.container}>
-      <List.Section>
-        <List.Subheader>When to wash</List.Subheader>
-        {!washHandsTimeSet.length ? (
-          <Paragraph>You don&apos;t need to wash your hands now!</Paragraph>
-        ) : null}
-        {washHandsTimeSet.map((eachTime) => (
-          <List.Item key={eachTime} title={eachTime} />
-        ))}
-      </List.Section>
+      <Title>Today`&apos;`s wash hands Times</Title>
+      <Text>{calculateWashHandsTime()}</Text>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>Permission not granted</Dialog.Title>

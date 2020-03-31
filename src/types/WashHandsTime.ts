@@ -4,11 +4,11 @@ export type WashHandsTime = {
 
 export type WashHandsTimeSet = {
   // year
-  [key: string]: {
+  [key: number]: {
     // month
-    [key: string]: {
+    [key: number]: {
       // day
-      [key: string]: WashHandsTime[];
+      [key: number]: WashHandsTime[];
     };
   };
 };
