@@ -54,11 +54,12 @@ const SettingScreen: React.FC<{}> = () => {
 
   const setPermissions = async (whichPermission: string): Promise<void> => {
     if (whichPermission === 'location') {
-      await askLocationPermission();
+      const result = await askLocationPermission();
+      setLocationPermitted(result);
     } else {
-      await askNotificationPermission();
+      const result = await askNotificationPermission();
+      setNotificationPermitted(result);
     }
-    await getPermissionStatus();
   };
 
   useEffect(() => {
