@@ -1,30 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
-import { Notifications } from 'expo';
-import * as TaskManager from 'expo-task-manager';
-import { shouldMakeNotification } from '@utils/measureMeters';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
+import {
+  Button,
+  Paragraph,
+  Dialog,
+  Portal,
+  Title,
+  Text,
+} from 'react-native-paper';
+import { WashHandsTimeType } from 'types/washHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
-import { GET_LOCATION_TASK } from '@constants/task';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginHorizontal: 20,
+    marginTop: 10,
   },
-  header: {
-    fontSize: 100,
-  },
-  sentence: {
-    fontSize: 50,
+  timesText: {
+    alignSelf: 'center',
+    fontSize: 500,
   },
 });
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTimeType>(
+    null
+  );
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -37,18 +43,46 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
+  const getWashHandsTime = async (): Promise<void> => {
+    const result = await AsyncStorage.getItem('washTimes');
+    if (!result) {
+      return;
+    }
+    setWashHandsTimeSet(JSON.parse(result));
+  };
+
+  const calculateWashHandsTime = (): number => {
+    const now = new Date();
+    if (!washHandsTimeSet) {
+      return 0;
+    }
+    const currentYearSet = washHandsTimeSet[now.getFullYear()];
+    if (!currentYearSet) {
+      return 0;
+    }
+    const currentMonthSet = washHandsTimeSet[now.getFullYear()][now.getMonth()];
+    if (!currentMonthSet) {
+      return 0;
+    }
+    const currentDateSet =
+      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()];
+    if (!currentDateSet) {
+      return 0;
+    }
+    return currentDateSet.length;
+  };
+
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
+    getWashHandsTime();
     // eslint-disable-next-line
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Wash your hands</Text>
-      <Text style={styles.sentence}>
-        Why not wash your hands to guard you from COVID19?
-      </Text>
+      <Title>Today&apos;s wash hands Times</Title>
+      <Text style={styles.timesText}>{calculateWashHandsTime()}</Text>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>Permission not granted</Dialog.Title>
@@ -66,23 +100,5 @@ const HomeScreen: React.FC<{}> = () => {
     </View>
   );
 };
-
-TaskManager.defineTask(
-  GET_LOCATION_TASK,
-  // eslint-disable-next-line
-  // @ts-ignore
-  ({ data: { locations }, error }) => {
-    if (error) {
-      return;
-    }
-    const result = shouldMakeNotification(locations);
-    if (result) {
-      Notifications.presentLocalNotificationAsync({
-        title: 'Wash your hands!',
-        body: 'You started to stay somewhere? Wash your hands!',
-      });
-    }
-  }
-);
 
 export default HomeScreen;

@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 // eslint-disable-next-line
 import { MaterialIcons } from '@expo/vector-icons';
-import HomeScreen from '@screens/home';
+import HomeStackScreen from './home';
 import HowToWashStackScreen from './howToWash';
 import StatisticsStackScreen from './statistics';
 import SettingsStackScreen from './settings';
@@ -43,7 +43,7 @@ const Navigator: React.FC<{}> = () => (
         inactiveTintColor: 'grey',
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeStackScreen} />
       <Tab.Screen name="How To Wash" component={HowToWashStackScreen} />
       <Tab.Screen name="Statistics" component={StatisticsStackScreen} />
       <Tab.Screen name="Setting" component={SettingsStackScreen} />
