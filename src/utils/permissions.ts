@@ -1,6 +1,6 @@
 import * as Permissions from 'expo-permissions';
 
-export interface GetNecessaryPermission {
+export interface GetNecessaryPermissions {
   granted: boolean;
   detail: {
     [key: string]: boolean;
@@ -9,7 +9,7 @@ export interface GetNecessaryPermission {
 
 // eslint-disable-next-line
 export const getNecessaryPermissions = async (): Promise<
-  GetNecessaryPermission
+  GetNecessaryPermissions
 > => {
   const { granted, permissions } = await Permissions.getAsync(
     Permissions.LOCATION,
