@@ -41,6 +41,9 @@ const HomeScreen: React.FC<{}> = () => {
 
   const getWashYourHandsTime = async (): Promise<void> => {
     const result = await AsyncStorage.getItem('washTimes');
+    if (!result) {
+      return;
+    }
     setWashHandsTimeSet(JSON.parse(result));
   };
 
