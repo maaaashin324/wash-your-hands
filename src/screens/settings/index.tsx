@@ -9,9 +9,16 @@ import {
   List,
   Switch,
 } from 'react-native-paper';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import TRANSLATIONS from '@constants/translations';
 import { askLocationPermission } from '@utils/permissionLocation';
 import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
+
+i18n.translations = TRANSLATIONS;
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const styles = StyleSheet.create({
   container: {
@@ -92,12 +99,9 @@ const SettingScreen: React.FC<{}> = () => {
       </List.Section>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
-          <Dialog.Title>Permission not granted</Dialog.Title>
+          <Dialog.Title>{i18n.t('settings.dialogTitle')}</Dialog.Title>
           <Dialog.Content>
-            <Paragraph>
-              Please let this app use notification and location to have you wash
-              your hands
-            </Paragraph>
+            <Paragraph>{i18n.t('settings.dialogContent')}</Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={hideDialog}>Ok</Button>

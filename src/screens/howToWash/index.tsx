@@ -1,7 +1,14 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import TRANSLATIONS from '@constants/translations';
 import MyCard from '@components/myCard';
+
+i18n.translations = TRANSLATIONS;
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const styles = StyleSheet.create({
   container: {
@@ -51,7 +58,7 @@ const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
           title={eachVideo.title}
           content={eachVideo.subTitle}
           thumbnail={eachVideo.thumbnailURL}
-          buttonTitle="Watch"
+          buttonTitle={i18n.t('howToWash.watchButton')}
           callback={(): void => {
             navigation.navigate('YouTube', {
               uri: eachVideo.youtubeURL,
