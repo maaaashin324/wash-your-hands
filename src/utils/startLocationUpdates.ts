@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import hasStartedLocationUpdates from './hasStartedLocationUpdates';
-import { getLocationPermission } from './PermissionLocation';
+import { getLocationPermission } from './permissionLocation';
 
 const startLocationUpdates = async (): Promise<void> => {
   const result = await hasStartedLocationUpdates();
@@ -8,7 +8,7 @@ const startLocationUpdates = async (): Promise<void> => {
     return;
   }
   const status = await getLocationPermission();
-  if (status !== 'granted') {
+  if (!status) {
     return;
   }
   await Location.startLocationUpdatesAsync('recordLocation', {
