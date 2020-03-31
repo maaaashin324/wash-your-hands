@@ -15,7 +15,7 @@ export const measureMeters = (lat1, lon1, lat2, lon2): number => {
   return d * 1000; // meters
 };
 
-export const shouldMakeNotification = (locations): boolean => {
+export const findMovement = (locations): boolean => {
   const [firstLocation] = locations;
   const lastLocation = locations[locations.index - 1];
   if (lastLocation.speed > 50) {
