@@ -8,12 +8,9 @@ import {
   Title,
   Text,
 } from 'react-native-paper';
-import * as TaskManager from 'expo-task-manager';
-import { GET_LOCATION_TASK } from '@constants/task';
 import { WashHandsTimeType } from 'types/washHandsTime';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
-import { makeNotifications } from '@utils/task';
 
 const styles = StyleSheet.create({
   container: {
