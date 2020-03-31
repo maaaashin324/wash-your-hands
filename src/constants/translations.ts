@@ -60,7 +60,7 @@ export default {
       },
     },
   },
-  'en-JP': {
+  ja: {
     tab: {
       home: 'ホーム',
       howToWash: '手の洗い方',
