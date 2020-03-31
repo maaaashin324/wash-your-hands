@@ -3,6 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import { Notifications } from 'expo';
 import * as TaskManager from 'expo-task-manager';
+import { shouldMakeNotification } from '@utils/measureMeters';
 import { askLocationPermission } from '@utils/permissionLocation';
 import { askNotificationPermission } from '@utils/permissionNotification';
 import { getNecessaryPermissions } from '@utils/permissions';
@@ -64,10 +65,13 @@ const HomeScreen: React.FC<{}> = () => {
         if (error) {
           return;
         }
-        Notifications.presentLocalNotificationAsync({
-          title: 'Wash your hands!',
-          body: 'You started to stay somewhere? Wash your hands!',
-        });
+        const result = shouldMakeNotification(locations);
+        if (result) {
+          Notifications.presentLocalNotificationAsync({
+            title: 'Wash your hands!',
+            body: 'You started to stay somewhere? Wash your hands!',
+          });
+        }
       }
     );
     // eslint-disable-next-line
