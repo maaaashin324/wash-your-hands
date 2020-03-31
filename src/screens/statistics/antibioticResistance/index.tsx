@@ -1,14 +1,12 @@
 import React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { Headline, Paragraph } from 'react-native-paper';
+import i18n from 'i18n-js';
 
 const AntibioticResistance: React.FC<{ style?: ViewStyle }> = ({ style }) => (
   <View style={style}>
-    <Headline>Antibiotic Resistance</Headline>
-    <Paragraph>
-      You can help prevent the overuse of antibiotics—the single most important
-      factor leading to antibiotic resistance around the world.
-    </Paragraph>
+    <Headline>{i18n.t('statistics.antibiotics.headline')}</Headline>
+    <Paragraph>{i18n.t('statistics.antibiotics.paragraph')}</Paragraph>
   </View>
 );
 

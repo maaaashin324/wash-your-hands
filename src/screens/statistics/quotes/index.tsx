@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { Subheading, Paragraph } from 'react-native-paper';
+import i18n from 'i18n-js';
 
 const Quotes: React.FC<{ style?: ViewStyle }> = ({ style }) => (
   <View style={style}>
-    <Subheading>Quotes</Subheading>
-    <Paragraph>CDC: Show Me the Science - Why Wash Your Hands?</Paragraph>
-    <Paragraph>https://www.cdc.gov/handwashing/why-handwashing.html</Paragraph>
+    <Subheading>{i18n.t('statistics.quotes.subheading')}</Subheading>
+    <Paragraph>{i18n.t('statistics.quotes.paragraph1')}</Paragraph>
+    <Paragraph>{i18n.t('statistics.quotes.paragraph2')}</Paragraph>
   </View>
 );
 

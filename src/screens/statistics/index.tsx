@@ -2,10 +2,17 @@ import React from 'react';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import { Divider } from 'react-native-paper';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+import TRANSLATIONS from '@constants/translations';
 import PreventionData from './prevention';
 import ChildrenData from './children';
 import AntibioticResistanceData from './antibioticResistance';
 import Quotes from './quotes';
+
+i18n.translations = TRANSLATIONS;
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const styles = StyleSheet.create({
   container: {
