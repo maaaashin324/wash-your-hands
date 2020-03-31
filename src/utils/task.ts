@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native';
+import { WashHandsTimeSet } from '@types/WashHandsTime';
 import { makeNotificationForWash } from './notifications';
 import { findMovement } from './measureMeters';
 
@@ -15,11 +16,22 @@ export const makeNotifications = async ({
     await makeNotificationForWash();
 
     const dataSet = await AsyncStorage.getItem('washTimes');
-    let washHandsTimeSet = [];
+    let washHandsTimeSet: WashHandsTimeSet = {};
     if (dataSet) {
       washHandsTimeSet = JSON.parse(dataSet);
     }
-    washHandsTimeSet.push(Date.now());
+    const now = new Date();
+    if (!washHandsTimeSet[now.getFullYear()]) {
+      washHandsTimeSet[now.getFullYear()] = {};
+    }
+    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()]) {
+      washHandsTimeSet[now.getFullYear()][now.getMonth()] = {};
+    }
+    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()]) {
+      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()] = [
+        { timestamp: now.getTime() },
+      ];
+    }
     await AsyncStorage.setItem('washTimes', JSON.stringify(washHandsTimeSet));
   }
 };
