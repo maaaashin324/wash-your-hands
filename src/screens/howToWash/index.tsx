@@ -5,6 +5,7 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import TRANSLATIONS from '@constants/translations';
 import MyCard from '@components/myCard';
+import { videoListsWithYoutubeURL } from './utils';
 
 i18n.translations = TRANSLATIONS;
 i18n.locale = Localization.locale;
@@ -22,32 +23,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
 });
-
-const createYoutubeURL = (youtubeVideoID: string): string =>
-  `https://www.youtube.com/watch?v=${youtubeVideoID}`;
-
-const createThumbnailURL = (youtubeVideoID: string): string =>
-  `https://img.youtube.com/vi/${youtubeVideoID}/default.jpg`;
-
-const videoLists = [
-  {
-    title: 'Coronavirus | How to wash your hands',
-    subTitle: 'Babylon Health',
-    videoID: 'seA1wbXUQTs',
-  },
-  {
-    title: 'Hand-washing Steps Using the WHO Technique',
-    subTitle: 'Johns Hopkins Medicine',
-    videoID: 'IisgnbMfKvI',
-  },
-];
-
-const videoListsWithYoutubeURL = videoLists.map((eachVideoItem) => ({
-  title: eachVideoItem.title,
-  subTitle: eachVideoItem.subTitle,
-  youtubeURL: createYoutubeURL(eachVideoItem.videoID),
-  thumbnailURL: createThumbnailURL(eachVideoItem.videoID),
-}));
 
 const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
   <SafeAreaView style={styles.container}>
