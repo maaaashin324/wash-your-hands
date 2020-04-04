@@ -8,13 +8,15 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import TRANSLATIONS from '@constants/translations';
+
 import HomeStackScreen from './home';
 import HowToWashStackScreen from './howToWash';
 import StatisticsStackScreen from './statistics';
 import SettingsStackScreen from './settings';
+import en from '../locales/en.json';
+import ja from '../locales/ja.json';
 
-i18n.translations = TRANSLATIONS;
+i18n.translations = { en, ja };
 i18n.locale = Localization.locale;
 i18n.fallbacks = true;
 

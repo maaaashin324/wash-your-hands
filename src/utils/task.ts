@@ -1,7 +1,8 @@
 import { AsyncStorage } from 'react-native';
-import { WashHandsTimeSetType } from 'types/washHandsTime';
+import { AlertFrequencyType } from 'types/alertFrequency';
 import { makeNotificationForWash } from './notifications';
 import { findMovement } from './measureMeters';
+import { setFrequency } from './frequency';
 
 // eslint-disable-next-line
 export const makeNotifications = async ({
@@ -16,22 +17,10 @@ export const makeNotifications = async ({
     await makeNotificationForWash();
 
     const dataSet = await AsyncStorage.getItem('washTimes');
-    let washHandsTimeSet: WashHandsTimeSetType = {};
+    let frequency: AlertFrequencyType = {};
     if (dataSet) {
-      washHandsTimeSet = JSON.parse(dataSet);
+      frequency = JSON.parse(dataSet);
     }
-    const now = new Date();
-    if (!washHandsTimeSet[now.getFullYear()]) {
-      washHandsTimeSet[now.getFullYear()] = {};
-    }
-    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()]) {
-      washHandsTimeSet[now.getFullYear()][now.getMonth()] = {};
-    }
-    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()]) {
-      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()] = [
-        { timestamp: now.getTime() },
-      ];
-    }
-    await AsyncStorage.setItem('washTimes', JSON.stringify(washHandsTimeSet));
+    await setFrequency({ frequency, dataTobeSet: Date.now(), type: 'alert' });
   }
 };

@@ -7,9 +7,11 @@ import {
   Portal,
   Title,
   Text,
+  FAB,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { WashHandsTimeType } from 'types/washHandsTime';
+import { AlertFrequencyType, WashFrequencyType } from 'types';
+import { calcFrequency, setFrequency } from '@utils/frequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
@@ -21,17 +23,60 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
-  timesText: {
+  frequencyContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    marginTop: 50,
+  },
+  frequencyView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  washView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  washFAB: {
+    width: 150,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  frequencyText: {
     alignSelf: 'center',
-    fontSize: 500,
+    fontSize: 150,
+  },
+  frequencyDescription: {
+    alignSelf: 'center',
+    fontSize: 20,
   },
 });
 
 const HomeScreen: React.FC<{}> = () => {
+  let alertFrequency: AlertFrequencyType | null = null;
+  let todayAlertTimes = 0;
+  let washFrequency: WashFrequencyType | null = null;
+
+  const [todayWashTimes, setTodayWashTimes] = useState<number>(0);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTimeType>(
-    null
-  );
+
+  const editWashFrequency = async (type: string): Promise<void> => {
+    let dataTobeSet = todayWashTimes;
+    if (type === 'plus') {
+      dataTobeSet += 1;
+    } else if (dataTobeSet > 0) {
+      dataTobeSet -= 1;
+    }
+    setTodayWashTimes(dataTobeSet);
+    await setFrequency({ frequency: washFrequency, dataTobeSet, type });
+  };
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -44,46 +89,61 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getWashHandsTime = async (): Promise<void> => {
-    const result = await AsyncStorage.getItem('washTimes');
-    if (!result) {
-      return;
+  const getFrequency = async (): Promise<void> => {
+    const alertFrequencyJSON = await AsyncStorage.getItem('alert');
+    const washFrequencyJSON = await AsyncStorage.getItem('wash');
+    if (alertFrequencyJSON) {
+      alertFrequency = JSON.parse(alertFrequencyJSON);
+      todayAlertTimes = calcFrequency(alertFrequency);
     }
-    setWashHandsTimeSet(JSON.parse(result));
-  };
-
-  const calculateWashHandsTime = (): number => {
-    const now = new Date();
-    if (!washHandsTimeSet) {
-      return 0;
+    if (washFrequencyJSON) {
+      washFrequency = JSON.parse(washFrequencyJSON);
+      setTodayWashTimes(calcFrequency(washFrequency));
     }
-    const currentYearSet = washHandsTimeSet[now.getFullYear()];
-    if (!currentYearSet) {
-      return 0;
-    }
-    const currentMonthSet = washHandsTimeSet[now.getFullYear()][now.getMonth()];
-    if (!currentMonthSet) {
-      return 0;
-    }
-    const currentDateSet =
-      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()];
-    if (!currentDateSet) {
-      return 0;
-    }
-    return currentDateSet.length;
   };
 
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
-    getWashHandsTime();
+    getFrequency();
     // eslint-disable-next-line
   }, []);
 
   return (
     <View style={styles.container}>
       <Title>{i18n.t('home.title')}</Title>
-      <Text style={styles.timesText}>{calculateWashHandsTime()}</Text>
+      <View style={styles.frequencyContainer}>
+        <View style={styles.frequencyView}>
+          <Text style={styles.frequencyText}>{todayAlertTimes}</Text>
+          <Text style={styles.frequencyDescription}>
+            {i18n.t('home.warningTimes')}
+          </Text>
+        </View>
+        <View style={styles.frequencyView}>
+          <View style={styles.washView}>
+            <Text style={styles.frequencyText}>{todayWashTimes}</Text>
+            <Text style={styles.frequencyDescription}>
+              {i18n.t('home.washTimes')}
+            </Text>
+          </View>
+          <View style={styles.washFAB}>
+            <FAB
+              icon="minus"
+              // eslint-disable-next-line
+              onPress={(): any => {
+                editWashFrequency('minus');
+              }}
+            />
+            <FAB
+              icon="plus"
+              // eslint-disable-next-line
+              onPress={(): any => {
+                editWashFrequency('plus');
+              }}
+            />
+          </View>
+        </View>
+      </View>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>{i18n.t('home.dialogTitle')}</Dialog.Title>

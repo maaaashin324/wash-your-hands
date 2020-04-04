@@ -1,14 +1,14 @@
-export type WashHandsTimeType = {
+export type AlertTimeType = {
   timestamp: number;
 };
 
-export type WashHandsTimeSetType = {
+export type AlertFrequencyType = {
   // year
   [key: number]: {
     // month
     [key: number]: {
       // day
-      [key: number]: WashHandsTimeType[];
+      [key: number]: AlertTimeType[];
     };
   };
 };

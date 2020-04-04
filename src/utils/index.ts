@@ -1,3 +1,4 @@
+export * from './frequency';
 export { default as hasStartedLocationUpdates } from './hasStartedLocationUpdates';
 export * from './permissionLocation';
 export * from './permissionNotification';
