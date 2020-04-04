@@ -1,12 +1,12 @@
-import * as TaskManager from 'expo-task-manager';
-import { GET_LOCATION_TASK, TIMER_TASK } from '@constants/task';
 import { AsyncStorage } from 'react-native';
+import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
-import { makeNotificationForWash, getTimerDuration } from './notifications';
+import { LOCATION_TASK_NAME, TIMER_TASK } from '@constants/task';
 import { setFrequency } from './frequency';
-import { getTimerPermission } from './permissions';
 import { startLocationUpdates, isMovedFarEnough } from './location';
+import { makeNotificationForWash, getTimerDuration } from './notifications';
+import { getTimerPermission, getLocationPermission } from './permissions';
 
 // eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
@@ -35,47 +35,66 @@ export const makeTimerNotifications = async (): Promise<number> => {
   return BackgroundFetch.Result.NewData;
 };
 
-export const initTask = (): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const promiseArray = [];
-    if (!TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
-      const locationPromise = new Promise((innerResolve) => {
-        TaskManager.defineTask(
-          GET_LOCATION_TASK,
-          // eslint-disable-next-line
-          // @ts-ignore
-          ({ data: { locations }, error }) => {
-            if (error) {
-              reject(error);
-            }
-            makeNotifications(locations).then(() => innerResolve());
-          }
-        );
-      });
-      promiseArray.push(
-        locationPromise.then(() => {
-          startLocationUpdates();
-        })
-      );
-    }
-    if (!TaskManager.isTaskDefined(TIMER_TASK)) {
-      const timerPromise = new Promise((innerResolve) => {
-        TaskManager.defineTask(TIMER_TASK, ({ error }) => {
-          if (error) {
-            reject(error);
-          }
-          makeTimerNotifications().then(() => innerResolve());
-        });
-      });
-      promiseArray.push(
-        timerPromise.then(async () => {
-          const timerDuration = await getTimerDuration();
-          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-            minimumInterval: timerDuration * 60000,
-          });
-        })
-      );
-    }
-    Promise.all(promiseArray).then(() => resolve());
-  });
+const initLocationTask = async (): Promise<void> => {
+  if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
+    TaskManager.defineTask(
+      LOCATION_TASK_NAME,
+      // eslint-disable-next-line
+      // @ts-ignore
+      ({ data: { locations }, error }) => {
+        if (error) {
+          console.error(error);
+        }
+        makeNotifications(locations);
+      }
+    );
+  }
+
+  const isLocationPermitted = await getLocationPermission();
+  const isBackPermitted = await BackgroundFetch.getStatusAsync();
+  const isRegistered = await TaskManager.isTaskRegisteredAsync(
+    LOCATION_TASK_NAME
+  );
+  if (
+    isLocationPermitted &&
+    isBackPermitted === BackgroundFetch.Status.Available &&
+    !isRegistered
+  ) {
+    await startLocationUpdates();
+  }
+};
+
+const initTimerTask = async (): Promise<void> => {
+  if (!TaskManager.isTaskDefined(TIMER_TASK)) {
+    TaskManager.defineTask(
+      TIMER_TASK,
+      // eslint-disable-next-line
+      // @ts-ignore
+      ({ error }) => {
+        if (error) {
+          console.error(error);
+        }
+        makeTimerNotifications();
+      }
+    );
+  }
+
+  const isLocationPermitted = await getTimerPermission();
+  const isBackPermitted = await BackgroundFetch.getStatusAsync();
+  const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
+  if (
+    isLocationPermitted &&
+    isBackPermitted === BackgroundFetch.Status.Available &&
+    !isRegistered
+  ) {
+    const timerDuration = await getTimerDuration();
+    BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+      minimumInterval: timerDuration * 60000,
+    });
+  }
+};
+
+// https://github.com/expo/expo/issues/3582
+export const initTask = async (): Promise<void> => {
+  await Promise.all([initLocationTask, initTimerTask]);
 };
