@@ -6,7 +6,8 @@
     "settings": "設定"
   },
   "home": {
-    "title": "みんな手を洗おう！",
+    "title": "手を洗おう！",
+    "description": "みんなで協力して新型コロナを収めよう",
     "warningTimes": "回洗った？",
     "washTimes": "回洗った！",
     "dialogTitle": "パーミッション設定",

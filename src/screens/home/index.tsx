@@ -25,9 +25,10 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
   },
   frequencyContainer: {
     flex: 3,
@@ -119,6 +120,7 @@ const HomeScreen: React.FC<{}> = () => {
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Title>{i18n.t('home.title')}</Title>
+        <Text>{i18n.t('home.description')}</Text>
       </View>
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
