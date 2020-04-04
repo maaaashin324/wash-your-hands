@@ -4,10 +4,9 @@ import { AsyncStorage } from 'react-native';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
 import { makeNotificationForWash, getTimerDuration } from './notifications';
-import { findMovement } from './measureMeters';
 import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
-import { startLocationUpdates } from './location';
+import { startLocationUpdates, findMovement } from './location';
 
 // eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
