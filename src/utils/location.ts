@@ -48,10 +48,13 @@ export const measureMeters = (lat1, lon1, lat2, lon2): number => {
   return d * 1000; // meters
 };
 
-export const findMovement = (locations: Location.LocationData[]): boolean => {
+export const isMovedFarEnough = (
+  locations: Location.LocationData[]
+): boolean => {
   const [firstLocation] = locations;
   const lastLocation = locations[locations.length - 1];
-  if (lastLocation.coords.speed > 50) {
+  // This speed is meter per second
+  if (lastLocation.coords.speed > 0) {
     return false;
   }
   const meters = measureMeters(

@@ -6,11 +6,11 @@ import { AlertFrequencyType } from 'types/alertFrequency';
 import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
-import { startLocationUpdates, findMovement } from './location';
+import { startLocationUpdates, isMovedFarEnough } from './location';
 
 // eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
-  const result = findMovement(locations);
+  const result = isMovedFarEnough(locations);
   if (result) {
     await makeNotificationForWash();
 
