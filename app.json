@@ -1,10 +1,12 @@
 {
   "expo": {
-    "name": "Blank Template (TypeScript)",
+    "name": "Wash Your Hands",
+    "description": "This app tells you to wash your hands to prevent sickness.",
     "slug": "wash-your-hands",
+    "backgroundColor": "#ffffff",
     "privacy": "public",
     "sdkVersion": "36.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": ["ios", "android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,10 +20,16 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
+      "bundleIdentifier": "com.maaaashin324.wash-your-hands",
+      "buildNumber": "1.0.0",
+      "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["location"]
       }
+    },
+    "android": {
+      "package": "com.maaaashin324.wash-your-hands",
+      "versionCode": 1
     }
   }
 }
