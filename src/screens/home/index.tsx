@@ -13,7 +13,6 @@ import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from 'types';
 import { calcFrequency, setFrequency } from '@utils/frequency';
 import { getNecessaryPermissions } from '@utils/permissions';
-import startLocationUpdates from '@utils/startLocationUpdates';
 
 const styles = StyleSheet.create({
   container: {
@@ -111,7 +110,6 @@ const HomeScreen: React.FC<{}> = () => {
 
   useEffect(() => {
     judgePermissionWhenRendered();
-    startLocationUpdates();
     getFrequency();
     // eslint-disable-next-line
   }, []);

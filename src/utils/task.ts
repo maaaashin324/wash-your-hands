@@ -3,14 +3,11 @@ import { GET_LOCATION_TASK, TIMER_TASK } from '@constants/task';
 import { AsyncStorage } from 'react-native';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
-import {
-  makeNotificationForWash,
-  getTimerDuration,
-  getLastTimeNotification,
-} from './notifications';
+import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { findMovement } from './measureMeters';
 import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
+import { startLocationUpdates } from './location';
 
 // eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
@@ -32,50 +29,53 @@ export const makeTimerNotifications = async (): Promise<number> => {
   if (!granted) {
     return BackgroundFetch.Result.NoData;
   }
-  const lastNotificationTime = await getLastTimeNotification();
-  if (!lastNotificationTime) {
-    return BackgroundFetch.Result.NoData;
-  }
   const timerDuration = await getTimerDuration();
-  if (Date.now() - lastNotificationTime > timerDuration * 60000) {
-    await makeNotificationForWash();
-  }
+  setInterval(() => {
+    makeNotificationForWash();
+  }, timerDuration * 60000);
   return BackgroundFetch.Result.NewData;
 };
 
 export const initTask = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const promiseArray = [];
-    if (TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
-      TaskManager.defineTask(
-        GET_LOCATION_TASK,
-        // eslint-disable-next-line
-        // @ts-ignore
-        ({ data: { locations }, error }) => {
+    if (!TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
+      const locationPromise = new Promise((innerResolve) => {
+        TaskManager.defineTask(
+          GET_LOCATION_TASK,
+          // eslint-disable-next-line
+          // @ts-ignore
+          ({ data: { locations }, error }) => {
+            if (error) {
+              reject(error);
+            }
+            makeNotifications(locations).then(() => innerResolve());
+          }
+        );
+      });
+      promiseArray.push(
+        locationPromise.then(() => {
+          startLocationUpdates();
+        })
+      );
+    }
+    if (!TaskManager.isTaskDefined(TIMER_TASK)) {
+      const timerPromise = new Promise((innerResolve) => {
+        TaskManager.defineTask(TIMER_TASK, ({ error }) => {
           if (error) {
             reject(error);
           }
-          const promise = makeNotifications(locations).then(() => {
-            BackgroundFetch.registerTaskAsync(GET_LOCATION_TASK, {
-              minimumInterval: 30,
-            });
-          });
-          promiseArray.push(promise);
-        }
-      );
-    }
-    if (TaskManager.isTaskDefined(TIMER_TASK)) {
-      TaskManager.defineTask(TIMER_TASK, ({ error }) => {
-        if (error) {
-          reject(error);
-        }
-        const promise = makeTimerNotifications().then(() => {
-          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-            minimumInterval: 30,
-          });
+          makeTimerNotifications().then(() => innerResolve());
         });
-        promiseArray.push(promise);
       });
+      promiseArray.push(
+        timerPromise.then(async () => {
+          const timerDuration = await getTimerDuration();
+          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+            minimumInterval: timerDuration * 60000,
+          });
+        })
+      );
     }
     Promise.all(promiseArray).then(() => resolve());
   });
