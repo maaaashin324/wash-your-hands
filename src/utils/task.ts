@@ -1,3 +1,5 @@
+import * as TaskManager from 'expo-task-manager';
+import { GET_LOCATION_TASK, TIMER_TASK } from '@constants/task';
 import { AsyncStorage } from 'react-native';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
@@ -11,13 +13,7 @@ import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
 
 // eslint-disable-next-line
-export const makeNotifications = async ({
-  data: { locations },
-  error,
-}): Promise<void> => {
-  if (error) {
-    return;
-  }
+export const makeNotifications = async (locations): Promise<void> => {
   const result = findMovement(locations);
   if (result) {
     await makeNotificationForWash();
@@ -45,4 +41,42 @@ export const makeTimerNotifications = async (): Promise<number> => {
     await makeNotificationForWash();
   }
   return BackgroundFetch.Result.NewData;
+};
+
+export const initTask = (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const promiseArray = [];
+    if (TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
+      TaskManager.defineTask(
+        GET_LOCATION_TASK,
+        // eslint-disable-next-line
+        // @ts-ignore
+        ({ data: { locations }, error }) => {
+          if (error) {
+            reject(error);
+          }
+          const promise = makeNotifications(locations).then(() => {
+            BackgroundFetch.registerTaskAsync(GET_LOCATION_TASK, {
+              minimumInterval: 30,
+            });
+          });
+          promiseArray.push(promise);
+        }
+      );
+    }
+    if (TaskManager.isTaskDefined(TIMER_TASK)) {
+      TaskManager.defineTask(TIMER_TASK, ({ error }) => {
+        if (error) {
+          reject(error);
+        }
+        const promise = makeTimerNotifications().then(() => {
+          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+            minimumInterval: 30,
+          });
+        });
+        promiseArray.push(promise);
+      });
+    }
+    Promise.all(promiseArray).then(() => resolve());
+  });
 };
