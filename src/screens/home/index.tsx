@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   frequencyText: {
     alignSelf: 'center',
-    fontSize: 200,
+    fontSize: 150,
   },
   frequencyDescription: {
     alignSelf: 'center',
@@ -115,12 +115,16 @@ const HomeScreen: React.FC<{}> = () => {
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
           <Text style={styles.frequencyText}>{todayAlertTimes}</Text>
-          <Text style={styles.frequencyDescription}>Warning times</Text>
+          <Text style={styles.frequencyDescription}>
+            {i18n.t('home.warningTimes')}
+          </Text>
         </View>
         <View style={styles.frequencyView}>
           <View style={styles.washView}>
             <Text style={styles.frequencyText}>{todayWashTimes}</Text>
-            <Text style={styles.frequencyDescription}>Wash times</Text>
+            <Text style={styles.frequencyDescription}>
+              {i18n.t('home.washTimes')}
+            </Text>
           </View>
           <View style={styles.washFAB}>
             <FAB
