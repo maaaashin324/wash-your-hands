@@ -25,15 +25,29 @@ const styles = StyleSheet.create({
   },
   frequencyContainer: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginTop: 50,
   },
   frequencyView: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  washView: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  washFAB: {
+    width: 150,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   frequencyText: {
     alignSelf: 'center',
@@ -41,7 +55,7 @@ const styles = StyleSheet.create({
   },
   frequencyDescription: {
     alignSelf: 'center',
-    fontSize: 100,
+    fontSize: 20,
   },
 });
 
@@ -103,16 +117,13 @@ const HomeScreen: React.FC<{}> = () => {
           <Text style={styles.frequencyText}>{todayAlertTimes}</Text>
           <Text style={styles.frequencyDescription}>Warning times</Text>
         </View>
-        <View style={styles.frequencyContainer}>
-          <View>
+        <View style={styles.frequencyView}>
+          <View style={styles.washView}>
             <Text style={styles.frequencyText}>{todayWashTimes}</Text>
-            <Text style={styles.frequencyDescription}>
-              Times you wash your hands
-            </Text>
+            <Text style={styles.frequencyDescription}>Wash times</Text>
           </View>
-          <View>
+          <View style={styles.washFAB}>
             <FAB
-              small
               icon="minus"
               // eslint-disable-next-line
               onPress={(): any => {
@@ -120,7 +131,6 @@ const HomeScreen: React.FC<{}> = () => {
               }}
             />
             <FAB
-              small
               icon="plus"
               // eslint-disable-next-line
               onPress={(): any => {
