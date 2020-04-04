@@ -33,13 +33,14 @@ export const setFrequency = async ({
   dataTobeSet,
   type,
 }: {
-  frequency: AlertFrequencyType | WashFrequencyType;
+  frequency: AlertFrequencyType | WashFrequencyType | null;
   dataTobeSet: number;
   type: string;
 }): Promise<void> => {
-  const newFrequency: AlertFrequencyType | WashFrequencyType = JSON.parse(
-    JSON.stringify(frequency)
-  );
+  let newFrequency: AlertFrequencyType | WashFrequencyType = {};
+  if (frequency) {
+    newFrequency = JSON.parse(JSON.stringify(frequency));
+  }
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
