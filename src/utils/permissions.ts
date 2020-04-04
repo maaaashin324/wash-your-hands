@@ -1,4 +1,5 @@
 import * as Permissions from 'expo-permissions';
+import { AsyncStorage } from 'react-native';
 
 export interface GetNecessaryPermissions {
   granted: boolean;
@@ -23,4 +24,36 @@ export const getNecessaryPermissions = async (): Promise<
         permissions[Permissions.NOTIFICATIONS].granted,
     },
   };
+};
+
+export const getLocationPermission = async (): Promise<boolean> => {
+  const { granted } = await Permissions.getAsync(Permissions.LOCATION);
+  return granted;
+};
+
+export const askLocationPermission = async (): Promise<boolean> => {
+  const { granted } = await Permissions.askAsync(Permissions.LOCATION);
+  return granted;
+};
+
+export const getNotificationPermission = async (): Promise<boolean> => {
+  const { granted } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  return granted;
+};
+
+export const askNotificationPermission = async (): Promise<boolean> => {
+  const { granted } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+  return granted;
+};
+
+export const getTimerPermission = async (): Promise<boolean> => {
+  const grantedJSON = await AsyncStorage.getItem('isTimerGranted');
+  if (!grantedJSON) {
+    return false;
+  }
+  return JSON.parse(grantedJSON);
+};
+
+export const setTimerPermission = async (granted: boolean): Promise<void> => {
+  await AsyncStorage.setItem('isTimerGranted', JSON.stringify(granted));
 };

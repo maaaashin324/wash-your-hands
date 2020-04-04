@@ -8,11 +8,17 @@ import {
   Portal,
   List,
   Switch,
+  TextInput,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { askLocationPermission } from '@utils/permissionLocation';
-import { askNotificationPermission } from '@utils/permissionNotification';
-import { getNecessaryPermissions } from '@utils/permissions';
+import {
+  askLocationPermission,
+  askNotificationPermission,
+  getNecessaryPermissions,
+  getTimerPermission,
+  setTimerPermission,
+} from '@utils/permissions';
+import { setTimerDuration } from '@utils/notifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +37,8 @@ const SettingScreen: React.FC<{}> = () => {
   const [isNotificationPermitted, setNotificationPermitted] = useState<boolean>(
     false
   );
+  const [isTimerPermitted, setTimerPermitted] = useState<boolean>(false);
+  const [timerDuration, setTimerDurationState] = useState<number>(30);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -45,6 +53,8 @@ const SettingScreen: React.FC<{}> = () => {
     if (result.detail[Permissions.NOTIFICATIONS]) {
       setNotificationPermitted(true);
     }
+    const timerResult = await getTimerPermission();
+    setTimerPermitted(timerResult);
   };
 
   const setPermissions = async (whichPermission: string): Promise<void> => {
@@ -52,13 +62,21 @@ const SettingScreen: React.FC<{}> = () => {
     if (whichPermission === 'location') {
       result = await askLocationPermission();
       setLocationPermitted(result);
-    } else {
+    } else if (whichPermission === 'notification') {
       result = await askNotificationPermission();
       setNotificationPermitted(result);
+    } else {
+      await setTimerPermission(!isTimerPermitted);
+      setTimerPermitted(!isTimerPermitted);
+      return;
     }
     if (!result) {
       setDialogOpen(true);
     }
+  };
+
+  const setTimer = async (newDuration): Promise<void> => {
+    await setTimerDuration(newDuration);
   };
 
   useEffect(() => {
@@ -69,7 +87,7 @@ const SettingScreen: React.FC<{}> = () => {
     <View style={styles.container}>
       <List.Section style={styles.listSection} title={i18n.t('settings.title')}>
         <List.Item
-          title={i18n.t('settings.listItem1')}
+          title={i18n.t('settings.location')}
           right={(): React.ReactNode => (
             <Switch
               value={isLocationPermitted}
@@ -80,7 +98,7 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <List.Item
-          title={i18n.t('settings.listItem2')}
+          title={i18n.t('settings.notification')}
           right={(): React.ReactNode => (
             <Switch
               value={isNotificationPermitted}
@@ -89,6 +107,33 @@ const SettingScreen: React.FC<{}> = () => {
               }}
             />
           )}
+        />
+        <List.Item
+          title={i18n.t('settings.timer')}
+          right={(): React.ReactNode => (
+            <Switch
+              value={isTimerPermitted}
+              onValueChange={async (): Promise<void> => {
+                await setPermissions('timer');
+              }}
+            />
+          )}
+        />
+        <TextInput
+          label="Timer"
+          disabled={!isTimerPermitted}
+          keyboardType="numeric"
+          onChangeText={(text): void => setTimerDurationState(+text)}
+          onBlur={(): void => {
+            if (timerDuration < 30) {
+              setTimer(30);
+              setTimerDurationState(30);
+            } else {
+              setTimer(timerDuration);
+            }
+          }}
+          returnKeyType="done"
+          value={String(timerDuration)}
         />
       </List.Section>
       <Portal>

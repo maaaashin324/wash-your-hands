@@ -52,7 +52,8 @@
     "dialogTitle": "Permission not granted",
     "dialogContent": "Please let this app use notification and location to have you wash your hands",
     "title": "Permission",
-    "listItem1": "Location",
-    "listItem2": "Notification"
+    "location": "Location",
+    "notification": "Notification",
+    "timer": "Repeat Alert"
   }
 }
