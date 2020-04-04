@@ -7,10 +7,11 @@ import {
   Portal,
   Title,
   Text,
+  FAB,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from 'types';
-import { calcFrequency } from '@utils/calcFrequency';
+import { calcFrequency, setFrequency } from '@utils/frequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
@@ -45,11 +46,16 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
+  let alertFrequency: AlertFrequencyType | null = null;
+  let washFrequency: WashFrequencyType | null = null;
+
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [alertFrequency, setAlertFrequency] = useState<AlertFrequencyType>(
-    null
-  );
-  const [washFrequency, setWashFrequency] = useState<WashFrequencyType>(null);
+
+  const editWashFrequency = (dataTobeSet: number, type: string): void => {
+    if (type === 'plus') {
+      setFrequency({ frequency: washFrequency, dataTobeSet, type });
+    }
+  };
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -62,18 +68,21 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getAlertFrequency = async (): Promise<void> => {
-    const result = await AsyncStorage.getItem('washTimes');
-    if (!result) {
-      return;
+  const getFrequency = async (): Promise<void> => {
+    const alertFrequencyJSON = await AsyncStorage.getItem('alert');
+    const washFrequencyJSON = await AsyncStorage.getItem('wash');
+    if (alertFrequencyJSON) {
+      alertFrequency = JSON.parse(alertFrequencyJSON);
     }
-    setAlertFrequency(JSON.parse(result));
+    if (washFrequencyJSON) {
+      washFrequency = JSON.parse(washFrequencyJSON);
+    }
   };
 
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
-    getAlertFrequency();
+    getFrequency();
     // eslint-disable-next-line
   }, []);
 
@@ -88,10 +97,16 @@ const HomeScreen: React.FC<{}> = () => {
           <Text style={styles.frequencyDescription}>Warning times</Text>
         </View>
         <View style={styles.frequencyContainer}>
-          <Text style={styles.frequencyText}>0</Text>
-          <Text style={styles.frequencyDescription}>
-            {calcFrequency(washFrequency)}
-          </Text>
+          <View>
+            <Text style={styles.frequencyText}>0</Text>
+            <Text style={styles.frequencyDescription}>
+              {calcFrequency(washFrequency)}
+            </Text>
+          </View>
+          <View>
+            <FAB small icon="minus" />
+            <FAB small icon="plus" />
+          </View>
         </View>
       </View>
       <Portal>
