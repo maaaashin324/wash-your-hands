@@ -6,7 +6,8 @@
     "settings": "設定"
   },
   "home": {
-    "title": "みんな手を洗おう！",
+    "title": "手を洗おう！",
+    "description": "みんなで協力して新型コロナを収めよう",
     "warningTimes": "回洗った？",
     "washTimes": "回洗った！",
     "dialogTitle": "パーミッション設定",
@@ -52,7 +53,8 @@
     "dialogTitle": "パーミッション設定",
     "dialogContent": "通知とGPSの設定を許可してください。",
     "title": "パーミッション",
-    "listItem1": "GPS",
-    "listItem2": "通知"
+    "location": "GPS",
+    "notification": "通知",
+    "timer": "定期的に通知"
   }
 }

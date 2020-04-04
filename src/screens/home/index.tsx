@@ -23,8 +23,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
-  frequencyContainer: {
+  titleContainer: {
     flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  frequencyContainer: {
+    flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'flex-start',
@@ -111,7 +118,10 @@ const HomeScreen: React.FC<{}> = () => {
 
   return (
     <View style={styles.container}>
-      <Title>{i18n.t('home.title')}</Title>
+      <View style={styles.titleContainer}>
+        <Title>{i18n.t('home.title')}</Title>
+        <Text>{i18n.t('home.description')}</Text>
+      </View>
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
           <Text style={styles.frequencyText}>{todayAlertTimes}</Text>
