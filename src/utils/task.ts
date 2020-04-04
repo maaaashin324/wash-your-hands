@@ -7,6 +7,7 @@ import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { findMovement } from './measureMeters';
 import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
+import { startLocationUpdates } from './location';
 
 // eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
@@ -38,40 +39,43 @@ export const makeTimerNotifications = async (): Promise<number> => {
 export const initTask = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const promiseArray = [];
-    if (TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
-      TaskManager.defineTask(
-        GET_LOCATION_TASK,
-        // eslint-disable-next-line
-        // @ts-ignore
-        ({ data: { locations }, error }) => {
+    if (!TaskManager.isTaskDefined(GET_LOCATION_TASK)) {
+      const locationPromise = new Promise((innerResolve) => {
+        TaskManager.defineTask(
+          GET_LOCATION_TASK,
+          // eslint-disable-next-line
+          // @ts-ignore
+          ({ data: { locations }, error }) => {
+            if (error) {
+              reject(error);
+            }
+            makeNotifications(locations).then(() => innerResolve());
+          }
+        );
+      });
+      promiseArray.push(
+        locationPromise.then(() => {
+          startLocationUpdates();
+        })
+      );
+    }
+    if (!TaskManager.isTaskDefined(TIMER_TASK)) {
+      const timerPromise = new Promise((innerResolve) => {
+        TaskManager.defineTask(TIMER_TASK, ({ error }) => {
           if (error) {
             reject(error);
           }
-          const promise = makeNotifications(locations).then(() => {
-            BackgroundFetch.registerTaskAsync(GET_LOCATION_TASK, {
-              minimumInterval: 30,
-            });
-          });
-          promiseArray.push(promise);
-        }
-      );
-    }
-    if (TaskManager.isTaskDefined(TIMER_TASK)) {
-      TaskManager.defineTask(TIMER_TASK, ({ error }) => {
-        if (error) {
-          reject(error);
-        }
-        const promise = makeTimerNotifications()
-          .then(() => {
-            return getTimerDuration();
-          })
-          .then((timerDuration) => {
-            BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-              minimumInterval: timerDuration * 60000,
-            });
-          });
-        promiseArray.push(promise);
+          makeTimerNotifications().then(() => innerResolve());
+        });
       });
+      promiseArray.push(
+        timerPromise.then(async () => {
+          const timerDuration = await getTimerDuration();
+          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+            minimumInterval: timerDuration * 60000,
+          });
+        })
+      );
     }
     Promise.all(promiseArray).then(() => resolve());
   });

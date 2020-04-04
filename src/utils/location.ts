@@ -1,8 +1,15 @@
 import * as Location from 'expo-location';
-import hasStartedLocationUpdates from './hasStartedLocationUpdates';
+import { GET_LOCATION_TASK } from '@constants/task';
 import { getLocationPermission } from './permissions';
 
-const startLocationUpdates = async (): Promise<void> => {
+const hasStartedLocationUpdates = async (): Promise<boolean> => {
+  const result = await Location.hasStartedLocationUpdatesAsync(
+    GET_LOCATION_TASK
+  );
+  return result;
+};
+
+export const startLocationUpdates = async (): Promise<void> => {
   const result = await hasStartedLocationUpdates();
   if (!result) {
     return;
