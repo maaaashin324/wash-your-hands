@@ -18,7 +18,10 @@ import {
   getTimerPermission,
   setTimerPermission,
 } from '@utils/permissions';
-import { setTimerDuration } from '@utils/notifications';
+import {
+  setTimerDuration,
+  makeNotificationForTest,
+} from '@utils/notifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,6 +70,9 @@ const SettingScreen: React.FC<{}> = () => {
       setNotificationPermitted(result);
     } else {
       await setTimerPermission(!isTimerPermitted);
+      if (!isTimerPermitted) {
+        await makeNotificationForTest();
+      }
       setTimerPermitted(!isTimerPermitted);
       return;
     }
