@@ -3,11 +3,7 @@ import { GET_LOCATION_TASK, TIMER_TASK } from '@constants/task';
 import { AsyncStorage } from 'react-native';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
-import {
-  makeNotificationForWash,
-  getTimerDuration,
-  getLastTimeNotification,
-} from './notifications';
+import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { findMovement } from './measureMeters';
 import { setFrequency } from './frequency';
 import { getTimerPermission } from './permissions';
@@ -32,14 +28,10 @@ export const makeTimerNotifications = async (): Promise<number> => {
   if (!granted) {
     return BackgroundFetch.Result.NoData;
   }
-  const lastNotificationTime = await getLastTimeNotification();
-  if (!lastNotificationTime) {
-    return BackgroundFetch.Result.NoData;
-  }
   const timerDuration = await getTimerDuration();
-  if (Date.now() - lastNotificationTime > timerDuration * 60000) {
-    await makeNotificationForWash();
-  }
+  setInterval(() => {
+    makeNotificationForWash();
+  }, timerDuration * 60000);
   return BackgroundFetch.Result.NewData;
 };
 
@@ -69,11 +61,15 @@ export const initTask = (): Promise<void> => {
         if (error) {
           reject(error);
         }
-        const promise = makeTimerNotifications().then(() => {
-          BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-            minimumInterval: 30,
+        const promise = makeTimerNotifications()
+          .then(() => {
+            return getTimerDuration();
+          })
+          .then((timerDuration) => {
+            BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+              minimumInterval: timerDuration * 60000,
+            });
           });
-        });
         promiseArray.push(promise);
       });
     }
