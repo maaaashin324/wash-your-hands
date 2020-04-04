@@ -56,5 +56,11 @@
     "location": "Location",
     "notification": "Notification",
     "timer": "Repeat Alert"
+  },
+  "notification": {
+    "title": "Wash your hands!",
+    "body": "You started to stay somewhere? Wash your hands!",
+    "testTitle": "Test!",
+    "testBody": "This is test notification!"
   }
 }
