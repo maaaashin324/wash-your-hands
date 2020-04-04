@@ -70,9 +70,9 @@ const HomeScreen: React.FC<{}> = () => {
   const editWashFrequency = async (type: string): Promise<void> => {
     let dataTobeSet = todayWashTimes;
     if (type === 'plus') {
-      dataTobeSet = todayWashTimes + 1;
-    } else {
-      dataTobeSet = todayWashTimes - 1;
+      dataTobeSet += 1;
+    } else if (dataTobeSet > 0) {
+      dataTobeSet -= 1;
     }
     setTodayWashTimes(dataTobeSet);
     await setFrequency({ frequency: washFrequency, dataTobeSet, type });
