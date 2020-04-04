@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native';
-import { WashHandsTimeSetType } from 'types/washHandsTime';
+import { AlertFrequencyType } from 'types/alertFrequency';
 import { makeNotificationForWash } from './notifications';
 import { findMovement } from './measureMeters';
 
@@ -16,22 +16,22 @@ export const makeNotifications = async ({
     await makeNotificationForWash();
 
     const dataSet = await AsyncStorage.getItem('washTimes');
-    let washHandsTimeSet: WashHandsTimeSetType = {};
+    let alertFrequency: AlertFrequencyType = {};
     if (dataSet) {
-      washHandsTimeSet = JSON.parse(dataSet);
+      alertFrequency = JSON.parse(dataSet);
     }
     const now = new Date();
-    if (!washHandsTimeSet[now.getFullYear()]) {
-      washHandsTimeSet[now.getFullYear()] = {};
+    if (!alertFrequency[now.getFullYear()]) {
+      alertFrequency[now.getFullYear()] = {};
     }
-    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()]) {
-      washHandsTimeSet[now.getFullYear()][now.getMonth()] = {};
+    if (!alertFrequency[now.getFullYear()][now.getMonth()]) {
+      alertFrequency[now.getFullYear()][now.getMonth()] = {};
     }
-    if (!washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()]) {
-      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()] = [
+    if (!alertFrequency[now.getFullYear()][now.getMonth()][now.getDate()]) {
+      alertFrequency[now.getFullYear()][now.getMonth()][now.getDate()] = [
         { timestamp: now.getTime() },
       ];
     }
-    await AsyncStorage.setItem('washTimes', JSON.stringify(washHandsTimeSet));
+    await AsyncStorage.setItem('washTimes', JSON.stringify(alertFrequency));
   }
 };

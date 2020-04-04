@@ -9,7 +9,7 @@ import {
   Text,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { WashHandsTimeType } from 'types/washHandsTime';
+import { AlertFrequencyType } from 'types/alertFrequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [washHandsTimeSet, setWashHandsTimeSet] = useState<WashHandsTimeType>(
+  const [alertFrequency, setAlertFrequency] = useState<AlertFrequencyType>(
     null
   );
 
@@ -60,29 +60,29 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getWashHandsTime = async (): Promise<void> => {
+  const getAlertFrequency = async (): Promise<void> => {
     const result = await AsyncStorage.getItem('washTimes');
     if (!result) {
       return;
     }
-    setWashHandsTimeSet(JSON.parse(result));
+    setAlertFrequency(JSON.parse(result));
   };
 
-  const calculateWashHandsTime = (): number => {
+  const calcAlertFrequency = (): number => {
     const now = new Date();
-    if (!washHandsTimeSet) {
+    if (!alertFrequency) {
       return 0;
     }
-    const currentYearSet = washHandsTimeSet[now.getFullYear()];
+    const currentYearSet = alertFrequency[now.getFullYear()];
     if (!currentYearSet) {
       return 0;
     }
-    const currentMonthSet = washHandsTimeSet[now.getFullYear()][now.getMonth()];
+    const currentMonthSet = alertFrequency[now.getFullYear()][now.getMonth()];
     if (!currentMonthSet) {
       return 0;
     }
     const currentDateSet =
-      washHandsTimeSet[now.getFullYear()][now.getMonth()][now.getDate()];
+      alertFrequency[now.getFullYear()][now.getMonth()][now.getDate()];
     if (!currentDateSet) {
       return 0;
     }
@@ -92,7 +92,7 @@ const HomeScreen: React.FC<{}> = () => {
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
-    getWashHandsTime();
+    getAlertFrequency();
     // eslint-disable-next-line
   }, []);
 
@@ -101,7 +101,7 @@ const HomeScreen: React.FC<{}> = () => {
       <Title>{i18n.t('home.title')}</Title>
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
-          <Text style={styles.frequencyText}>{calculateWashHandsTime()}</Text>
+          <Text style={styles.frequencyText}>{calcAlertFrequency()}</Text>
           <Text style={styles.frequencyDescription}>Warning times</Text>
         </View>
         <View style={styles.frequencyContainer}>
