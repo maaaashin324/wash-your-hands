@@ -1,5 +1,6 @@
 import { Notifications } from 'expo';
 import { AsyncStorage } from 'react-native';
+import i18n from 'i18n-js';
 
 const setLastTimeNotification = async (): Promise<void> => {
   await AsyncStorage.setItem(
@@ -19,8 +20,8 @@ export const getLastTimeNotification = async (): Promise<number> => {
 // eslint-disable-next-line
 export const makeNotificationForWash = async () => {
   await Notifications.presentLocalNotificationAsync({
-    title: 'Wash your hands!',
-    body: 'You started to stay somewhere? Wash your hands!',
+    title: i18n.t('notification:title'),
+    body: i18n.t('notification:body'),
   });
   await setLastTimeNotification();
 };
@@ -28,8 +29,8 @@ export const makeNotificationForWash = async () => {
 // eslint-disable-next-line
 export const makeNotificationForTest = async () => {
   await Notifications.presentLocalNotificationAsync({
-    title: 'Test!',
-    body: 'This is test notification!',
+    title: i18n.t('notification:testTitle'),
+    body: i18n.t('notification:testBody'),
   });
   await setLastTimeNotification();
 };

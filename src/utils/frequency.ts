@@ -1,30 +1,48 @@
 import { AlertFrequencyType, WashFrequencyType } from 'types';
 import { AsyncStorage } from 'react-native';
 
-// eslint-disable-next-line
+interface CalcToday {
+  year: number;
+  month: number;
+  date: number;
+}
+export const calcToday = (): CalcToday => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const date = now.getDate();
+  return { year, month, date };
+};
+
+/**
+ * calcFrequency provides you with how frequent alert or wash times are
+ * @param frequency This should be AlertFrequencyType or WashFrequencyType
+ * @returns {Number}
+ */
 export const calcFrequency = (
   frequency: AlertFrequencyType | WashFrequencyType
 ): number => {
-  const now = new Date();
+  const { year, month, date } = calcToday();
   if (!frequency) {
     return 0;
   }
-  const currentYearSet = frequency[now.getFullYear()];
+  const currentYearSet = frequency[year];
   if (!currentYearSet) {
     return 0;
   }
-  const currentMonthSet = frequency[now.getFullYear()][now.getMonth()];
+  const currentMonthSet = frequency[year][month];
   if (!currentMonthSet) {
     return 0;
   }
-  const currentDateSet =
-    frequency[now.getFullYear()][now.getMonth()][now.getDate()];
+  const currentDateSet = frequency[year][month][date];
   if (!currentDateSet) {
     return 0;
   }
+  //  This means currentDataSet is WashFrequencyType
   if (typeof currentDateSet === 'number') {
     return currentDateSet;
   }
+  //  This means currentDataSet is AlertFrequencyType
   return currentDateSet.length;
 };
 
@@ -33,7 +51,7 @@ export const setFrequency = async ({
   dataTobeSet,
   type,
 }: {
-  frequency: AlertFrequencyType | WashFrequencyType | null;
+  frequency?: AlertFrequencyType | WashFrequencyType | null;
   dataTobeSet: number;
   type: string;
 }): Promise<void> => {
@@ -41,10 +59,7 @@ export const setFrequency = async ({
   if (frequency) {
     newFrequency = JSON.parse(JSON.stringify(frequency));
   }
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const date = now.getDate();
+  const { year, month, date } = calcToday();
 
   const currentYearSet = newFrequency[year];
   if (!currentYearSet) {
@@ -57,17 +72,16 @@ export const setFrequency = async ({
   const currentDateSet = newFrequency[year][month][date];
   if (type === 'wash') {
     newFrequency[year][month][date] = dataTobeSet;
-  } else if (!currentDateSet) {
+    await AsyncStorage.setItem('wash', JSON.stringify(newFrequency));
+    return;
+  }
+
+  if (!currentDateSet) {
     newFrequency[year][month][date] = [{ timestamp: dataTobeSet }];
   } else {
     // eslint-disable-next-line
     // @ts-ignore
     newFrequency[year][month][date].push({ timestamp: dataTobeSet });
   }
-
-  if (type === 'wash') {
-    await AsyncStorage.setItem('wash', JSON.stringify(newFrequency));
-  } else {
-    await AsyncStorage.setItem('alert', JSON.stringify(newFrequency));
-  }
+  await AsyncStorage.setItem('alert', JSON.stringify(newFrequency));
 };

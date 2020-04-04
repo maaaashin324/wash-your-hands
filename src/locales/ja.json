@@ -56,5 +56,11 @@
     "location": "GPS",
     "notification": "通知",
     "timer": "定期的に通知"
+  },
+  "notification": {
+    "title": "手を洗おう！",
+    "body": "近くにお手洗いある？手を洗おう！",
+    "testTitle": "これはテスト！",
+    "testBody": "こんな形で通知しますね。"
   }
 }
