@@ -21,9 +21,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 10,
   },
-  timesText: {
+  frequencyContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  frequencyView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  frequencyText: {
     alignSelf: 'center',
-    fontSize: 500,
+    fontSize: 200,
+  },
+  frequencyDescription: {
+    alignSelf: 'center',
+    fontSize: 100,
   },
 });
 
@@ -83,7 +99,18 @@ const HomeScreen: React.FC<{}> = () => {
   return (
     <View style={styles.container}>
       <Title>{i18n.t('home.title')}</Title>
-      <Text style={styles.timesText}>{calculateWashHandsTime()}</Text>
+      <View style={styles.frequencyContainer}>
+        <View style={styles.frequencyView}>
+          <Text style={styles.frequencyText}>{calculateWashHandsTime()}</Text>
+          <Text style={styles.frequencyDescription}>Warning times</Text>
+        </View>
+        <View style={styles.frequencyContainer}>
+          <Text style={styles.frequencyText}>0</Text>
+          <Text style={styles.frequencyDescription}>
+            How many times you wash your hands
+          </Text>
+        </View>
+      </View>
       <Portal>
         <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
           <Dialog.Title>{i18n.t('home.dialogTitle')}</Dialog.Title>
