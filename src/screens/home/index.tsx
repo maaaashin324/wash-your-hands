@@ -47,14 +47,21 @@ const styles = StyleSheet.create({
 
 const HomeScreen: React.FC<{}> = () => {
   let alertFrequency: AlertFrequencyType | null = null;
+  let todayAlertTimes = 0;
   let washFrequency: WashFrequencyType | null = null;
 
+  const [todayWashTimes, setTodayWashTimes] = useState<number>(0);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const editWashFrequency = (dataTobeSet: number, type: string): void => {
+  const editWashFrequency = async (type: string): Promise<void> => {
+    let dataTobeSet = todayWashTimes;
     if (type === 'plus') {
-      setFrequency({ frequency: washFrequency, dataTobeSet, type });
+      dataTobeSet = todayWashTimes + 1;
+    } else {
+      dataTobeSet = todayWashTimes - 1;
     }
+    setTodayWashTimes(dataTobeSet);
+    await setFrequency({ frequency: washFrequency, dataTobeSet, type });
   };
 
   const hideDialog = (): void => {
@@ -73,9 +80,11 @@ const HomeScreen: React.FC<{}> = () => {
     const washFrequencyJSON = await AsyncStorage.getItem('wash');
     if (alertFrequencyJSON) {
       alertFrequency = JSON.parse(alertFrequencyJSON);
+      todayAlertTimes = calcFrequency(alertFrequency);
     }
     if (washFrequencyJSON) {
       washFrequency = JSON.parse(washFrequencyJSON);
+      setTodayWashTimes(calcFrequency(washFrequency));
     }
   };
 
@@ -91,21 +100,33 @@ const HomeScreen: React.FC<{}> = () => {
       <Title>{i18n.t('home.title')}</Title>
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
-          <Text style={styles.frequencyText}>
-            {calcFrequency(alertFrequency)}
-          </Text>
+          <Text style={styles.frequencyText}>{todayAlertTimes}</Text>
           <Text style={styles.frequencyDescription}>Warning times</Text>
         </View>
         <View style={styles.frequencyContainer}>
           <View>
-            <Text style={styles.frequencyText}>0</Text>
+            <Text style={styles.frequencyText}>{todayWashTimes}</Text>
             <Text style={styles.frequencyDescription}>
-              {calcFrequency(washFrequency)}
+              Times you wash your hands
             </Text>
           </View>
           <View>
-            <FAB small icon="minus" />
-            <FAB small icon="plus" />
+            <FAB
+              small
+              icon="minus"
+              // eslint-disable-next-line
+              onPress={(): any => {
+                editWashFrequency('minus');
+              }}
+            />
+            <FAB
+              small
+              icon="plus"
+              // eslint-disable-next-line
+              onPress={(): any => {
+                editWashFrequency('plus');
+              }}
+            />
           </View>
         </View>
       </View>
