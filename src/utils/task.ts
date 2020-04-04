@@ -1,8 +1,14 @@
 import { AsyncStorage } from 'react-native';
+import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from 'types/alertFrequency';
-import { makeNotificationForWash } from './notifications';
+import {
+  makeNotificationForWash,
+  getTimerDuration,
+  getLastTimeNotification,
+} from './notifications';
 import { findMovement } from './measureMeters';
 import { setFrequency } from './frequency';
+import { getTimerPermission } from './permissions';
 
 // eslint-disable-next-line
 export const makeNotifications = async ({
@@ -23,4 +29,20 @@ export const makeNotifications = async ({
     }
     await setFrequency({ frequency, dataTobeSet: Date.now(), type: 'alert' });
   }
+};
+
+export const makeTimerNotifications = async (): Promise<number> => {
+  const granted = await getTimerPermission();
+  if (!granted) {
+    return BackgroundFetch.Result.NoData;
+  }
+  const lastNotificationTime = await getLastTimeNotification();
+  if (!lastNotificationTime) {
+    return BackgroundFetch.Result.NoData;
+  }
+  const timerDuration = await getTimerDuration();
+  if (Date.now() - lastNotificationTime > timerDuration * 60000) {
+    await makeNotificationForWash();
+  }
+  return BackgroundFetch.Result.NewData;
 };
