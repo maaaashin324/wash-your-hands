@@ -9,7 +9,8 @@ import {
   Text,
 } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { AlertFrequencyType } from 'types/alertFrequency';
+import { AlertFrequencyType, WashFrequencyType } from 'types';
+import { calcFrequency } from '@utils/calcFrequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 import startLocationUpdates from '@utils/startLocationUpdates';
 
@@ -48,6 +49,7 @@ const HomeScreen: React.FC<{}> = () => {
   const [alertFrequency, setAlertFrequency] = useState<AlertFrequencyType>(
     null
   );
+  const [washFrequency, setWashFrequency] = useState<WashFrequencyType>(null);
 
   const hideDialog = (): void => {
     setDialogOpen(false);
@@ -68,27 +70,6 @@ const HomeScreen: React.FC<{}> = () => {
     setAlertFrequency(JSON.parse(result));
   };
 
-  const calcAlertFrequency = (): number => {
-    const now = new Date();
-    if (!alertFrequency) {
-      return 0;
-    }
-    const currentYearSet = alertFrequency[now.getFullYear()];
-    if (!currentYearSet) {
-      return 0;
-    }
-    const currentMonthSet = alertFrequency[now.getFullYear()][now.getMonth()];
-    if (!currentMonthSet) {
-      return 0;
-    }
-    const currentDateSet =
-      alertFrequency[now.getFullYear()][now.getMonth()][now.getDate()];
-    if (!currentDateSet) {
-      return 0;
-    }
-    return currentDateSet.length;
-  };
-
   useEffect(() => {
     judgePermissionWhenRendered();
     startLocationUpdates();
@@ -101,13 +82,15 @@ const HomeScreen: React.FC<{}> = () => {
       <Title>{i18n.t('home.title')}</Title>
       <View style={styles.frequencyContainer}>
         <View style={styles.frequencyView}>
-          <Text style={styles.frequencyText}>{calcAlertFrequency()}</Text>
+          <Text style={styles.frequencyText}>
+            {calcFrequency(alertFrequency)}
+          </Text>
           <Text style={styles.frequencyDescription}>Warning times</Text>
         </View>
         <View style={styles.frequencyContainer}>
           <Text style={styles.frequencyText}>0</Text>
           <Text style={styles.frequencyDescription}>
-            How many times you wash your hands
+            {calcFrequency(washFrequency)}
           </Text>
         </View>
       </View>
