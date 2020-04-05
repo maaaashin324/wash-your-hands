@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image } from 'react-native';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { initTask } from '@utils/task';
+import { defineTask, initTask } from '@utils/task';
 import MyApp from './src';
 
 const App: React.FC<{}> = () => {
   const [isSplashReady, setSplashReady] = useState<boolean>(false);
   const [isAppReady, setAppReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    initTask();
+  }, []);
 
   const cacheSplashResourcesAsync = async (): Promise<void> => {
     // eslint-disable-next-line
@@ -58,6 +62,6 @@ const App: React.FC<{}> = () => {
   );
 };
 
-initTask();
+defineTask();
 
 export default App;

@@ -26,30 +26,30 @@ export const makeNotifications = async (locations): Promise<void> => {
 export const makeTimerNotifications = async (): Promise<number> => {
   const granted = await getTimerPermission();
   if (!granted) {
-    return BackgroundFetch.Result.NoData;
+    return 0;
   }
   const timerDuration = await getTimerDuration();
-  setInterval(() => {
+  const intervalID = setInterval(() => {
     makeNotificationForWash();
   }, timerDuration * 60000);
-  return BackgroundFetch.Result.NewData;
+  return intervalID;
 };
 
-const initLocationTask = async (): Promise<void> => {
+const defineLocationTask = async (): Promise<void> => {
   if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
     TaskManager.defineTask(
       LOCATION_TASK_NAME,
-      // eslint-disable-next-line
-      // @ts-ignore
-      ({ data: { locations }, error }) => {
+      async ({ data: { locations }, error }) => {
         if (error) {
           console.error(error);
         }
-        makeNotifications(locations);
+        await makeNotifications(locations);
       }
     );
   }
+};
 
+const initLocationTask = async (): Promise<void> => {
   const isLocationPermitted = await getLocationPermission();
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   const isRegistered = await TaskManager.isTaskRegisteredAsync(
@@ -64,21 +64,21 @@ const initLocationTask = async (): Promise<void> => {
   }
 };
 
-const initTimerTask = async (): Promise<void> => {
+const defineTimerTask = async (): Promise<void> => {
   if (!TaskManager.isTaskDefined(TIMER_TASK)) {
-    TaskManager.defineTask(
-      TIMER_TASK,
-      // eslint-disable-next-line
-      // @ts-ignore
-      ({ error }) => {
-        if (error) {
-          console.error(error);
-        }
-        makeTimerNotifications();
+    TaskManager.defineTask(TIMER_TASK, async ({ error }) => {
+      if (error) {
+        return BackgroundFetch.Result.Failed;
       }
-    );
+      const result = await makeTimerNotifications();
+      return !result
+        ? BackgroundFetch.Result.NoData
+        : BackgroundFetch.Result.NewData;
+    });
   }
+};
 
+const initTimerTask = async (): Promise<void> => {
   const isLocationPermitted = await getTimerPermission();
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
@@ -88,13 +88,17 @@ const initTimerTask = async (): Promise<void> => {
     !isRegistered
   ) {
     const timerDuration = await getTimerDuration();
-    BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+    await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
       minimumInterval: timerDuration * 60000,
     });
   }
 };
 
 // https://github.com/expo/expo/issues/3582
+export const defineTask = async (): Promise<void> => {
+  await Promise.all([defineLocationTask, defineTimerTask]);
+};
+
 export const initTask = async (): Promise<void> => {
   await Promise.all([initLocationTask, initTimerTask]);
 };
