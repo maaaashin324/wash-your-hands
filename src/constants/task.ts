@@ -1,1 +1,2 @@
-export const GET_LOCATION_TASK = 'recordLocation';
+export const LOCATION_TASK_NAME = 'recordLocation';
+export const TIMER_TASK = 'timerNotification';

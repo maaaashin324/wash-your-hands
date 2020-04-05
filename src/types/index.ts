@@ -1,1 +1,2 @@
-export * from './washHandsTime';
+export * from './alertFrequency';
+export * from './washFrequency';

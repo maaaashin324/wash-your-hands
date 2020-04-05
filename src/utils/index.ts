@@ -1,6 +1,5 @@
-export { default as hasStartedLocationUpdates } from './hasStartedLocationUpdates';
-export * from './permissionLocation';
-export * from './permissionNotification';
+export * from './frequency';
+export * from './notifications';
 export * from './permissions';
-export { default as startLocationUpdates } from './startLocationUpdates';
+export * from './location';
 export * from './task';

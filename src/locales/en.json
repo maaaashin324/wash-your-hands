@@ -1,0 +1,66 @@
+{
+  "tab": {
+    "home": "Home",
+    "howToWash": "How To Wash",
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "Wash Your Hands!!",
+    "description": "Let's reduce the number of covid19 infected",
+    "warningTimes": "Times washed?",
+    "washTimes": "Times washed!",
+    "dialogTitle": "Permission not granted",
+    "dialogContent": "Please let this app use notification and location to have you wash your hands"
+  },
+  "howToWash": {
+    "watchButton": "Watch"
+  },
+  "statistics": {
+    "antibiotics": {
+      "headline": "Antibiotic Resistance",
+      "paragraph": "You can help prevent the overuse of antibiotics—the single most important factor leading to antibiotic resistance around the world."
+    },
+    "children": {
+      "headline": "Data about children",
+      "label": "Label",
+      "data": "data",
+      "cell1": "Reduce children diarrhea",
+      "cell2": "Reduce children respiratory",
+      "cell3": "Improve school attendance",
+      "cell3Data": "Some extend",
+      "cell4": "Improve child development",
+      "cell4Data": "Some extend",
+      "cell5": "Handwashing after toilet",
+      "cell5Data": "Only 19%!!"
+    },
+    "prevention": {
+      "headline": "Data about Prevention",
+      "label": "Reduces...",
+      "data": "Data",
+      "cell1": "diarrhea",
+      "cell2": "diarrhea/weakened immune",
+      "cell3": "Respiratory illnesses",
+      "cell4": "Absenteeism in school"
+    },
+    "quotes": {
+      "subheading": "Quotes",
+      "paragraph1": "CDC: Show Me the Science - Why Wash Your Hands?",
+      "paragraph2": "https://www.cdc.gov/handwashing/why-handwashing.html"
+    }
+  },
+  "settings": {
+    "dialogTitle": "Permission not granted",
+    "dialogContent": "Please let this app use notification and location to have you wash your hands",
+    "title": "Permission",
+    "location": "Location",
+    "notification": "Notification",
+    "timer": "Repeat Alert"
+  },
+  "notification": {
+    "title": "Wash your hands!",
+    "body": "You started to stay somewhere? Wash your hands!",
+    "testTitle": "Test!",
+    "testBody": "This is test notification!"
+  }
+}
