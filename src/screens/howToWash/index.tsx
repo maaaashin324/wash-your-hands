@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   },
   myCard: {
     marginBottom: 20,
-    marginHorizontal: 0,
   },
 });
 
