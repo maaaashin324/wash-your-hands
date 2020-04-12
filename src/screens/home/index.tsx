@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-import {
-  Button,
-  Paragraph,
-  Dialog,
-  Portal,
-  Title,
-  Text,
-  FAB,
-} from 'react-native-paper';
+import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from 'types';
+import MyPortal from '@components/myPortal';
 import { calcFrequency, setFrequency } from '@utils/frequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 
@@ -152,17 +145,12 @@ const HomeScreen: React.FC<{}> = () => {
           </View>
         </View>
       </View>
-      <Portal>
-        <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
-          <Dialog.Title>{i18n.t('home.dialogTitle')}</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>{i18n.t('home.dialogContent')}</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Ok</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <MyPortal
+        title={i18n.t('home.dialogTitle')}
+        content={i18n.t('home.dialogContent')}
+        isDialogOpen={isDialogOpen}
+        hideDialog={hideDialog}
+      />
     </View>
   );
 };
