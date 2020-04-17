@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, ViewStyle } from 'react-native';
-import { Button, Card, Title, Paragraph, Divider } from 'react-native-paper';
+// eslint-disable-next-line
+// @ts-ignore
+import { StyleSheet, ViewStyle, useWindowDimensions } from 'react-native';
+import { Button, Card, Divider } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,18 +28,22 @@ const MyCard: React.FC<MyCardInterface> = ({
   buttonTitle,
   callback,
   style,
-}) => (
-  <Card style={{ ...styles.container, ...style }}>
-    <Card.Cover source={{ uri: thumbnail }} style={{ width: 350 }} />
-    <Card.Content>
-      <Title>{title}</Title>
-      <Paragraph>{content}</Paragraph>
+}) => {
+  const window = useWindowDimensions();
+
+  return (
+    <Card style={{ ...styles.container, ...style, width: window.width - 10 }}>
+      <Card.Title title={title} subtitle={content} />
+      <Card.Cover
+        source={{ uri: thumbnail, cache: 'only-if-cached' }}
+        style={{ width: window.width - 10, minWidth: window.width - 10 }}
+      />
       <Divider />
       <Card.Actions>
         <Button onPress={callback}>{!buttonTitle ? 'OK' : buttonTitle}</Button>
       </Card.Actions>
-    </Card.Content>
-  </Card>
-);
+    </Card>
+  );
+};
 
 export default MyCard;

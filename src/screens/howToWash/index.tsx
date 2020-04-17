@@ -1,6 +1,6 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 import MyCard from '@components/myCard';
 import { videoListsWithYoutubeURL } from './utils';
@@ -14,29 +14,30 @@ const styles = StyleSheet.create({
   },
   myCard: {
     marginBottom: 20,
-    marginHorizontal: 0,
   },
 });
 
 const HowToWashScreen: React.FC<{ navigation }> = ({ navigation }) => (
   <SafeAreaView style={styles.container}>
-    <ScrollView>
-      {videoListsWithYoutubeURL.map((eachVideo) => (
+    <FlatList
+      data={videoListsWithYoutubeURL}
+      keyExtractor={(item): string => item.title}
+      renderItem={({ item }): React.ReactElement => (
         <MyCard
-          key={eachVideo.title}
-          title={eachVideo.title}
-          content={eachVideo.subTitle}
-          thumbnail={eachVideo.thumbnailURL}
+          key={item.title}
+          title={item.title}
+          content={item.subTitle}
+          thumbnail={item.thumbnailURL}
           buttonTitle={i18n.t('howToWash.watchButton')}
           callback={(): void => {
             navigation.navigate('YouTube', {
-              uri: eachVideo.youtubeURL,
+              uri: item.youtubeURL,
             });
           }}
           style={styles.myCard}
         />
-      ))}
-    </ScrollView>
+      )}
+    />
   </SafeAreaView>
 );
 
