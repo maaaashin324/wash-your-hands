@@ -18,7 +18,7 @@ export const startLocationUpdates = async (): Promise<void> => {
   if (!status) {
     return;
   }
-  await Location.startLocationUpdatesAsync('recordLocation', {
+  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.Balanced,
   });
 };

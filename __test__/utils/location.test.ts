@@ -1,10 +1,31 @@
 import * as Location from 'expo-location';
-import { hasStartedLocationUpdates, isMovedFarEnough } from '@utils/location';
+import {
+  hasStartedLocationUpdates,
+  startLocationUpdates,
+  isMovedFarEnough,
+} from '@utils/location';
 import { LOCATION_TASK_NAME } from '@constants/task';
 
 jest.mock('expo-location', () => {
   return {
     hasStartedLocationUpdatesAsync: jest.fn(() => {
+      return new Promise((resolve) => {
+        resolve(true);
+      });
+    }),
+    startLocationUpdatesAsync: jest.fn(() => {
+      return new Promise((resolve) => {
+        resolve(null);
+      });
+    }),
+    Accuracy: {
+      Balanced: 3,
+    },
+  };
+});
+jest.mock('@/utils/permissions', () => {
+  return {
+    getLocationPermission: jest.fn(() => {
       return new Promise((resolve) => {
         resolve(true);
       });
@@ -27,7 +48,7 @@ describe('Location', () => {
       spyOnHasStartedLocationUpdatesAsync.mockClear();
     });
 
-    test('should return true', async () => {
+    test('should return true since mock always returns true', async () => {
       const result = await hasStartedLocationUpdates();
 
       expect(result).toBe(true);
@@ -38,7 +59,34 @@ describe('Location', () => {
     });
   });
 
-  describe('findMovement', () => {
+  describe('startLocationUpdates', () => {
+    let spyOnStartLocationUpdatesAsync;
+
+    beforeEach(() => {
+      spyOnStartLocationUpdatesAsync = jest.spyOn(
+        Location,
+        'startLocationUpdatesAsync'
+      );
+    });
+
+    afterEach(() => {
+      spyOnStartLocationUpdatesAsync.mockClear();
+    });
+
+    test('should execute startLocationUpdatesAsync', async () => {
+      await startLocationUpdates();
+
+      expect(spyOnStartLocationUpdatesAsync).toHaveBeenCalledTimes(1);
+      expect(spyOnStartLocationUpdatesAsync).toHaveBeenCalledWith(
+        LOCATION_TASK_NAME,
+        {
+          accuracy: Location.Accuracy.Balanced,
+        }
+      );
+    });
+  });
+
+  describe('isMovedFarEnough', () => {
     test('should return true when you move far enough and stop', () => {
       const xPoint: Location.LocationData = {
         coords: {
