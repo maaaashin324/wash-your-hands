@@ -5,7 +5,7 @@ import SettingsScreen from '@screens/settings';
 const SettingsStack = createStackNavigator();
 
 const SettingsNavigator: React.FC<{}> = () => (
-  <SettingsStack.Navigator>
+  <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
     <SettingsStack.Screen name="Settings" component={SettingsScreen} />
   </SettingsStack.Navigator>
 );
