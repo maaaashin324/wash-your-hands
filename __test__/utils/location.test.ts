@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import { hasStartedLocationUpdates, isMovedFarEnough } from '@utils/location';
-import { GET_LOCATION_TASK } from '@constants/task';
+import { LOCATION_TASK_NAME } from '@constants/task';
 
 jest.mock('expo-location', () => {
   return {
@@ -33,7 +33,7 @@ describe('Location', () => {
       expect(result).toBe(true);
       expect(spyOnHasStartedLocationUpdatesAsync).toHaveBeenCalledTimes(1);
       expect(spyOnHasStartedLocationUpdatesAsync).toHaveBeenCalledWith(
-        GET_LOCATION_TASK
+        LOCATION_TASK_NAME
       );
     });
   });

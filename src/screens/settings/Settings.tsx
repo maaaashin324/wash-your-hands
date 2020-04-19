@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as Permissions from 'expo-permissions';
-import {
-  Button,
-  Paragraph,
-  Dialog,
-  Portal,
-  List,
-  Switch,
-  TextInput,
-} from 'react-native-paper';
+import { List, Switch, TextInput } from 'react-native-paper';
 import i18n from 'i18n-js';
 import {
   askLocationPermission,
@@ -17,11 +9,10 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-} from '@utils/permissions';
-import {
   setTimerDuration,
   makeNotificationForTest,
-} from '@utils/notifications';
+} from '@/utils';
+import MyPortal from '@components/myPortal';
 
 const styles = StyleSheet.create({
   container: {
@@ -142,17 +133,12 @@ const SettingScreen: React.FC<{}> = () => {
           value={String(timerDuration)}
         />
       </List.Section>
-      <Portal>
-        <Dialog visible={isDialogOpen} onDismiss={hideDialog}>
-          <Dialog.Title>{i18n.t('settings.dialogTitle')}</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>{i18n.t('settings.dialogContent')}</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Ok</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <MyPortal
+        title={i18n.t('settings.dialogTitle')}
+        content={i18n.t('settings.dialogContent')}
+        isDialogOpen={isDialogOpen}
+        hideDialog={hideDialog}
+      />
     </View>
   );
 };
