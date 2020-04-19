@@ -2,6 +2,7 @@ const themeColor = '#4297BF';
 
 export default {
   themeColor,
+  accentColor: '#3DCCAC',
   tintColor: themeColor,
   tabIconDefault: '#ccc',
   tabIconSelected: themeColor,
