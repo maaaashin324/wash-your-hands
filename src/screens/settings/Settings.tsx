@@ -9,11 +9,9 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-} from '@utils/permissions';
-import {
   setTimerDuration,
   makeNotificationForTest,
-} from '@utils/notifications';
+} from '@/utils';
 import MyPortal from '@components/myPortal';
 
 const styles = StyleSheet.create({
