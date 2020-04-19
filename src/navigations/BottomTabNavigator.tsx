@@ -4,8 +4,7 @@ import {
   createBottomTabNavigator,
   BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
-// eslint-disable-next-line
-import { MaterialIcons } from '@expo/vector-icons';
+import TabBarIcon from '@components/tabBarIcon';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 import { getHeaderTitle } from '@utils/navigations';
 import HomeStackScreen from './home';
@@ -38,19 +37,13 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
   }, [navigation, route]);
 
   return (
-    <BottomTab.Navigator
-      initialRouteName={INITIAL_ROUTE_NAME}
-      tabBarOptions={{
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'grey',
-      }}
-    >
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Home"
         component={HomeStackScreen}
         options={{
-          tabBarIcon: ({ color, size }): React.ReactNode => (
-            <MaterialIcons name="home" color={color} size={size} />
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="home" focused={focused} />
           ),
         }}
       />
@@ -58,12 +51,8 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
         name="How To Wash"
         component={HowToWashStackScreen}
         options={{
-          tabBarIcon: ({ color, size }): React.ReactNode => (
-            <MaterialIcons
-              name="play-circle-filled"
-              color={color}
-              size={size}
-            />
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="play-circle-filled" focused={focused} />
           ),
         }}
       />
@@ -71,8 +60,8 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
         name="Statistics"
         component={StatisticsStackScreen}
         options={{
-          tabBarIcon: ({ color, size }): React.ReactNode => (
-            <MaterialIcons name="insert-chart" color={color} size={size} />
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="insert-chart" focused={focused} />
           ),
         }}
       />
@@ -80,8 +69,8 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
         name="Settings"
         component={SettingsStackScreen}
         options={{
-          tabBarIcon: ({ color, size }): React.ReactNode => (
-            <MaterialIcons name="settings" color={color} size={size} />
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="settings" focused={focused} />
           ),
         }}
       />
