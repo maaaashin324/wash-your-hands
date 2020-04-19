@@ -6,14 +6,14 @@ import {
 } from '@react-navigation/bottom-tabs';
 // eslint-disable-next-line
 import { MaterialIcons } from '@expo/vector-icons';
-import i18n from 'i18n-js';
+import { INITIAL_ROUTE_NAME } from '@constants/navigations';
+import { getHeaderTitle } from '@utils/navigations';
 import HomeStackScreen from './home';
 import HowToWashStackScreen from './howToWash';
 import StatisticsStackScreen from './statistics';
 import SettingsStackScreen from './settings';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = i18n.t('tab.home');
 
 type RootStackParamList = {
   BottomTab: undefined;
@@ -27,24 +27,6 @@ type BottomTabScreenNavigationProp = StackNavigationProp<
 type BottomTabNavigatorProps = {
   route: BottomTabBarProps;
   navigation: BottomTabScreenNavigationProp;
-};
-
-const getHeaderTitle = (route: BottomTabBarProps): string => {
-  const routeName =
-    route.state?.routes[route.state?.index]?.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
-    case 'Home':
-      return i18n.t('tab.home');
-    case 'How To Wash':
-      return i18n.t('tab.howToWash');
-    case 'Statistics':
-      return i18n.t('tab.statistics');
-    case 'Settings':
-      return i18n.t('tab.settings');
-    default:
-      return i18n.t('tab.home');
-  }
 };
 
 const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
