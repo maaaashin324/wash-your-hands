@@ -1,4 +1,4 @@
-export default [
+export default Object.freeze([
   {
     title: 'PPAP-2020-/PIKOTARO(ピコ太郎)',
     subTitle: '-PIKOTARO OFFICIAL CHANNEL-',
@@ -13,12 +13,6 @@ export default [
     thumbnail: 'https://img.youtube.com/vi/VzMT7btiwwI/hqdefault.jpg',
   },
   {
-    title: 'Wash Your Hands',
-    subTitle: 'ジャニーズ公式',
-    videoURL: 'https://youtu.be/j3KL3BFFbdA?t=816',
-    thumbnail: 'https://img.youtube.com/vi/j3KL3BFFbdA/hqdefault.jpg',
-  },
-  {
     title: 'Coronavirus | How to wash your hands',
     subTitle: 'Babylon Health',
     videoURL: 'https://youtu.be/seA1wbXUQTs',
@@ -30,4 +24,4 @@ export default [
     videoURL: 'https://youtu.be/IisgnbMfKvI',
     thumbnail: 'https://img.youtube.com/vi/IisgnbMfKvI/hqdefault.jpg',
   },
-];
+]);

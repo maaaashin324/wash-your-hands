@@ -1,6 +1,6 @@
 const themeColor = '#4297BF';
 
-export default {
+export default Object.freeze({
   themeColor,
   accentColor: '#3DCCAC',
   tintColor: themeColor,
@@ -13,4 +13,4 @@ export default {
   warningText: '#666804',
   noticeBackground: themeColor,
   noticeText: '#fff',
-};
+});
