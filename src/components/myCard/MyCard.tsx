@@ -11,16 +11,16 @@ const styles = StyleSheet.create({
   },
 });
 
-interface MyCardInterface {
+type MyCardProps = {
   title: string;
   content: string;
   thumbnail?: string;
   buttonTitle: string;
   callback: () => void;
   style: ViewStyle;
-}
+};
 
-const MyCard: React.FC<MyCardInterface> = ({
+const MyCard: React.FC<MyCardProps> = ({
   title,
   content,
   thumbnail,
