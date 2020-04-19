@@ -1,8 +1,6 @@
 # Wash Your Hands
 
-![Logo of the project](./src/assets/icon.png)
-
-> Additional information or tagline
+![Logo of the project](./src/assets/icon.png =100x)
 
 This app notifies you should wash your hands when you stay somewhere after you move and at intervals.
 
