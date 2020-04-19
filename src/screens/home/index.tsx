@@ -4,6 +4,7 @@ import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from 'types';
 import MyPortal from '@components/myPortal';
+import Color from '@constants/colors';
 import { calcFrequency, setFrequency } from '@utils/frequency';
 import { getNecessaryPermissions } from '@utils/permissions';
 
@@ -130,6 +131,7 @@ const HomeScreen: React.FC<{}> = () => {
           <View style={styles.washFAB}>
             <FAB
               icon="minus"
+              style={{ backgroundColor: Color.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('minus');
@@ -137,6 +139,7 @@ const HomeScreen: React.FC<{}> = () => {
             />
             <FAB
               icon="plus"
+              style={{ backgroundColor: Color.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('plus');
