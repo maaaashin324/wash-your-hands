@@ -33,10 +33,7 @@ const MyCard: React.FC<MyCardInterface> = ({
   return (
     <Card style={{ ...styles.container, ...style, width }}>
       <Card.Title title={title} subtitle={content} />
-      <Card.Cover
-        source={{ uri: thumbnail, cache: 'only-if-cached' }}
-        style={{ width }}
-      />
+      <Card.Cover source={{ uri: thumbnail }} style={{ width }} />
       <Divider />
       <Card.Actions>
         <Button onPress={callback}>{!buttonTitle ? 'OK' : buttonTitle}</Button>

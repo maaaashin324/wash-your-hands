@@ -6,6 +6,13 @@ export default [
     thumbnail: 'https://img.youtube.com/vi/WKfolJv6Kx8/hqdefault.jpg',
   },
   {
+    title:
+      '【Dance Video（Wash Your Hands）English Subtitled Version】〜ARASHI〜',
+    subTitle: 'ARASHI',
+    videoURL: 'https://www.youtube.com/watch?v=VzMT7btiwwI',
+    thumbnail: 'https://img.youtube.com/vi/VzMT7btiwwI/hqdefault.jpg',
+  },
+  {
     title: 'Wash Your Hands',
     subTitle: 'ジャニーズ公式',
     videoURL: 'https://youtu.be/j3KL3BFFbdA?t=816',
