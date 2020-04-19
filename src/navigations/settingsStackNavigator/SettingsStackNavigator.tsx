@@ -4,10 +4,10 @@ import SettingsScreen from '@screens/settings';
 
 const SettingsStack = createStackNavigator();
 
-const SettingsNavigator: React.FC<{}> = () => (
+const SettingsStackNavigator: React.FC<{}> = () => (
   <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
     <SettingsStack.Screen name="Settings" component={SettingsScreen} />
   </SettingsStack.Navigator>
 );
 
-export default SettingsNavigator;
+export default SettingsStackNavigator;

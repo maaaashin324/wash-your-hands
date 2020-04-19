@@ -7,10 +7,10 @@ import {
 import TabBarIcon from '@components/tabBarIcon';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 import { getHeaderTitle } from '@utils/navigations';
-import HomeStackScreen from './home';
-import HowToWashStackScreen from './howToWash';
-import StatisticsStackScreen from './statistics';
-import SettingsStackScreen from './settings';
+import HomeStackNavigator from './homeStackNavigator';
+import HowToWashStackNavigator from './howToWashStackNavigator';
+import StatisticsStackNavigator from './statisticsStackNavigator';
+import SettingsStackNavigator from './settingsStackNavigator';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -40,7 +40,7 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Home"
-        component={HomeStackScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarIcon: ({ focused }): React.ReactNode => (
             <TabBarIcon name="home" focused={focused} />
@@ -49,7 +49,7 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
       />
       <BottomTab.Screen
         name="How To Wash"
-        component={HowToWashStackScreen}
+        component={HowToWashStackNavigator}
         options={{
           tabBarIcon: ({ focused }): React.ReactNode => (
             <TabBarIcon name="play-circle-filled" focused={focused} />
@@ -58,7 +58,7 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
       />
       <BottomTab.Screen
         name="Statistics"
-        component={StatisticsStackScreen}
+        component={StatisticsStackNavigator}
         options={{
           tabBarIcon: ({ focused }): React.ReactNode => (
             <TabBarIcon name="insert-chart" focused={focused} />
@@ -67,7 +67,7 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
       />
       <BottomTab.Screen
         name="Settings"
-        component={SettingsStackScreen}
+        component={SettingsStackNavigator}
         options={{
           tabBarIcon: ({ focused }): React.ReactNode => (
             <TabBarIcon name="settings" focused={focused} />

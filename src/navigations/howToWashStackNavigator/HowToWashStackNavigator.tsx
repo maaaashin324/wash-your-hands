@@ -5,11 +5,11 @@ import YouTubeScreen from '@screens/youTube';
 
 const HowToWashStack = createStackNavigator();
 
-const HowToWashNavigator: React.FC<{}> = () => (
+const HowToWashStackNavigator: React.FC<{}> = () => (
   <HowToWashStack.Navigator screenOptions={{ headerShown: false }}>
     <HowToWashStack.Screen name="HowToWash" component={HowToWashScreen} />
     <HowToWashStack.Screen name="YouTube" component={YouTubeScreen} />
   </HowToWashStack.Navigator>
 );
 
-export default HowToWashNavigator;
+export default HowToWashStackNavigator;

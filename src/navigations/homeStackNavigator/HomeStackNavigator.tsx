@@ -4,10 +4,10 @@ import HomeScreen from '@screens/home';
 
 const HomeStack = createStackNavigator();
 
-const HomeNavigator: React.FC<{}> = () => (
+const HomeStackNavigator: React.FC<{}> = () => (
   <HomeStack.Navigator screenOptions={{ headerShown: false }}>
     <HomeStack.Screen name="Home" component={HomeScreen} />
   </HomeStack.Navigator>
 );
 
-export default HomeNavigator;
+export default HomeStackNavigator;
