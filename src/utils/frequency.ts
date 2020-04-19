@@ -1,4 +1,4 @@
-import { AlertFrequencyType, WashFrequencyType } from 'types';
+import { AlertFrequencyType, WashFrequencyType } from '@types';
 import { AsyncStorage } from 'react-native';
 
 interface CalcToday {

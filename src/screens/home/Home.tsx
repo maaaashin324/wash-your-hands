@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { AlertFrequencyType, WashFrequencyType } from 'types';
+import { AlertFrequencyType, WashFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
 import Color from '@constants/colors';
 import { calcFrequency, setFrequency } from '@utils/frequency';

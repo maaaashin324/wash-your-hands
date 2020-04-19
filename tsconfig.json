@@ -13,7 +13,7 @@
       "@components/*": ["components/*"],
       "@navigations/*": ["navigations/*"],
       "@screens/*": ["screens/*"],
-      "types/*": ["types/*"],
+      "@types/*": ["@types/*"],
       "@utils/*": ["utils/*"]
     }
   }
