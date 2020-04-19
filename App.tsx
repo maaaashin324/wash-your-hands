@@ -2,9 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { View, Image } from 'react-native';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { defineTask, initTask } from '@utils/task';
+import Colors from '@constants/colors';
 import MyApp from './src';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Colors.themeColor,
+    accent: Colors.accentColor,
+  },
+};
 
 const App: React.FC<{}> = () => {
   const [isSplashReady, setSplashReady] = useState<boolean>(false);
@@ -56,7 +66,7 @@ const App: React.FC<{}> = () => {
     );
   }
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <MyApp />
     </PaperProvider>
   );

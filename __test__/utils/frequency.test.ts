@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import { calcToday, calcFrequency, setFrequency } from '@utils/frequency';
-import { AlertFrequencyType } from 'types';
+import { AlertFrequencyType } from '@types';
 
 jest.mock('react-native', () => ({
   AsyncStorage: {

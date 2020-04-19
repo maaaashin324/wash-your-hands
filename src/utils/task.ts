@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
-import { AlertFrequencyType } from 'types/alertFrequency';
+import { AlertFrequencyType } from '@types';
 import { LOCATION_TASK_NAME, TIMER_TASK } from '@constants/task';
 import { setFrequency } from './frequency';
 import { startLocationUpdates, isMovedFarEnough } from './location';

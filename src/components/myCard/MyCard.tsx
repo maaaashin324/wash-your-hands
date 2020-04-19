@@ -1,8 +1,7 @@
 import React from 'react';
-// eslint-disable-next-line
-// @ts-ignore
-import { StyleSheet, ViewStyle, useWindowDimensions } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 import { Button, Card, Divider } from 'react-native-paper';
+import Layout from '@constants/layout';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,14 +28,14 @@ const MyCard: React.FC<MyCardInterface> = ({
   callback,
   style,
 }) => {
-  const window = useWindowDimensions();
+  const { width } = Layout.window;
 
   return (
-    <Card style={{ ...styles.container, ...style, width: window.width - 10 }}>
+    <Card style={{ ...styles.container, ...style, width }}>
       <Card.Title title={title} subtitle={content} />
       <Card.Cover
         source={{ uri: thumbnail, cache: 'only-if-cached' }}
-        style={{ width: window.width - 10, minWidth: window.width - 10 }}
+        style={{ width }}
       />
       <Divider />
       <Card.Actions>

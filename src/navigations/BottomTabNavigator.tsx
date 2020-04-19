@@ -1,63 +1,81 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   createBottomTabNavigator,
-  BottomTabNavigationOptions,
+  BottomTabBarProps,
 } from '@react-navigation/bottom-tabs';
-// eslint-disable-next-line
-import { MaterialIcons } from '@expo/vector-icons';
-import i18n from 'i18n-js';
-import HomeStackScreen from './home';
-import HowToWashStackScreen from './howToWash';
-import StatisticsStackScreen from './statistics';
-import SettingsStackScreen from './settings';
+import TabBarIcon from '@components/tabBarIcon';
+import { INITIAL_ROUTE_NAME } from '@constants/navigations';
+import { getHeaderTitle } from '@utils/navigations';
+import HomeStackNavigator from './homeStackNavigator';
+import HowToWashStackNavigator from './howToWashStackNavigator';
+import StatisticsStackNavigator from './statisticsStackNavigator';
+import SettingsStackNavigator from './settingsStackNavigator';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = i18n.t('tab.home');
 
-const BottomTabNavigator: React.FC<{}> = () => (
-  <BottomTab.Navigator
-    initialRouteName={INITIAL_ROUTE_NAME}
-    screenOptions={({ route }): BottomTabNavigationOptions => ({
-      tabBarIcon: ({ color, size }): React.ReactNode => {
-        if (route.name === 'Home') {
-          return <MaterialIcons name="home" color={color} size={size} />;
-        }
-        if (route.name === 'How To Wash') {
-          return (
-            <MaterialIcons
-              name="play-circle-filled"
-              color={color}
-              size={size}
-            />
-          );
-        }
-        if (route.name === 'Statistics') {
-          return (
-            <MaterialIcons name="insert-chart" color={color} size={size} />
-          );
-        }
-        return <MaterialIcons name="settings" color={color} size={size} />;
-      },
-    })}
-    tabBarOptions={{
-      activeTintColor: 'tomato',
-      inactiveTintColor: 'grey',
-    }}
-  >
-    <BottomTab.Screen name={i18n.t('tab.home')} component={HomeStackScreen} />
-    <BottomTab.Screen
-      name={i18n.t('tab.howToWash')}
-      component={HowToWashStackScreen}
-    />
-    <BottomTab.Screen
-      name={i18n.t('tab.statistics')}
-      component={StatisticsStackScreen}
-    />
-    <BottomTab.Screen
-      name={i18n.t('tab.settings')}
-      component={SettingsStackScreen}
-    />
-  </BottomTab.Navigator>
-);
+type RootStackParamList = {
+  BottomTab: undefined;
+};
+
+type BottomTabScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'BottomTab'
+>;
+
+type BottomTabNavigatorProps = {
+  route: BottomTabBarProps;
+  navigation: BottomTabScreenNavigationProp;
+};
+
+const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
+  navigation,
+  route,
+}) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  }, [navigation, route]);
+
+  return (
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <BottomTab.Screen
+        name="Home"
+        component={HomeStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="home" focused={focused} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="How To Wash"
+        component={HowToWashStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="play-circle-filled" focused={focused} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Statistics"
+        component={StatisticsStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="insert-chart" focused={focused} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsStackNavigator}
+        options={{
+          tabBarIcon: ({ focused }): React.ReactNode => (
+            <TabBarIcon name="settings" focused={focused} />
+          ),
+        }}
+      />
+    </BottomTab.Navigator>
+  );
+};
 
 export default BottomTabNavigator;
