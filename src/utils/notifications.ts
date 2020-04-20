@@ -1,16 +1,17 @@
 import { Notifications } from 'expo';
 import { AsyncStorage } from 'react-native';
 import i18n from 'i18n-js';
+import StorageKeys from '@constants/storage';
 
 const setLastTimeNotification = async (): Promise<void> => {
   await AsyncStorage.setItem(
-    'lastNotificationTime',
+    StorageKeys.LastNotificationTime,
     JSON.stringify(Date.now())
   );
 };
 
 export const getLastTimeNotification = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem('lastNotificationTime');
+  const result = await AsyncStorage.getItem(StorageKeys.LastNotificationTime);
   if (!result) {
     return 0;
   }
@@ -27,7 +28,7 @@ export const makeNotificationForWash = async () => {
 };
 
 export const getTimerDuration = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem('timerDuration');
+  const result = await AsyncStorage.getItem(StorageKeys.TimeDuration);
   if (!result) {
     return 30;
   }
@@ -35,5 +36,8 @@ export const getTimerDuration = async (): Promise<number> => {
 };
 
 export const setTimerDuration = async (duration: number): Promise<void> => {
-  await AsyncStorage.setItem('timerDuration', JSON.stringify(duration));
+  await AsyncStorage.setItem(
+    StorageKeys.TimeDuration,
+    JSON.stringify(duration)
+  );
 };

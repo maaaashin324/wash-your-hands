@@ -4,7 +4,7 @@ import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
-import Color from '@constants/colors';
+import { Color, StorageKeys } from '@/constants';
 import { calcFrequency, setFrequency, getNecessaryPermissions } from '@/utils';
 
 const styles = StyleSheet.create({
@@ -89,8 +89,12 @@ const HomeScreen: React.FC<{}> = () => {
   };
 
   const getFrequency = async (): Promise<void> => {
-    const alertFrequencyJSON = await AsyncStorage.getItem('alert');
-    const washFrequencyJSON = await AsyncStorage.getItem('wash');
+    const alertFrequencyJSON = await AsyncStorage.getItem(
+      StorageKeys.AlertFrequency
+    );
+    const washFrequencyJSON = await AsyncStorage.getItem(
+      StorageKeys.WashFrequency
+    );
     if (alertFrequencyJSON) {
       alertFrequency = JSON.parse(alertFrequencyJSON);
       todayAlertTimes = calcFrequency(alertFrequency);
