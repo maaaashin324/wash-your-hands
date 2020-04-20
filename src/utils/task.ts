@@ -2,7 +2,7 @@ import { AsyncStorage } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { AlertFrequencyType } from '@types';
-import { LOCATION_TASK_NAME, TIMER_TASK } from '@constants/task';
+import { LOCATION_TASK_NAME, TIMER_TASK, StorageKeys } from '@/constants';
 import { setFrequency } from './frequency';
 import { startLocationUpdates, isMovedFarEnough } from './location';
 import { makeNotificationForWash, getTimerDuration } from './notifications';
@@ -14,12 +14,16 @@ export const makeNotifications = async (locations): Promise<void> => {
   if (result) {
     await makeNotificationForWash();
 
-    const dataSet = await AsyncStorage.getItem('washTimes');
+    const dataSet = await AsyncStorage.getItem(StorageKeys.AlertFrequency);
     let frequency: AlertFrequencyType = {};
     if (dataSet) {
       frequency = JSON.parse(dataSet);
     }
-    await setFrequency({ frequency, dataTobeSet: Date.now(), type: 'alert' });
+    await setFrequency({
+      frequency,
+      dataTobeSet: Date.now(),
+      type: StorageKeys.AlertFrequency,
+    });
   }
 };
 
