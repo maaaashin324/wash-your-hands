@@ -24,6 +24,9 @@
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["location"]
+      },
+      "config": {
+        "usesNonExemptEncryption": false
       }
     },
     "android": {
