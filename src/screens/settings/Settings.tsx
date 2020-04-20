@@ -32,7 +32,7 @@ const SettingScreen: React.FC<{}> = () => {
     false
   );
   const [isTimerPermitted, setTimerPermitted] = useState<boolean>(false);
-  const [timerDuration, setTimerDurationState] = useState<number>(30);
+  const [duration, setDuration] = useState<number>(30);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -118,17 +118,17 @@ const SettingScreen: React.FC<{}> = () => {
           label="Timer"
           disabled={!isTimerPermitted}
           keyboardType="numeric"
-          onChangeText={(text): void => setTimerDurationState(+text)}
-          onBlur={(): void => {
-            if (timerDuration < 30) {
-              setTimer(30);
-              setTimerDurationState(30);
+          onChangeText={(text): void => setDuration(+text)}
+          onBlur={async (): Promise<void> => {
+            if (duration < 30) {
+              await setTimer(30);
+              setDuration(30);
             } else {
-              setTimer(timerDuration);
+              await setTimer(duration);
             }
           }}
           returnKeyType="done"
-          value={String(timerDuration)}
+          value={String(duration)}
         />
       </List.Section>
       <MyPortal
