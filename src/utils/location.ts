@@ -1,10 +1,10 @@
 import * as Location from 'expo-location';
-import { GET_LOCATION_TASK } from '@constants/task';
+import { LOCATION_TASK_NAME } from '@constants/task';
 import { getLocationPermission } from './permissions';
 
 export const hasStartedLocationUpdates = async (): Promise<boolean> => {
   const result = await Location.hasStartedLocationUpdatesAsync(
-    GET_LOCATION_TASK
+    LOCATION_TASK_NAME
   );
   return result;
 };
@@ -18,7 +18,7 @@ export const startLocationUpdates = async (): Promise<void> => {
   if (!status) {
     return;
   }
-  await Location.startLocationUpdatesAsync('recordLocation', {
+  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.Balanced,
   });
 };

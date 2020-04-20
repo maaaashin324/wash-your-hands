@@ -9,11 +9,10 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-} from '@utils/permissions';
-import {
   setTimerDuration,
   makeNotificationForTest,
-} from '@utils/notifications';
+  initTask,
+} from '@/utils';
 import MyPortal from '@components/myPortal';
 
 const styles = StyleSheet.create({
@@ -67,8 +66,9 @@ const SettingScreen: React.FC<{}> = () => {
         await makeNotificationForTest();
       }
       setTimerPermitted(!isTimerPermitted);
-      return;
+      result = true;
     }
+    await initTask();
     if (!result) {
       setDialogOpen(true);
     }

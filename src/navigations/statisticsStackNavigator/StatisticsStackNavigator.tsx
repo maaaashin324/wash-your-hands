@@ -5,7 +5,7 @@ import StatisticsScreen from '@screens/statistics';
 const StatisticsStack = createStackNavigator();
 
 const StatisticsNavigator: React.FC<{}> = () => (
-  <StatisticsStack.Navigator>
+  <StatisticsStack.Navigator screenOptions={{ headerShown: false }}>
     <StatisticsStack.Screen name="Statistics" component={StatisticsScreen} />
   </StatisticsStack.Navigator>
 );

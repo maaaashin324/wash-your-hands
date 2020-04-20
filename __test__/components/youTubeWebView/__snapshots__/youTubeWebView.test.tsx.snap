@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`YouTubeWebView should render YouTubeWebView correctly 1`] = `
+<WebView
+  source={
+    Object {
+      "uri": "https://www.youtube.com/watch?v=WKfolJv6Kx8",
+    }
+  }
+/>
+`;

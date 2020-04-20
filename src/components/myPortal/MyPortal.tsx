@@ -1,14 +1,14 @@
 import React from 'react';
 import { Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 
-interface MyPortalInterface {
+type MyPortalProps = {
   title: string;
   content: string;
   isDialogOpen: boolean;
   hideDialog: () => void;
-}
+};
 
-const MyPortal: React.FC<MyPortalInterface> = ({
+const MyPortal: React.FC<MyPortalProps> = ({
   title,
   content,
   isDialogOpen,
