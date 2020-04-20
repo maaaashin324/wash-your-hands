@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Wash Your Hands",
+    "name": "#WashYourHands",
     "description": "This app tells you to wash your hands to prevent sickness.",
-    "slug": "wash-your-hands",
+    "slug": "hash-wash-your-hands",
     "backgroundColor": "#4297BF",
     "privacy": "public",
     "platforms": ["ios", "android"],
@@ -19,7 +19,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.maaaashin324.wash-your-hands",
+      "bundleIdentifier": "com.maaaashin324.hash-wash-your-hands",
       "buildNumber": "1.0.0",
       "supportsTablet": false,
       "infoPlist": {
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "package": "com.maaaashin324.wash_your_hands",
+      "package": "com.maaaashin324.hash-wash_your_hands",
       "versionCode": 1
     }
   }
