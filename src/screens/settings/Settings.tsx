@@ -10,7 +10,6 @@ import {
   getTimerPermission,
   setTimerPermission,
   setTimerDuration,
-  makeNotificationForTest,
   initTask,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
@@ -62,9 +61,6 @@ const SettingScreen: React.FC<{}> = () => {
       setNotificationPermitted(result);
     } else {
       await setTimerPermission(!isTimerPermitted);
-      if (!isTimerPermitted) {
-        await makeNotificationForTest();
-      }
       setTimerPermitted(!isTimerPermitted);
       result = true;
     }

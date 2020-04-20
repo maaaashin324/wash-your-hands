@@ -26,15 +26,6 @@ export const makeNotificationForWash = async () => {
   await setLastTimeNotification();
 };
 
-// eslint-disable-next-line
-export const makeNotificationForTest = async () => {
-  await Notifications.presentLocalNotificationAsync({
-    title: i18n.t('notification:testTitle'),
-    body: i18n.t('notification:testBody'),
-  });
-  await setLastTimeNotification();
-};
-
 export const getTimerDuration = async (): Promise<number> => {
   const result = await AsyncStorage.getItem('timerDuration');
   if (!result) {
