@@ -11,6 +11,7 @@ import {
   setTimerPermission,
   setTimerDuration,
   makeNotificationForTest,
+  initTask,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
 
@@ -65,8 +66,9 @@ const SettingScreen: React.FC<{}> = () => {
         await makeNotificationForTest();
       }
       setTimerPermitted(!isTimerPermitted);
-      return;
+      result = true;
     }
+    await initTask();
     if (!result) {
       setDialogOpen(true);
     }

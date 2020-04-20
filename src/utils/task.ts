@@ -35,7 +35,7 @@ export const makeTimerNotifications = async (): Promise<number> => {
   return intervalID;
 };
 
-const defineLocationTask = async (): Promise<void> => {
+const defineLocationTask = (): void => {
   if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
     TaskManager.defineTask(
       LOCATION_TASK_NAME,
