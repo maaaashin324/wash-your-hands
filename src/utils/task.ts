@@ -8,7 +8,6 @@ import { startLocationUpdates, isMovedFarEnough } from './location';
 import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { getTimerPermission, getLocationPermission } from './permissions';
 
-// eslint-disable-next-line
 export const makeNotifications = async (locations): Promise<void> => {
   const result = isMovedFarEnough(locations);
   if (result) {
@@ -40,10 +39,7 @@ const defineLocationTask = (): void => {
   if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
     TaskManager.defineTask(
       LOCATION_TASK_NAME,
-      async ({ data: { locations }, error }) => {
-        if (error) {
-          console.error(error);
-        }
+      async ({ data: { locations } }) => {
         await makeNotifications(locations);
       }
     );
