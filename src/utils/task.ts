@@ -46,16 +46,13 @@ const defineLocationTask = (): void => {
   }
 };
 
+// https://github.com/expo/expo/issues/3582#issuecomment-480820345
 const initLocationTask = async (): Promise<void> => {
   const isLocationPermitted = await getLocationPermission();
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
-  const isRegistered = await TaskManager.isTaskRegisteredAsync(
-    LOCATION_TASK_NAME
-  );
   if (
     isLocationPermitted &&
-    isBackPermitted === BackgroundFetch.Status.Available &&
-    !isRegistered
+    isBackPermitted === BackgroundFetch.Status.Available
   ) {
     await startLocationUpdates();
   }
@@ -75,10 +72,10 @@ const defineTimerTask = (): void => {
   }
 };
 
+// https://github.com/expo/expo/issues/3582#issuecomment-480820345
 const initTimerTask = async (): Promise<void> => {
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
-  const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
-  if (isBackPermitted === BackgroundFetch.Status.Available && !isRegistered) {
+  if (isBackPermitted === BackgroundFetch.Status.Available) {
     const timerDuration = await getTimerDuration();
     await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
       minimumInterval: timerDuration * 60,
