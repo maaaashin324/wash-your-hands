@@ -93,7 +93,7 @@ const initTimerTask = async (): Promise<void> => {
   ) {
     const timerDuration = await getTimerDuration();
     await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-      minimumInterval: timerDuration * 60000,
+      minimumInterval: timerDuration * 60,
     });
   }
 };
