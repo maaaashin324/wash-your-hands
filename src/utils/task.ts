@@ -39,7 +39,10 @@ const defineLocationTask = (): void => {
   if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
     TaskManager.defineTask(
       LOCATION_TASK_NAME,
-      async ({ data: { locations } }) => {
+      async ({ data: { locations }, error }) => {
+        if (error) {
+          return;
+        }
         await makeNotifications(locations);
       }
     );
@@ -64,10 +67,14 @@ const defineTimerTask = (): void => {
       if (error) {
         return BackgroundFetch.Result.Failed;
       }
-      const result = await makeTimerNotifications();
-      return !result
-        ? BackgroundFetch.Result.NoData
-        : BackgroundFetch.Result.NewData;
+      try {
+        const result = await makeTimerNotifications();
+        return !result
+          ? BackgroundFetch.Result.NoData
+          : BackgroundFetch.Result.NewData;
+      } catch (error) {
+        return BackgroundFetch.Result.Failed;
+      }
     });
   }
 };
