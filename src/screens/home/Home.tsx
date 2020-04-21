@@ -5,7 +5,12 @@ import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
 import { Colors, StorageKeys } from '@/constants';
-import { calcFrequency, setFrequency, getNecessaryPermissions } from '@/utils';
+import {
+  initTask,
+  calcFrequency,
+  setFrequency,
+  getNecessaryPermissions,
+} from '@/utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -106,6 +111,7 @@ const HomeScreen: React.FC<{}> = () => {
   };
 
   useEffect(() => {
+    initTask();
     judgePermissionWhenRendered();
     getFrequency();
     // eslint-disable-next-line

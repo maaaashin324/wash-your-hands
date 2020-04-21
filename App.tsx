@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { defineTask, initTask } from '@utils/task';
+import { defineTask } from '@utils/task';
 import Colors from '@constants/colors';
 import MyApp from './src';
 
@@ -19,10 +19,6 @@ const theme = {
 const App: React.FC<{}> = () => {
   const [isSplashReady, setSplashReady] = useState<boolean>(false);
   const [isAppReady, setAppReady] = useState<boolean>(false);
-
-  useEffect(() => {
-    initTask();
-  }, []);
 
   const cacheSplashResourcesAsync = async (): Promise<void> => {
     // eslint-disable-next-line

@@ -23,7 +23,7 @@
       "buildNumber": "1.0.3",
       "supportsTablet": false,
       "infoPlist": {
-        "UIBackgroundModes": ["location"]
+        "UIBackgroundModes": ["location", "fetch"]
       },
       "config": {
         "usesNonExemptEncryption": false

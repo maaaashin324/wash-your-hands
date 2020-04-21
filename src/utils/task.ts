@@ -76,14 +76,9 @@ const defineTimerTask = (): void => {
 };
 
 const initTimerTask = async (): Promise<void> => {
-  const isLocationPermitted = await getTimerPermission();
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
-  if (
-    isLocationPermitted &&
-    isBackPermitted === BackgroundFetch.Status.Available &&
-    !isRegistered
-  ) {
+  if (isBackPermitted === BackgroundFetch.Status.Available && !isRegistered) {
     const timerDuration = await getTimerDuration();
     await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
       minimumInterval: timerDuration * 60,
@@ -97,5 +92,7 @@ export const defineTask = (): void => {
 };
 
 export const initTask = async (): Promise<void> => {
-  await Promise.all([initLocationTask, initTimerTask]);
+  await TaskManager.unregisterAllTasksAsync();
+  await initTimerTask();
+  await initLocationTask();
 };
