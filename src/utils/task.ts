@@ -30,13 +30,10 @@ export const makeNotifications = async (locations): Promise<void> => {
 export const makeTimerNotifications = async (): Promise<number> => {
   const granted = await getTimerPermission();
   if (!granted) {
-    return 0;
+    return BackgroundFetch.Result.NoData;
   }
-  const timerDuration = await getTimerDuration();
-  const intervalID = setInterval(() => {
-    makeNotificationForWash();
-  }, timerDuration * 60000);
-  return intervalID;
+  await makeNotificationForWash();
+  return BackgroundFetch.Result.NewData;
 };
 
 const defineLocationTask = (): void => {
@@ -68,7 +65,7 @@ const initLocationTask = async (): Promise<void> => {
   }
 };
 
-const defineTimerTask = async (): Promise<void> => {
+const defineTimerTask = (): void => {
   if (!TaskManager.isTaskDefined(TIMER_TASK)) {
     TaskManager.defineTask(TIMER_TASK, async ({ error }) => {
       if (error) {
@@ -98,9 +95,9 @@ const initTimerTask = async (): Promise<void> => {
   }
 };
 
-// https://github.com/expo/expo/issues/3582
-export const defineTask = async (): Promise<void> => {
-  await Promise.all([defineLocationTask, defineTimerTask]);
+export const defineTask = (): void => {
+  defineLocationTask();
+  defineTimerTask();
 };
 
 export const initTask = async (): Promise<void> => {
