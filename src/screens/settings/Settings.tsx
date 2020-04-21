@@ -11,6 +11,7 @@ import {
   setTimerPermission,
   setTimerDuration,
   initTask,
+  restartTimerTask,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
 
@@ -72,6 +73,7 @@ const SettingScreen: React.FC<{}> = () => {
 
   const setTimer = async (newDuration): Promise<void> => {
     await setTimerDuration(newDuration);
+    await restartTimerTask();
   };
 
   useEffect(() => {

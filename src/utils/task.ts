@@ -96,3 +96,8 @@ export const initTask = async (): Promise<void> => {
   await initTimerTask();
   await initLocationTask();
 };
+
+export const restartTimerTask = async (): Promise<void> => {
+  await BackgroundFetch.unregisterTaskAsync(TIMER_TASK);
+  await initTimerTask();
+};
