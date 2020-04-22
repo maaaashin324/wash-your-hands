@@ -23,7 +23,10 @@
       "buildNumber": "1.0.5",
       "supportsTablet": false,
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"]
+        "UIBackgroundModes": ["location", "fetch"],
+        "NSLocationWhenInUseUsageDescription": "Your location is required to make a notification when you stay somewhere after you move.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location is required to make a notification when you stay somewhere after you move.",
+        "NSLocationAlwaysUsageDescription": "Your location is required to make a notification when you stay somewhere after you move."
       },
       "config": {
         "usesNonExemptEncryption": false
