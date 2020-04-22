@@ -40,7 +40,7 @@ export const setTimerDurationByMinutes = async (
   );
 };
 
-const storeFrequency = async (): Promise<void> => {
+const storeFrequency = async (dataTobeSet: number): Promise<void> => {
   const dataSet = await AsyncStorage.getItem(StorageKeys.AlertFrequency);
   let frequency: AlertFrequencyType = {};
   if (dataSet) {
@@ -48,7 +48,7 @@ const storeFrequency = async (): Promise<void> => {
   }
   await setFrequency({
     frequency,
-    dataTobeSet: Date.now() + 60000,
+    dataTobeSet,
     type: StorageKeys.AlertFrequency,
   });
 };
@@ -59,14 +59,15 @@ export const makeLocationNotification = async (
   if (!isMovedFarEnough(locations)) {
     return;
   }
+  const time = Date.now() + 60000;
   await Notifications.scheduleLocalNotificationAsync(
     {
       title: i18n.t('notification:title'),
       body: i18n.t('notification:body'),
     },
-    { time: Date.now() + 60000 }
+    { time }
   );
-  await storeFrequency();
+  await storeFrequency(time);
 };
 
 // https://github.com/expo/expo/pull/7035#discussion_r390141822
@@ -96,6 +97,6 @@ export const makeTimerNotification = async (): Promise<boolean> => {
     { time: nextNotificationTime }
   );
   await setLastTimeNotification();
-  await storeFrequency();
+  await storeFrequency(nextNotificationTime);
   return true;
 };
