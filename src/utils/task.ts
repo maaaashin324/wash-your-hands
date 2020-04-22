@@ -29,13 +29,13 @@ export const makeNotifications = async (
   }
 };
 
-export const makeTimerNotifications = async (): Promise<number> => {
+export const makeTimerNotifications = async (): Promise<boolean> => {
   const granted = await getTimerPermission();
   if (!granted) {
-    return BackgroundFetch.Result.NoData;
+    return false;
   }
   await makeNotificationForWash();
-  return BackgroundFetch.Result.NewData;
+  return true;
 };
 
 const defineLocationTask = (): void => {
