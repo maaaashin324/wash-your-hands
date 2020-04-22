@@ -36,17 +36,18 @@ export const makeTimerNotifications = async (): Promise<number> => {
 };
 
 const defineLocationTask = (): void => {
-  if (!TaskManager.isTaskDefined(LOCATION_TASK_NAME)) {
-    TaskManager.defineTask(
-      LOCATION_TASK_NAME,
-      async ({ data: { locations }, error }) => {
-        if (error) {
-          return;
-        }
-        await makeNotifications(locations);
+  TaskManager.defineTask(
+    LOCATION_TASK_NAME,
+    // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
+    // Since taskExecutor is invoked with await in line 182, this should be return promise.
+    // eslint-disable-next-line
+    async ({ data: { locations }, error }) => {
+      if (error) {
+        return;
       }
-    );
-  }
+      await makeNotifications(locations);
+    }
+  );
 };
 
 // https://github.com/expo/expo/issues/3582#issuecomment-480820345
@@ -63,6 +64,9 @@ const initLocationTask = async (): Promise<void> => {
 
 const defineTimerTask = (): void => {
   if (!TaskManager.isTaskDefined(TIMER_TASK)) {
+    // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
+    // Since taskExecutor is invoked with await in line 182, this should be return promise.
+    // eslint-disable-next-line
     TaskManager.defineTask(TIMER_TASK, async ({ error }) => {
       if (error) {
         return BackgroundFetch.Result.Failed;
