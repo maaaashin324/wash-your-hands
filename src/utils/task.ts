@@ -1,42 +1,13 @@
-import { AsyncStorage } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Locations from 'expo-location';
-import { AlertFrequencyType } from '@types';
-import { LOCATION_TASK_NAME, TIMER_TASK, StorageKeys } from '@/constants';
-import { setFrequency } from './frequency';
-import { startLocationUpdates, isMovedFarEnough } from './location';
-import { makeNotificationForWash } from './notifications';
-import { getTimerPermission, getLocationPermission } from './permissions';
-
-export const makeNotifications = async (
-  locations: Locations.LocationData[]
-): Promise<void> => {
-  const result = isMovedFarEnough(locations);
-  if (result) {
-    await makeNotificationForWash();
-
-    const dataSet = await AsyncStorage.getItem(StorageKeys.AlertFrequency);
-    let frequency: AlertFrequencyType = {};
-    if (dataSet) {
-      frequency = JSON.parse(dataSet);
-    }
-    await setFrequency({
-      frequency,
-      dataTobeSet: Date.now(),
-      type: StorageKeys.AlertFrequency,
-    });
-  }
-};
-
-export const makeTimerNotifications = async (): Promise<boolean> => {
-  const granted = await getTimerPermission();
-  if (!granted) {
-    return false;
-  }
-  await makeNotificationForWash();
-  return true;
-};
+import { LOCATION_TASK_NAME, TIMER_TASK } from '@/constants';
+import { startLocationUpdates } from './location';
+import {
+  makeLocationNotification,
+  makeTimerNotification,
+} from './notifications';
+import { getLocationPermission } from './permissions';
 
 const defineLocationTask = (): void => {
   TaskManager.defineTask(
@@ -54,7 +25,7 @@ const defineLocationTask = (): void => {
       if (error) {
         return;
       }
-      await makeNotifications(locations);
+      await makeLocationNotification(locations);
     }
   );
 };
@@ -82,7 +53,7 @@ const defineTimerTask = (): void => {
         return BackgroundFetch.Result.Failed;
       }
       try {
-        const result = await makeTimerNotifications();
+        const result = await makeTimerNotification();
         return !result
           ? BackgroundFetch.Result.NoData
           : BackgroundFetch.Result.NewData;
