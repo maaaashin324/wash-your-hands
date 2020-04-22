@@ -117,14 +117,15 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <TextInput
-          label="Timer"
+          defaultValue="10"
           disabled={!isTimerPermitted}
+          label="Timer by minutes"
           keyboardType="numeric"
           onChangeText={(text): void => setDuration(+text)}
           onBlur={async (): Promise<void> => {
-            if (duration < 30) {
-              await setTimer(30);
-              setDuration(30);
+            if (duration <= 0) {
+              await setTimer(10);
+              setDuration(10);
             } else {
               await setTimer(duration);
             }
