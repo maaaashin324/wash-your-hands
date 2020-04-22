@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
+import * as Locations from 'expo-location';
 import { AlertFrequencyType } from '@types';
 import { LOCATION_TASK_NAME, TIMER_TASK, StorageKeys } from '@/constants';
 import { setFrequency } from './frequency';
@@ -8,7 +9,9 @@ import { startLocationUpdates, isMovedFarEnough } from './location';
 import { makeNotificationForWash, getTimerDuration } from './notifications';
 import { getTimerPermission, getLocationPermission } from './permissions';
 
-export const makeNotifications = async (locations): Promise<void> => {
+export const makeNotifications = async (
+  locations: Locations.LocationData[]
+): Promise<void> => {
   const result = isMovedFarEnough(locations);
   if (result) {
     await makeNotificationForWash();
@@ -41,7 +44,13 @@ const defineLocationTask = (): void => {
     // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
     // Since taskExecutor is invoked with await in line 182, this should be return promise.
     // eslint-disable-next-line
-    async ({ data: { locations }, error }) => {
+    async ({
+      data,
+      error,
+    }: TaskManager.TaskManagerTaskBody & {
+      data: { locations: Locations.LocationData[] };
+    }) => {
+      const { locations }: { locations: Locations.LocationData[] } = data;
       if (error) {
         return;
       }
@@ -64,22 +73,25 @@ const initLocationTask = async (): Promise<void> => {
 
 const defineTimerTask = (): void => {
   if (!TaskManager.isTaskDefined(TIMER_TASK)) {
-    // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
-    // Since taskExecutor is invoked with await in line 182, this should be return promise.
-    // eslint-disable-next-line
-    TaskManager.defineTask(TIMER_TASK, async ({ error }) => {
-      if (error) {
-        return BackgroundFetch.Result.Failed;
+    TaskManager.defineTask(
+      TIMER_TASK,
+      // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
+      // Since taskExecutor is invoked with await in line 182, this should be return promise.
+      // eslint-disable-next-line
+      async ({ error: taskManagerError }: TaskManager.TaskManagerTaskBody) => {
+        if (taskManagerError) {
+          return BackgroundFetch.Result.Failed;
+        }
+        try {
+          const result = await makeTimerNotifications();
+          return !result
+            ? BackgroundFetch.Result.NoData
+            : BackgroundFetch.Result.NewData;
+        } catch (error) {
+          return BackgroundFetch.Result.Failed;
+        }
       }
-      try {
-        const result = await makeTimerNotifications();
-        return !result
-          ? BackgroundFetch.Result.NoData
-          : BackgroundFetch.Result.NewData;
-      } catch (error) {
-        return BackgroundFetch.Result.Failed;
-      }
-    });
+    );
   }
 };
 
