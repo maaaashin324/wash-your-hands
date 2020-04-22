@@ -8,7 +8,7 @@ import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
 import { setFrequency } from './frequency';
 
-const setLastTimeNotification = async (): Promise<void> => {
+export const setLastTimeNotification = async (): Promise<void> => {
   await AsyncStorage.setItem(
     StorageKeys.LastNotificationTime,
     JSON.stringify(Date.now())
