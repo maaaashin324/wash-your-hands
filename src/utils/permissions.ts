@@ -2,31 +2,6 @@ import * as Permissions from 'expo-permissions';
 import { AsyncStorage } from 'react-native';
 import StorageKeys from '@constants/storage';
 
-export interface GetNecessaryPermissions {
-  granted: boolean;
-  detail: {
-    [key: string]: boolean;
-  };
-}
-
-// eslint-disable-next-line
-export const getNecessaryPermissions = async (): Promise<
-  GetNecessaryPermissions
-> => {
-  const { granted, permissions } = await Permissions.getAsync(
-    Permissions.LOCATION,
-    Permissions.NOTIFICATIONS
-  );
-  return {
-    granted,
-    detail: {
-      [Permissions.LOCATION]: permissions[Permissions.LOCATION].granted,
-      [Permissions.NOTIFICATIONS]:
-        permissions[Permissions.NOTIFICATIONS].granted,
-    },
-  };
-};
-
 export const getLocationPermission = async (): Promise<boolean> => {
   const { granted } = await Permissions.getAsync(Permissions.LOCATION);
   return granted;
@@ -60,4 +35,26 @@ export const setTimerPermission = async (granted: boolean): Promise<void> => {
     StorageKeys.IsTimerGranted,
     JSON.stringify(granted)
   );
+};
+
+export interface GetNecessaryPermissions {
+  granted: boolean;
+  detail: {
+    [key: string]: boolean;
+  };
+}
+
+// https://docs.expo.io/versions/latest/sdk/permissions/
+export const getNecessaryPermissions = async (): Promise<
+  GetNecessaryPermissions
+> => {
+  const isLocationPermitted = await getLocationPermission();
+  const isNotificationPermitted = await getNotificationPermission();
+  return {
+    granted: isLocationPermitted && isNotificationPermitted,
+    detail: {
+      [Permissions.LOCATION]: isLocationPermitted,
+      [Permissions.NOTIFICATIONS]: isNotificationPermitted,
+    },
+  };
 };
