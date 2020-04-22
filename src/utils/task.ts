@@ -69,7 +69,9 @@ const defineTimerTask = (): void => {
 const initTimerTask = async (): Promise<void> => {
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   if (isBackPermitted === BackgroundFetch.Status.Available) {
-    await BackgroundFetch.registerTaskAsync(TIMER_TASK);
+    await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+      minimumInterval: 60,
+    });
   }
 };
 
@@ -82,6 +84,7 @@ export const initTask = async (): Promise<void> => {
   await TaskManager.unregisterAllTasksAsync();
   await initTimerTask();
   await initLocationTask();
+  await BackgroundFetch.setMinimumIntervalAsync(60);
 };
 
 export const restartTimerTask = async (): Promise<void> => {
@@ -89,4 +92,5 @@ export const restartTimerTask = async (): Promise<void> => {
   await setLastTimeNotification();
   await BackgroundFetch.unregisterTaskAsync(TIMER_TASK);
   await initTimerTask();
+  await BackgroundFetch.setMinimumIntervalAsync(60);
 };
