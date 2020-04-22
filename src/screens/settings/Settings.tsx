@@ -9,7 +9,7 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-  setTimerDuration,
+  setTimerDurationByMinutes,
   initTask,
   restartTimerTask,
 } from '@/utils';
@@ -72,7 +72,7 @@ const SettingScreen: React.FC<{}> = () => {
   };
 
   const setTimer = async (newDuration): Promise<void> => {
-    await setTimerDuration(newDuration);
+    await setTimerDurationByMinutes(newDuration);
     await restartTimerTask();
   };
 

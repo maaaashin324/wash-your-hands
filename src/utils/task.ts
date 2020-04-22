@@ -6,7 +6,10 @@ import { AlertFrequencyType } from '@types';
 import { LOCATION_TASK_NAME, TIMER_TASK, StorageKeys } from '@/constants';
 import { setFrequency } from './frequency';
 import { startLocationUpdates, isMovedFarEnough } from './location';
-import { makeNotificationForWash, getTimerDuration } from './notifications';
+import {
+  makeNotificationForWash,
+  getTimerDurationByMinutes,
+} from './notifications';
 import { getTimerPermission, getLocationPermission } from './permissions';
 
 export const makeNotifications = async (
@@ -97,7 +100,7 @@ const defineTimerTask = (): void => {
 const initTimerTask = async (): Promise<void> => {
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   if (isBackPermitted === BackgroundFetch.Status.Available) {
-    const timerDuration = await getTimerDuration();
+    const timerDuration = await getTimerDurationByMinutes();
     await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
       minimumInterval: timerDuration * 60,
     });
