@@ -72,27 +72,25 @@ const initLocationTask = async (): Promise<void> => {
 };
 
 const defineTimerTask = (): void => {
-  if (!TaskManager.isTaskDefined(TIMER_TASK)) {
-    TaskManager.defineTask(
-      TIMER_TASK,
-      // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
-      // Since taskExecutor is invoked with await in line 182, this should be return promise.
-      // eslint-disable-next-line
-      async ({ error: taskManagerError }: TaskManager.TaskManagerTaskBody) => {
-        if (taskManagerError) {
-          return BackgroundFetch.Result.Failed;
-        }
-        try {
-          const result = await makeTimerNotifications();
-          return !result
-            ? BackgroundFetch.Result.NoData
-            : BackgroundFetch.Result.NewData;
-        } catch (error) {
-          return BackgroundFetch.Result.Failed;
-        }
+  TaskManager.defineTask(
+    TIMER_TASK,
+    // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
+    // Since taskExecutor is invoked with await in line 182, this should be return promise.
+    // eslint-disable-next-line
+    async ({ error: taskManagerError }: TaskManager.TaskManagerTaskBody) => {
+      if (taskManagerError) {
+        return BackgroundFetch.Result.Failed;
       }
-    );
-  }
+      try {
+        const result = await makeTimerNotifications();
+        return !result
+          ? BackgroundFetch.Result.NoData
+          : BackgroundFetch.Result.NewData;
+      } catch (error) {
+        return BackgroundFetch.Result.Failed;
+      }
+    }
+  );
 };
 
 // https://github.com/expo/expo/issues/3582#issuecomment-480820345
