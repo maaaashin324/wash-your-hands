@@ -8,7 +8,6 @@ import {
   getTimerDurationByMinutes,
   makeLocationNotification,
   makeTimerNotification,
-  setLastTimeNotification,
 } from './notifications';
 import { getLocationPermission } from './permissions';
 
@@ -74,7 +73,5 @@ export const initTask = async (): Promise<void> => {
 };
 
 export const restartTimerTask = async (): Promise<void> => {
-  // Since you need to make a notification by duration after now, you need to execute this function.
-  await setLastTimeNotification();
   await initTimerTask();
 };

@@ -88,6 +88,5 @@ export const makeTimerNotification = async (): Promise<boolean> => {
     },
     { time: Date.now() + SCHEDULE_NOTIFICATION_BUFFER }
   );
-  await setLastTimeNotification();
   return true;
 };

@@ -12,8 +12,10 @@ import {
   setTimerDurationByMinutes,
   initTask,
   restartTimerTask,
+  getTimerDurationByMinutes,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
+import { DEFAULT_TIMER_INTERVAL } from '@constants/notifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -76,8 +78,14 @@ const SettingScreen: React.FC<{}> = () => {
     await restartTimerTask();
   };
 
+  const setInitTimerDuration = async (): Promise<void> => {
+    const initDuration = await getTimerDurationByMinutes();
+    setDuration(initDuration);
+  };
+
   useEffect(() => {
     getPermissionStatus();
+    setInitTimerDuration();
   }, []);
 
   return (
@@ -117,7 +125,7 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <TextInput
-          defaultValue="10"
+          defaultValue={String(DEFAULT_TIMER_INTERVAL)}
           disabled={!isTimerPermitted}
           label="Timer by minutes"
           keyboardType="numeric"
