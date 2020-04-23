@@ -12,17 +12,17 @@ import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
 import { setFrequency } from './frequency';
 
-export const setLastTimeNotification = async (): Promise<void> => {
+export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
     STORAGE_KEYS.LastNotificationTime,
-    JSON.stringify(Date.now())
+    JSON.stringify(time)
   );
 };
 
 export const getLastTimeNotification = async (): Promise<number> => {
   const result = await AsyncStorage.getItem(STORAGE_KEYS.LastNotificationTime);
   if (!result) {
-    return 0;
+    return Date.now();
   }
   return JSON.parse(result);
 };
@@ -81,12 +81,31 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   if (!granted) {
     return false;
   }
-  await Notifications.scheduleLocalNotificationAsync(
-    {
-      title: i18n.t('notification:title'),
-      body: i18n.t('notification:body'),
-    },
-    { time: Date.now() + SCHEDULE_NOTIFICATION_BUFFER }
+  const timer = [];
+  const lastTimeNotification = await getLastTimeNotification();
+  const timerDurationByMinutes = await getTimerDurationByMinutes();
+  let beforeTime = lastTimeNotification;
+  const timerDuration = timerDurationByMinutes * 60000;
+  for (let i = 0; i < 100; i += 1) {
+    const currentTime = beforeTime + timerDuration;
+    timer.push(currentTime);
+    beforeTime = currentTime;
+  }
+  await Promise.all(
+    timer.map(async (time) => {
+      if (!time) {
+        console.warn('Time is falsy', time);
+        return;
+      }
+      await Notifications.scheduleLocalNotificationAsync(
+        {
+          title: i18n.t('notification:title'),
+          body: i18n.t('notification:body'),
+        },
+        { time }
+      );
+    })
   );
+  await setLastTimeNotification(timer[timer.length - 1]);
   return true;
 };
