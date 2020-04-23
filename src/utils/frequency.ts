@@ -1,4 +1,8 @@
-import { AlertFrequencyType, WashFrequencyType } from '@types';
+import {
+  AlertFrequencyType,
+  WashFrequencyType,
+  GetFrequencyType,
+} from '@types';
 import { AsyncStorage } from 'react-native';
 import STORAGE_KEYS from '@constants/storage';
 
@@ -45,6 +49,31 @@ export const calcFrequency = (
   }
   //  This means currentDataSet is AlertFrequencyType
   return currentDateSet.length;
+};
+
+export const getFrequency = async (): Promise<GetFrequencyType> => {
+  const alertFrequencyJSON = await AsyncStorage.getItem(
+    STORAGE_KEYS.AlertFrequency
+  );
+  const washFrequencyJSON = await AsyncStorage.getItem(
+    STORAGE_KEYS.WashFrequency
+  );
+
+  const result: GetFrequencyType = {
+    alertTimes: 0,
+    todayTimes: 0,
+    alertFrequency: null,
+    washFrequency: null,
+  };
+  if (alertFrequencyJSON) {
+    result.alertFrequency = JSON.parse(alertFrequencyJSON);
+    result.alertTimes = calcFrequency(result.alertFrequency);
+  }
+  if (washFrequencyJSON) {
+    result.washFrequency = JSON.parse(washFrequencyJSON);
+    result.todayTimes = calcFrequency(result.washFrequency);
+  }
+  return result;
 };
 
 export const setFrequency = async ({

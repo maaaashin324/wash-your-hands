@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { AlertFrequencyType, WashFrequencyType } from '@types';
+import { GetFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
 import { Colors, STORAGE_KEYS } from '@/constants';
 import {
   initTask,
-  calcFrequency,
+  getFrequency,
   setFrequency,
   getNecessaryPermissions,
 } from '@/utils';
@@ -64,22 +64,24 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
-  let alertFrequency: AlertFrequencyType | null = null;
-  let todayAlertTimes = 0;
-  let washFrequency: WashFrequencyType | null = null;
-
+  const [frequencyData, setFrequencyData] = useState<GetFrequencyType>(null);
+  const [todayAlertTimes, setTodayAlertTimes] = useState<number>(0);
   const [todayWashTimes, setTodayWashTimes] = useState<number>(0);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const editWashFrequency = async (type: string): Promise<void> => {
+  const editWashFrequency = async (operator: string): Promise<void> => {
     let dataTobeSet = todayWashTimes;
-    if (type === 'plus') {
+    if (operator === 'plus') {
       dataTobeSet += 1;
     } else if (dataTobeSet > 0) {
       dataTobeSet -= 1;
     }
     setTodayWashTimes(dataTobeSet);
-    await setFrequency({ frequency: washFrequency, dataTobeSet, type });
+    await setFrequency({
+      frequency: frequencyData.washFrequency,
+      dataTobeSet,
+      type: STORAGE_KEYS.WashFrequency,
+    });
   };
 
   const hideDialog = (): void => {
@@ -93,27 +95,17 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getFrequency = async (): Promise<void> => {
-    const alertFrequencyJSON = await AsyncStorage.getItem(
-      STORAGE_KEYS.AlertFrequency
-    );
-    const washFrequencyJSON = await AsyncStorage.getItem(
-      STORAGE_KEYS.WashFrequency
-    );
-    if (alertFrequencyJSON) {
-      alertFrequency = JSON.parse(alertFrequencyJSON);
-      todayAlertTimes = calcFrequency(alertFrequency);
-    }
-    if (washFrequencyJSON) {
-      washFrequency = JSON.parse(washFrequencyJSON);
-      setTodayWashTimes(calcFrequency(washFrequency));
-    }
+  const initCurrentFrequency = async (): Promise<void> => {
+    const result = await getFrequency();
+    setFrequencyData(result);
+    setTodayAlertTimes(result.alertTimes);
+    setTodayWashTimes(result.todayTimes);
   };
 
   useEffect(() => {
     initTask();
     judgePermissionWhenRendered();
-    getFrequency();
+    initCurrentFrequency();
     // eslint-disable-next-line
   }, []);
 
