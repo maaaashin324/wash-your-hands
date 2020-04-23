@@ -4,7 +4,7 @@ import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { AlertFrequencyType, WashFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
-import { Colors, StorageKeys } from '@/constants';
+import { Colors, STORAGE_KEYS } from '@/constants';
 import {
   initTask,
   calcFrequency,
@@ -95,10 +95,10 @@ const HomeScreen: React.FC<{}> = () => {
 
   const getFrequency = async (): Promise<void> => {
     const alertFrequencyJSON = await AsyncStorage.getItem(
-      StorageKeys.AlertFrequency
+      STORAGE_KEYS.AlertFrequency
     );
     const washFrequencyJSON = await AsyncStorage.getItem(
-      StorageKeys.WashFrequency
+      STORAGE_KEYS.WashFrequency
     );
     if (alertFrequencyJSON) {
       alertFrequency = JSON.parse(alertFrequencyJSON);

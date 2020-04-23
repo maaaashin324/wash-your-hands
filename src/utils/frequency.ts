@@ -1,6 +1,6 @@
 import { AlertFrequencyType, WashFrequencyType } from '@types';
 import { AsyncStorage } from 'react-native';
-import StorageKeys from '@constants/storage';
+import STORAGE_KEYS from '@constants/storage';
 
 interface CalcToday {
   year: number;
@@ -74,7 +74,7 @@ export const setFrequency = async ({
   if (type === 'wash') {
     newFrequency[year][month][date] = dataTobeSet;
     await AsyncStorage.setItem(
-      StorageKeys.WashFrequency,
+      STORAGE_KEYS.WashFrequency,
       JSON.stringify(newFrequency)
     );
     return;
@@ -88,7 +88,7 @@ export const setFrequency = async ({
     newFrequency[year][month][date].push({ timestamp: dataTobeSet });
   }
   await AsyncStorage.setItem(
-    StorageKeys.AlertFrequency,
+    STORAGE_KEYS.AlertFrequency,
     JSON.stringify(newFrequency)
   );
 };

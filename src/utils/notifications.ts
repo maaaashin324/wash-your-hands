@@ -2,7 +2,11 @@ import { AsyncStorage } from 'react-native';
 import { Notifications } from 'expo';
 import * as Locations from 'expo-location';
 import i18n from 'i18n-js';
-import StorageKeys from '@constants/storage';
+import {
+  DEFAULT_TIMER_INTERVAL,
+  SCHEDULE_NOTIFICATION_BUFFER,
+  STORAGE_KEYS,
+} from '@/constants';
 import { AlertFrequencyType } from '@types';
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
@@ -10,13 +14,13 @@ import { setFrequency } from './frequency';
 
 export const setLastTimeNotification = async (): Promise<void> => {
   await AsyncStorage.setItem(
-    StorageKeys.LastNotificationTime,
+    STORAGE_KEYS.LastNotificationTime,
     JSON.stringify(Date.now())
   );
 };
 
 export const getLastTimeNotification = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem(StorageKeys.LastNotificationTime);
+  const result = await AsyncStorage.getItem(STORAGE_KEYS.LastNotificationTime);
   if (!result) {
     return 0;
   }
@@ -24,9 +28,9 @@ export const getLastTimeNotification = async (): Promise<number> => {
 };
 
 export const getTimerDurationByMinutes = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem(StorageKeys.TimeDuration);
+  const result = await AsyncStorage.getItem(STORAGE_KEYS.TimeDuration);
   if (!result) {
-    return 30;
+    return DEFAULT_TIMER_INTERVAL;
   }
   return JSON.parse(result);
 };
@@ -35,13 +39,13 @@ export const setTimerDurationByMinutes = async (
   duration: number
 ): Promise<void> => {
   await AsyncStorage.setItem(
-    StorageKeys.TimeDuration,
+    STORAGE_KEYS.TimeDuration,
     JSON.stringify(duration)
   );
 };
 
 const storeFrequency = async (dataTobeSet: number): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(StorageKeys.AlertFrequency);
+  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
   let frequency: AlertFrequencyType = {};
   if (dataSet) {
     frequency = JSON.parse(dataSet);
@@ -49,7 +53,7 @@ const storeFrequency = async (dataTobeSet: number): Promise<void> => {
   await setFrequency({
     frequency,
     dataTobeSet,
-    type: StorageKeys.AlertFrequency,
+    type: STORAGE_KEYS.AlertFrequency,
   });
 };
 
@@ -59,7 +63,7 @@ export const makeLocationNotification = async (
   if (!isMovedFarEnough(locations)) {
     return;
   }
-  const time = Date.now() + 60000;
+  const time = Date.now() + SCHEDULE_NOTIFICATION_BUFFER;
   await Notifications.scheduleLocalNotificationAsync(
     {
       title: i18n.t('notification:title'),
@@ -77,26 +81,13 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   if (!granted) {
     return false;
   }
-  const timerDurationByMinutes = await getTimerDurationByMinutes();
-  const lastNotificationTime = await getLastTimeNotification();
-  let nextNotificationTime = 0;
-  if (!lastNotificationTime) {
-    nextNotificationTime = Date.now() + timerDurationByMinutes * 60000;
-  } else {
-    let calculated = lastNotificationTime + timerDurationByMinutes * 60000;
-    if (calculated < Date.now()) {
-      calculated = Date.now() + timerDurationByMinutes * 60000;
-    }
-    nextNotificationTime = calculated;
-  }
   await Notifications.scheduleLocalNotificationAsync(
     {
       title: i18n.t('notification:title'),
       body: i18n.t('notification:body'),
     },
-    { time: nextNotificationTime }
+    { time: Date.now() + SCHEDULE_NOTIFICATION_BUFFER }
   );
   await setLastTimeNotification();
-  await storeFrequency(nextNotificationTime);
   return true;
 };

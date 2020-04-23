@@ -1,9 +1,11 @@
+import { AsyncStorage } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Locations from 'expo-location';
-import { LOCATION_TASK_NAME, TIMER_TASK } from '@/constants';
+import { LOCATION_TASK_NAME, STORAGE_KEYS } from '@/constants';
 import { startLocationUpdates } from './location';
 import {
+  getTimerDurationByMinutes,
   makeLocationNotification,
   makeTimerNotification,
   setLastTimeNotification,
@@ -43,41 +45,25 @@ const initLocationTask = async (): Promise<void> => {
   }
 };
 
-const defineTimerTask = (): void => {
-  TaskManager.defineTask(
-    TIMER_TASK,
-    // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
-    // Since taskExecutor is invoked with await in line 182, this should be return promise.
-    // eslint-disable-next-line
-    async ({ error: taskManagerError }: TaskManager.TaskManagerTaskBody) => {
-      if (taskManagerError) {
-        return BackgroundFetch.Result.Failed;
-      }
-      try {
-        const result = await makeTimerNotification();
-        return !result
-          ? BackgroundFetch.Result.NoData
-          : BackgroundFetch.Result.NewData;
-      } catch (error) {
-        return BackgroundFetch.Result.Failed;
-      }
-    }
-  );
-};
-
 // https://github.com/expo/expo/issues/3582#issuecomment-480820345
 const initTimerTask = async (): Promise<void> => {
-  const isBackPermitted = await BackgroundFetch.getStatusAsync();
-  if (isBackPermitted === BackgroundFetch.Status.Available) {
-    await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-      minimumInterval: 60,
-    });
+  const currentIntervalID = await AsyncStorage.getItem(STORAGE_KEYS.IntervalID);
+  if (currentIntervalID) {
+    const IDTobeCleared = JSON.parse(currentIntervalID);
+    clearInterval(IDTobeCleared);
   }
+  const timerDurationByMinutes = await getTimerDurationByMinutes();
+  const intervalID = setInterval(() => {
+    makeTimerNotification();
+  }, timerDurationByMinutes * 60000);
+  await AsyncStorage.setItem(
+    STORAGE_KEYS.IntervalID,
+    JSON.stringify(intervalID)
+  );
 };
 
 export const defineTask = (): void => {
   defineLocationTask();
-  defineTimerTask();
 };
 
 export const initTask = async (): Promise<void> => {
@@ -90,7 +76,5 @@ export const initTask = async (): Promise<void> => {
 export const restartTimerTask = async (): Promise<void> => {
   // Since you need to make a notification by duration after now, you need to execute this function.
   await setLastTimeNotification();
-  await BackgroundFetch.unregisterTaskAsync(TIMER_TASK);
   await initTimerTask();
-  await BackgroundFetch.setMinimumIntervalAsync(60);
 };

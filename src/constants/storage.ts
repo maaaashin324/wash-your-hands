@@ -1,7 +1,8 @@
 export default Object.freeze({
   AlertFrequency: 'alert',
-  WashFrequency: 'wash',
+  IntervalID: 'intervalID',
+  IsTimerGranted: 'isTimerGranted',
   LastNotificationTime: 'lastNotificationTime',
   TimeDuration: 'timerDuration',
-  IsTimerGranted: 'isTimerGranted',
+  WashFrequency: 'wash',
 });
