@@ -7,10 +7,9 @@ import {
   SCHEDULE_NOTIFICATION_BUFFER,
   STORAGE_KEYS,
 } from '@/constants';
-import { AlertFrequencyType } from '@types';
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
-import { setFrequency } from './frequency';
+import { storeFrequency } from './frequency';
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
@@ -42,19 +41,6 @@ export const setTimerDurationByMinutes = async (
     STORAGE_KEYS.TimeDuration,
     JSON.stringify(duration)
   );
-};
-
-const storeFrequency = async (dataTobeSet: number): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
-  let frequency: AlertFrequencyType = {};
-  if (dataSet) {
-    frequency = JSON.parse(dataSet);
-  }
-  await setFrequency({
-    frequency,
-    dataTobeSet,
-    type: STORAGE_KEYS.AlertFrequency,
-  });
 };
 
 export const makeLocationNotification = async (

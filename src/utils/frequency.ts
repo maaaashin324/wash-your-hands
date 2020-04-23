@@ -121,3 +121,16 @@ export const setFrequency = async ({
     JSON.stringify(newFrequency)
   );
 };
+
+export const storeFrequency = async (dataTobeSet: number): Promise<void> => {
+  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
+  let frequency: AlertFrequencyType = {};
+  if (dataSet) {
+    frequency = JSON.parse(dataSet);
+  }
+  await setFrequency({
+    frequency,
+    dataTobeSet,
+    type: STORAGE_KEYS.AlertFrequency,
+  });
+};
