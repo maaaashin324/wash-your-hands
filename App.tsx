@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
+import * as Localization from 'expo-localization';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import i18n from 'i18n-js';
 import { defineTask } from '@utils/task';
 import Colors from '@constants/colors';
 import MyApp from './src';
+import en from './src/locales/en.json';
+import ja from './src/locales/ja.json';
+
+defineTask();
+
+i18n.translations = { en, ja };
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const theme = {
   ...DefaultTheme,
@@ -67,7 +77,5 @@ const App: React.FC<{}> = () => {
     </PaperProvider>
   );
 };
-
-defineTask();
 
 export default App;
