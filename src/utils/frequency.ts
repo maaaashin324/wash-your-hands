@@ -71,7 +71,7 @@ export const setFrequency = async ({
     newFrequency[year][month] = {};
   }
   const currentDateSet = newFrequency[year][month][date];
-  if (type === 'wash') {
+  if (type === STORAGE_KEYS.WashFrequency) {
     newFrequency[year][month][date] = dataTobeSet;
     await AsyncStorage.setItem(
       STORAGE_KEYS.WashFrequency,
