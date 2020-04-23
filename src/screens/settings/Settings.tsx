@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const SettingScreen: React.FC<{}> = () => {
+  let initTimerDurationByMinutes = 0;
   const [isLocationPermitted, setLocationPermitted] = useState<boolean>(false);
   const [isNotificationPermitted, setNotificationPermitted] = useState<boolean>(
     false
@@ -73,19 +74,24 @@ const SettingScreen: React.FC<{}> = () => {
     }
   };
 
-  const setTimer = async (newDuration): Promise<void> => {
+  const setTimer = async (newDuration: number): Promise<void> => {
+    if (initTimerDurationByMinutes === newDuration) {
+      return;
+    }
     await setTimerDurationByMinutes(newDuration);
     await restartTimerTask();
   };
 
   const setInitTimerDuration = async (): Promise<void> => {
     const initDuration = await getTimerDurationByMinutes();
+    initTimerDurationByMinutes = initDuration;
     setDuration(initDuration);
   };
 
   useEffect(() => {
     getPermissionStatus();
     setInitTimerDuration();
+    // eslint-disable-next-line
   }, []);
 
   return (
