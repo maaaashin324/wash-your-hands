@@ -94,7 +94,6 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   await Promise.all(
     timer.map(async (time) => {
       if (!time) {
-        console.warn('Time is falsy', time);
         return;
       }
       await Notifications.scheduleLocalNotificationAsync(
