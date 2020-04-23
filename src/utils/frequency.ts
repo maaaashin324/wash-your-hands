@@ -48,7 +48,9 @@ export const calcFrequency = (
     return currentDateSet;
   }
   //  This means currentDataSet is AlertFrequencyType
-  return currentDateSet.length;
+  return currentDateSet.filter(
+    (dateNumber) => dateNumber.timestamp < Date.now()
+  ).length;
 };
 
 export const getFrequency = async (): Promise<GetFrequencyType> => {
@@ -133,4 +135,23 @@ export const storeFrequency = async (dataTobeSet: number): Promise<void> => {
     dataTobeSet,
     type: STORAGE_KEYS.AlertFrequency,
   });
+};
+
+export const storeFrequencies = async (
+  dataTobeSet: number[]
+): Promise<void> => {
+  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
+  let frequency: AlertFrequencyType = {};
+  if (dataSet) {
+    frequency = JSON.parse(dataSet);
+  }
+  await Promise.all(
+    dataTobeSet.map(async (eachData) => {
+      await setFrequency({
+        frequency,
+        dataTobeSet: eachData,
+        type: STORAGE_KEYS.AlertFrequency,
+      });
+    })
+  );
 };
