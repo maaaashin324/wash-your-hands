@@ -51,18 +51,20 @@ export const measureMeters = (lat1, lon1, lat2, lon2): number => {
 export const isMovedFarEnough = (
   locations: Location.LocationData[]
 ): boolean => {
-  const [firstLocation] = locations;
   const lastLocation = locations[locations.length - 1];
   // This speed is meter per second
   if (lastLocation.coords.speed > 0) {
     return false;
   }
-  const meters = measureMeters(
-    firstLocation.coords.latitude,
-    firstLocation.coords.longitude,
-    lastLocation.coords.latitude,
-    lastLocation.coords.longitude
-  );
+  let meters = 0;
+  for (let i = 0; i < locations.length - 1; i += 1) {
+    meters += measureMeters(
+      locations[i].coords.latitude,
+      locations[i].coords.longitude,
+      locations[i + 1].coords.latitude,
+      locations[i + 1].coords.longitude
+    );
+  }
   if (meters < 500) {
     return false;
   }

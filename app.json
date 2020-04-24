@@ -20,10 +20,13 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.maaaashin324.wash-ur-hands",
-      "buildNumber": "1.0.0",
+      "buildNumber": "1.0.11",
       "supportsTablet": false,
       "infoPlist": {
-        "UIBackgroundModes": ["location"]
+        "UIBackgroundModes": ["location", "fetch"],
+        "NSLocationWhenInUseUsageDescription": "Your location is required to make a notification when you stay somewhere after you move.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location is required to make a notification when you stay somewhere after you move.",
+        "NSLocationAlwaysUsageDescription": "Your location is required to make a notification when you stay somewhere after you move."
       },
       "config": {
         "usesNonExemptEncryption": false

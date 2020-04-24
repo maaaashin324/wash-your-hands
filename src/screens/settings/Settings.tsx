@@ -9,10 +9,13 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-  setTimerDuration,
+  setTimerDurationByHours,
   initTask,
+  restartTimerTask,
+  getTimerDurationByHours,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
+import { DEFAULT_TIMER_INTERVAL } from '@constants/notifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,12 +30,13 @@ const styles = StyleSheet.create({
 });
 
 const SettingScreen: React.FC<{}> = () => {
+  let initTimerDurationByHours = 0;
   const [isLocationPermitted, setLocationPermitted] = useState<boolean>(false);
   const [isNotificationPermitted, setNotificationPermitted] = useState<boolean>(
     false
   );
   const [isTimerPermitted, setTimerPermitted] = useState<boolean>(false);
-  const [duration, setDuration] = useState<number>(30);
+  const [duration, setDuration] = useState<number>(DEFAULT_TIMER_INTERVAL);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -70,12 +74,24 @@ const SettingScreen: React.FC<{}> = () => {
     }
   };
 
-  const setTimer = async (newDuration): Promise<void> => {
-    await setTimerDuration(newDuration);
+  const setTimer = async (newDuration: number): Promise<void> => {
+    if (initTimerDurationByHours === newDuration) {
+      return;
+    }
+    await setTimerDurationByHours(newDuration);
+    await restartTimerTask();
+  };
+
+  const setInitTimerDuration = async (): Promise<void> => {
+    const initDuration = await getTimerDurationByHours();
+    initTimerDurationByHours = initDuration;
+    setDuration(initDuration);
   };
 
   useEffect(() => {
     getPermissionStatus();
+    setInitTimerDuration();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -115,14 +131,15 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <TextInput
-          label="Timer"
+          defaultValue={String(DEFAULT_TIMER_INTERVAL)}
           disabled={!isTimerPermitted}
+          label="Timer by hours"
           keyboardType="numeric"
           onChangeText={(text): void => setDuration(+text)}
           onBlur={async (): Promise<void> => {
-            if (duration < 30) {
-              await setTimer(30);
-              setDuration(30);
+            if (duration <= 0) {
+              await setTimer(DEFAULT_TIMER_INTERVAL);
+              setDuration(DEFAULT_TIMER_INTERVAL);
             } else {
               await setTimer(duration);
             }

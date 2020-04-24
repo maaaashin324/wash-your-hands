@@ -1,7 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line
 import { MaterialIcons } from '@expo/vector-icons';
-import Colors from '@constants/colors';
+import COLORS from '@constants/colors';
 
 type TabBarIconProps = {
   name: string;
@@ -14,7 +14,7 @@ const TabBarIcon: React.FC<TabBarIconProps> = ({ name, focused }) => {
       name={name}
       size={30}
       style={{ marginBottom: -3 }}
-      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+      color={focused ? COLORS.tabIconSelected : COLORS.tabIconDefault}
     />
   );
 };

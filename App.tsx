@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
+import * as Localization from 'expo-localization';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { defineTask, initTask } from '@utils/task';
-import Colors from '@constants/colors';
+import i18n from 'i18n-js';
+import { defineTask } from '@utils/task';
+import COLORS from '@constants/colors';
 import MyApp from './src';
+import en from './src/locales/en.json';
+import ja from './src/locales/ja.json';
+
+defineTask();
+
+i18n.translations = { en, ja };
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: Colors.themeColor,
-    accent: Colors.accentColor,
+    primary: COLORS.themeColor,
+    accent: COLORS.accentColor,
   },
 };
 
 const App: React.FC<{}> = () => {
   const [isSplashReady, setSplashReady] = useState<boolean>(false);
   const [isAppReady, setAppReady] = useState<boolean>(false);
-
-  useEffect(() => {
-    initTask();
-  }, []);
 
   const cacheSplashResourcesAsync = async (): Promise<void> => {
     // eslint-disable-next-line
@@ -71,7 +77,5 @@ const App: React.FC<{}> = () => {
     </PaperProvider>
   );
 };
-
-defineTask();
 
 export default App;

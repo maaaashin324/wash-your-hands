@@ -4,9 +4,9 @@ const { width } = Dimensions.get('window');
 const { height } = Dimensions.get('window');
 
 export default Object.freeze({
-  window: {
-    width,
-    height,
+  WINDOW: {
+    WIDTH: width,
+    HEIGHT: height,
   },
-  isSmallDevice: width < 375,
+  IS_SMALL_DEVICE: width < 375,
 });

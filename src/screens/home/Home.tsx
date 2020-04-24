@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { AppState, StyleSheet, View } from 'react-native';
 import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { AlertFrequencyType, WashFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
-import { Color, StorageKeys } from '@/constants';
-import { calcFrequency, setFrequency, getNecessaryPermissions } from '@/utils';
+import { COLORS } from '@/constants';
+import {
+  initTask,
+  getFrequency,
+  storeWashFrequency,
+  getNecessaryPermissions,
+} from '@/utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,22 +63,19 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
-  let alertFrequency: AlertFrequencyType | null = null;
-  let todayAlertTimes = 0;
-  let washFrequency: WashFrequencyType | null = null;
-
+  const [todayAlertTimes, setTodayAlertTimes] = useState<number>(0);
   const [todayWashTimes, setTodayWashTimes] = useState<number>(0);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const editWashFrequency = async (type: string): Promise<void> => {
+  const editWashFrequency = async (operator: string): Promise<void> => {
     let dataTobeSet = todayWashTimes;
-    if (type === 'plus') {
+    if (operator === 'plus') {
       dataTobeSet += 1;
     } else if (dataTobeSet > 0) {
       dataTobeSet -= 1;
     }
     setTodayWashTimes(dataTobeSet);
-    await setFrequency({ frequency: washFrequency, dataTobeSet, type });
+    await storeWashFrequency({ dataTobeSet });
   };
 
   const hideDialog = (): void => {
@@ -88,26 +89,23 @@ const HomeScreen: React.FC<{}> = () => {
     }
   };
 
-  const getFrequency = async (): Promise<void> => {
-    const alertFrequencyJSON = await AsyncStorage.getItem(
-      StorageKeys.AlertFrequency
-    );
-    const washFrequencyJSON = await AsyncStorage.getItem(
-      StorageKeys.WashFrequency
-    );
-    if (alertFrequencyJSON) {
-      alertFrequency = JSON.parse(alertFrequencyJSON);
-      todayAlertTimes = calcFrequency(alertFrequency);
-    }
-    if (washFrequencyJSON) {
-      washFrequency = JSON.parse(washFrequencyJSON);
-      setTodayWashTimes(calcFrequency(washFrequency));
-    }
+  const initCurrentFrequency = async (): Promise<void> => {
+    const result = await getFrequency();
+    setTodayWashTimes(result.washTimes);
+    setTodayAlertTimes(result.alertTimes);
+    // eslint-disable-next-line
+    AppState.addEventListener('change', async (state) => {
+      if (state === 'active') {
+        const currentResult = await getFrequency();
+        setTodayAlertTimes(currentResult.alertTimes);
+      }
+    });
   };
 
   useEffect(() => {
+    initTask();
     judgePermissionWhenRendered();
-    getFrequency();
+    initCurrentFrequency();
     // eslint-disable-next-line
   }, []);
 
@@ -134,7 +132,7 @@ const HomeScreen: React.FC<{}> = () => {
           <View style={styles.washFAB}>
             <FAB
               icon="minus"
-              style={{ backgroundColor: Color.themeColor }}
+              style={{ backgroundColor: COLORS.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('minus');
@@ -142,7 +140,7 @@ const HomeScreen: React.FC<{}> = () => {
             />
             <FAB
               icon="plus"
-              style={{ backgroundColor: Color.themeColor }}
+              style={{ backgroundColor: COLORS.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('plus');
