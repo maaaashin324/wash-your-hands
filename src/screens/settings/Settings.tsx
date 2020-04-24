@@ -9,10 +9,10 @@ import {
   getNecessaryPermissions,
   getTimerPermission,
   setTimerPermission,
-  setTimerDurationByMinutes,
+  setTimerDurationByHours,
   initTask,
   restartTimerTask,
-  getTimerDurationByMinutes,
+  getTimerDurationByHours,
 } from '@/utils';
 import MyPortal from '@components/myPortal';
 import { DEFAULT_TIMER_INTERVAL } from '@constants/notifications';
@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
 });
 
 const SettingScreen: React.FC<{}> = () => {
-  let initTimerDurationByMinutes = 0;
+  let initTimerDurationByHours = 0;
   const [isLocationPermitted, setLocationPermitted] = useState<boolean>(false);
   const [isNotificationPermitted, setNotificationPermitted] = useState<boolean>(
     false
   );
   const [isTimerPermitted, setTimerPermitted] = useState<boolean>(false);
-  const [duration, setDuration] = useState<number>(30);
+  const [duration, setDuration] = useState<number>(DEFAULT_TIMER_INTERVAL);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -75,16 +75,16 @@ const SettingScreen: React.FC<{}> = () => {
   };
 
   const setTimer = async (newDuration: number): Promise<void> => {
-    if (initTimerDurationByMinutes === newDuration) {
+    if (initTimerDurationByHours === newDuration) {
       return;
     }
-    await setTimerDurationByMinutes(newDuration);
+    await setTimerDurationByHours(newDuration);
     await restartTimerTask();
   };
 
   const setInitTimerDuration = async (): Promise<void> => {
-    const initDuration = await getTimerDurationByMinutes();
-    initTimerDurationByMinutes = initDuration;
+    const initDuration = await getTimerDurationByHours();
+    initTimerDurationByHours = initDuration;
     setDuration(initDuration);
   };
 
@@ -133,13 +133,13 @@ const SettingScreen: React.FC<{}> = () => {
         <TextInput
           defaultValue={String(DEFAULT_TIMER_INTERVAL)}
           disabled={!isTimerPermitted}
-          label="Timer by minutes"
+          label="Timer by hours"
           keyboardType="numeric"
           onChangeText={(text): void => setDuration(+text)}
           onBlur={async (): Promise<void> => {
             if (duration <= 0) {
-              await setTimer(10);
-              setDuration(10);
+              await setTimer(DEFAULT_TIMER_INTERVAL);
+              setDuration(DEFAULT_TIMER_INTERVAL);
             } else {
               await setTimer(duration);
             }

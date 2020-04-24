@@ -26,7 +26,7 @@ export const getLastTimeNotification = async (): Promise<number> => {
   return JSON.parse(result);
 };
 
-export const getTimerDurationByMinutes = async (): Promise<number> => {
+export const getTimerDurationByHours = async (): Promise<number> => {
   const result = await AsyncStorage.getItem(STORAGE_KEYS.TimeDuration);
   if (!result) {
     return DEFAULT_TIMER_INTERVAL;
@@ -34,7 +34,7 @@ export const getTimerDurationByMinutes = async (): Promise<number> => {
   return JSON.parse(result);
 };
 
-export const setTimerDurationByMinutes = async (
+export const setTimerDurationByHours = async (
   duration: number
 ): Promise<void> => {
   await AsyncStorage.setItem(
@@ -69,12 +69,12 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   }
   const timer = [];
   const lastTimeNotification = await getLastTimeNotification();
-  const timerDurationByMinutes = await getTimerDurationByMinutes();
+  const timerDurationByHours = await getTimerDurationByHours();
   let beforeTime = lastTimeNotification;
   if (beforeTime < Date.now()) {
     beforeTime = Date.now();
   }
-  const timerDuration = timerDurationByMinutes * 60000;
+  const timerDuration = timerDurationByHours * 3600000;
   for (let i = 0; i < 10; i += 1) {
     const currentTime = beforeTime + timerDuration;
     timer.push(currentTime);
