@@ -52,7 +52,7 @@ export const getFrequency = async (): Promise<GetFrequencyType> => {
 
   const result: GetFrequencyType = {
     alertTimes: 0,
-    todayTimes: 0,
+    washTimes: 0,
     alertFrequency: null,
     washFrequency: null,
   };
@@ -62,7 +62,7 @@ export const getFrequency = async (): Promise<GetFrequencyType> => {
   }
   if (washFrequencyJSON) {
     result.washFrequency = JSON.parse(washFrequencyJSON);
-    result.todayTimes = calcTodayFrequency(result.washFrequency);
+    result.washTimes = calcTodayFrequency(result.washFrequency);
   }
   return result;
 };
@@ -70,12 +70,17 @@ export const getFrequency = async (): Promise<GetFrequencyType> => {
 export const setFrequency = async ({
   frequency,
   dataTobeSet,
+  dataTobeSets,
   type,
 }: {
   frequency?: FrequencyType | null;
-  dataTobeSet: number;
+  dataTobeSet?: number;
+  dataTobeSets?: number[];
   type: string;
 }): Promise<void> => {
+  if (!dataTobeSet && !dataTobeSets) {
+    throw new TypeError();
+  }
   let newFrequency: FrequencyType = {};
   if (frequency) {
     newFrequency = JSON.parse(JSON.stringify(frequency));
@@ -91,18 +96,39 @@ export const setFrequency = async ({
     newFrequency[year][month] = {};
   }
   const currentDateSet = newFrequency[year][month][date];
-  if (!currentDateSet) {
-    newFrequency[year][month][date] = [{ timestamp: dataTobeSet }];
+  if (dataTobeSet) {
+    if (!currentDateSet) {
+      newFrequency[year][month][date] = [{ timestamp: dataTobeSet }];
+    } else {
+      newFrequency[year][month][date].push({ timestamp: dataTobeSet });
+    }
+  } else if (!currentDateSet) {
+    newFrequency[year][month][date] = dataTobeSets.map((eachData) => ({
+      timestamp: eachData,
+    }));
   } else {
-    // eslint-disable-next-line
-    // @ts-ignore
-    newFrequency[year][month][date].push({ timestamp: dataTobeSet });
+    newFrequency[year][month][date].push(
+      ...dataTobeSets.map((eachData) => ({
+        timestamp: eachData,
+      }))
+    );
   }
   await AsyncStorage.setItem(type, JSON.stringify(newFrequency));
 };
 
-export const storeFrequency = async (dataTobeSet: number): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.ALERT_FREQUENCY);
+export const storeFrequency = async ({
+  type,
+  dataTobeSet,
+  dataTobeSets,
+}: {
+  type: string;
+  dataTobeSet?: number;
+  dataTobeSets?: number[];
+}): Promise<void> => {
+  if (!dataTobeSet && !dataTobeSets) {
+    throw new TypeError();
+  }
+  const dataSet = await AsyncStorage.getItem(type);
   let frequency: FrequencyType = {};
   if (dataSet) {
     frequency = JSON.parse(dataSet);
@@ -110,25 +136,7 @@ export const storeFrequency = async (dataTobeSet: number): Promise<void> => {
   await setFrequency({
     frequency,
     dataTobeSet,
-    type: STORAGE_KEYS.ALERT_FREQUENCY,
+    dataTobeSets,
+    type,
   });
-};
-
-export const storeFrequencies = async (
-  dataTobeSet: number[]
-): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.ALERT_FREQUENCY);
-  let frequency: FrequencyType = {};
-  if (dataSet) {
-    frequency = JSON.parse(dataSet);
-  }
-  await Promise.all(
-    dataTobeSet.map(async (eachData) => {
-      await setFrequency({
-        frequency,
-        dataTobeSet: eachData,
-        type: STORAGE_KEYS.ALERT_FREQUENCY,
-      });
-    })
-  );
 };

@@ -1,6 +1,6 @@
 export type GetFrequencyType = {
   alertTimes: number;
-  todayTimes: number;
+  washTimes: number;
   alertFrequency: FrequencyType | null;
   washFrequency: FrequencyType | null;
 };
