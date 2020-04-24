@@ -71,6 +71,9 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   const lastTimeNotification = await getLastTimeNotification();
   const timerDurationByMinutes = await getTimerDurationByMinutes();
   let beforeTime = lastTimeNotification;
+  if (beforeTime < Date.now()) {
+    beforeTime = Date.now();
+  }
   const timerDuration = timerDurationByMinutes * 60000;
   for (let i = 0; i < 10; i += 1) {
     const currentTime = beforeTime + timerDuration;
