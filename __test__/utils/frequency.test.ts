@@ -1,13 +1,52 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { FrequencyType } from '@types';
-import { calcToday, calcFrequency, setFrequency } from '@utils/frequency';
+import { FrequencyType, GetFrequencyType } from '@types';
+import {
+  calcToday,
+  calcTodayFrequency,
+  getFrequency,
+  setFrequency,
+} from '@utils/frequency';
 import { STORAGE_KEYS } from '@/constants';
 
+const mockGetItemKey = STORAGE_KEYS.ALERT_FREQUENCY;
 jest.mock('@react-native-community/async-storage', () => {
   return {
     setItem: jest.fn(() => {
       return new Promise((resolve) => {
         resolve(null);
+      });
+    }),
+    getItem: jest.fn((key) => {
+      return new Promise((resolve) => {
+        const today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+        if (key === mockGetItemKey) {
+          resolve(
+            JSON.stringify({
+              [today.getFullYear()]: {
+                [today.getMonth()]: {
+                  [today.getDate()]: [{ timestamp: today.getTime() - 1 }],
+                },
+              },
+            })
+          );
+          return;
+        }
+        resolve(
+          JSON.stringify({
+            [today.getFullYear()]: {
+              [today.getMonth()]: {
+                [today.getDate()]: [
+                  { timestamp: today.getTime() - 2 },
+                  { timestamp: today.getTime() - 1 },
+                ],
+              },
+            },
+          })
+        );
       });
     }),
   };
@@ -27,7 +66,7 @@ describe('Frequency', () => {
   describe('calcFrequency', () => {
     test('should return 0 when frequency is falsy', () => {
       const frequency = null;
-      const result = calcFrequency(frequency);
+      const result = calcTodayFrequency(frequency);
 
       expect(result).toBe(0);
     });
@@ -35,7 +74,7 @@ describe('Frequency', () => {
     test('should return 0 when month is not set', () => {
       const now = new Date();
       const frequency = { [now.getFullYear()]: null };
-      const result = calcFrequency(frequency);
+      const result = calcTodayFrequency(frequency);
 
       expect(result).toBe(0);
     });
@@ -43,7 +82,7 @@ describe('Frequency', () => {
     test('should return 0 when date is not set', () => {
       const now = new Date();
       const frequency = { [now.getFullYear()]: { [now.getMonth()]: null } };
-      const result = calcFrequency(frequency);
+      const result = calcTodayFrequency(frequency);
 
       expect(result).toBe(0);
     });
@@ -55,7 +94,7 @@ describe('Frequency', () => {
           [now.getMonth()]: { [now.getDate()]: [{ timestamp: Date.now() }] },
         },
       };
-      const result = calcFrequency(frequency);
+      const result = calcTodayFrequency(frequency);
 
       expect(result).toBe(1);
     });
@@ -72,9 +111,42 @@ describe('Frequency', () => {
           },
         },
       };
-      const result = calcFrequency(frequency);
+      const result = calcTodayFrequency(frequency);
 
       expect(result).toBe(2);
+    });
+  });
+
+  describe('getFrequency', () => {
+    test('should get GetFrequencyType', async () => {
+      const result = await getFrequency();
+      const today = new Date();
+      today.setHours(0);
+      today.setMinutes(0);
+      today.setSeconds(0);
+      today.setMilliseconds(0);
+      const expected: GetFrequencyType = {
+        alertTimes: 1,
+        todayTimes: 2,
+        alertFrequency: {
+          [today.getFullYear()]: {
+            [today.getMonth()]: {
+              [today.getDate()]: [{ timestamp: today.getTime() - 1 }],
+            },
+          },
+        },
+        washFrequency: {
+          [today.getFullYear()]: {
+            [today.getMonth()]: {
+              [today.getDate()]: [
+                { timestamp: today.getTime() - 2 },
+                { timestamp: today.getTime() - 1 },
+              ],
+            },
+          },
+        },
+      };
+      expect(result).toEqual(expected);
     });
   });
 

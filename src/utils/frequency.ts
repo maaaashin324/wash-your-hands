@@ -16,11 +16,11 @@ export const calcToday = (): CalcToday => {
 };
 
 /**
- * calcFrequency provides you with how frequent alert or wash times are
+ * calcTodayFrequency provides you with how frequent alert or wash times are
  * @param frequency This should be AlertFrequencyType or WashFrequencyType
  * @returns {Number}
  */
-export const calcFrequency = (frequency: FrequencyType): number => {
+export const calcTodayFrequency = (frequency: FrequencyType): number => {
   const { year, month, date } = calcToday();
   if (!frequency) {
     return 0;
@@ -58,11 +58,11 @@ export const getFrequency = async (): Promise<GetFrequencyType> => {
   };
   if (alertFrequencyJSON) {
     result.alertFrequency = JSON.parse(alertFrequencyJSON);
-    result.alertTimes = calcFrequency(result.alertFrequency);
+    result.alertTimes = calcTodayFrequency(result.alertFrequency);
   }
   if (washFrequencyJSON) {
     result.washFrequency = JSON.parse(washFrequencyJSON);
-    result.todayTimes = calcFrequency(result.washFrequency);
+    result.todayTimes = calcTodayFrequency(result.washFrequency);
   }
   return result;
 };
