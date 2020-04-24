@@ -99,7 +99,7 @@ const HomeScreen: React.FC<{}> = () => {
     const result = await getFrequency();
     setFrequencyData(result);
     setTodayAlertTimes(result.alertTimes);
-    setTodayWashTimes(result.todayTimes);
+    setTodayWashTimes(result.washTimes);
   };
 
   useEffect(() => {
