@@ -6,7 +6,7 @@ import * as Localization from 'expo-localization';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { defineTask } from '@utils/task';
-import Colors from '@constants/colors';
+import COLORS from '@constants/colors';
 import MyApp from './src';
 import en from './src/locales/en.json';
 import ja from './src/locales/ja.json';
@@ -21,8 +21,8 @@ const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: Colors.themeColor,
-    accent: Colors.accentColor,
+    primary: COLORS.themeColor,
+    accent: COLORS.accentColor,
   },
 };
 

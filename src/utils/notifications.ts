@@ -13,13 +13,15 @@ import { storeFrequency, storeFrequencies } from './frequency';
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
-    STORAGE_KEYS.LastNotificationTime,
+    STORAGE_KEYS.LAST_NOTIFICATION_TIME,
     JSON.stringify(time)
   );
 };
 
 export const getLastTimeNotification = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem(STORAGE_KEYS.LastNotificationTime);
+  const result = await AsyncStorage.getItem(
+    STORAGE_KEYS.LAST_NOTIFICATION_TIME
+  );
   if (!result) {
     return Date.now();
   }
@@ -27,7 +29,7 @@ export const getLastTimeNotification = async (): Promise<number> => {
 };
 
 export const getTimerDurationByHours = async (): Promise<number> => {
-  const result = await AsyncStorage.getItem(STORAGE_KEYS.TimeDuration);
+  const result = await AsyncStorage.getItem(STORAGE_KEYS.TIME_DURATION);
   if (!result) {
     return DEFAULT_TIMER_INTERVAL;
   }
@@ -38,7 +40,7 @@ export const setTimerDurationByHours = async (
   duration: number
 ): Promise<void> => {
   await AsyncStorage.setItem(
-    STORAGE_KEYS.TimeDuration,
+    STORAGE_KEYS.TIME_DURATION,
     JSON.stringify(duration)
   );
 };

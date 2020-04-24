@@ -28,12 +28,12 @@ const MyCard: React.FC<MyCardProps> = ({
   callback,
   style,
 }) => {
-  const { width } = Layout.window;
+  const { WIDTH } = Layout.WINDOW;
 
   return (
-    <Card style={{ ...styles.container, ...style, width }}>
+    <Card style={{ ...styles.container, ...style, width: WIDTH }}>
       <Card.Title title={title} subtitle={content} />
-      <Card.Cover source={{ uri: thumbnail }} style={{ width }} />
+      <Card.Cover source={{ uri: thumbnail }} style={{ width: WIDTH }} />
       <Divider />
       <Card.Actions>
         <Button onPress={callback}>{!buttonTitle ? 'OK' : buttonTitle}</Button>

@@ -23,7 +23,7 @@ export const askNotificationPermission = async (): Promise<boolean> => {
 };
 
 export const getTimerPermission = async (): Promise<boolean> => {
-  const grantedJSON = await AsyncStorage.getItem(STORAGE_KEYS.IsTimerGranted);
+  const grantedJSON = await AsyncStorage.getItem(STORAGE_KEYS.IS_TIMER_GRANTED);
   if (!grantedJSON) {
     return false;
   }
@@ -32,7 +32,7 @@ export const getTimerPermission = async (): Promise<boolean> => {
 
 export const setTimerPermission = async (granted: boolean): Promise<void> => {
   await AsyncStorage.setItem(
-    STORAGE_KEYS.IsTimerGranted,
+    STORAGE_KEYS.IS_TIMER_GRANTED,
     JSON.stringify(granted)
   );
 };

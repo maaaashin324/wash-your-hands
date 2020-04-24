@@ -4,7 +4,7 @@ import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import { GetFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
-import { Colors, STORAGE_KEYS } from '@/constants';
+import { COLORS, STORAGE_KEYS } from '@/constants';
 import {
   initTask,
   getFrequency,
@@ -80,7 +80,7 @@ const HomeScreen: React.FC<{}> = () => {
     await setFrequency({
       frequency: frequencyData.washFrequency,
       dataTobeSet,
-      type: STORAGE_KEYS.WashFrequency,
+      type: STORAGE_KEYS.WASH_FREQUENCY,
     });
   };
 
@@ -132,7 +132,7 @@ const HomeScreen: React.FC<{}> = () => {
           <View style={styles.washFAB}>
             <FAB
               icon="minus"
-              style={{ backgroundColor: Colors.themeColor }}
+              style={{ backgroundColor: COLORS.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('minus');
@@ -140,7 +140,7 @@ const HomeScreen: React.FC<{}> = () => {
             />
             <FAB
               icon="plus"
-              style={{ backgroundColor: Colors.themeColor }}
+              style={{ backgroundColor: COLORS.themeColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('plus');

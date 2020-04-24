@@ -1,9 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  AlertFrequencyType,
-  WashFrequencyType,
-  GetFrequencyType,
-} from '@types';
+import { FrequencyType, GetFrequencyType } from '@types';
 import STORAGE_KEYS from '@constants/storage';
 
 interface CalcToday {
@@ -24,9 +20,7 @@ export const calcToday = (): CalcToday => {
  * @param frequency This should be AlertFrequencyType or WashFrequencyType
  * @returns {Number}
  */
-export const calcFrequency = (
-  frequency: AlertFrequencyType | WashFrequencyType
-): number => {
+export const calcFrequency = (frequency: FrequencyType): number => {
   const { year, month, date } = calcToday();
   if (!frequency) {
     return 0;
@@ -43,22 +37,17 @@ export const calcFrequency = (
   if (!currentDateSet) {
     return 0;
   }
-  //  This means currentDataSet is WashFrequencyType
-  if (typeof currentDateSet === 'number') {
-    return currentDateSet;
-  }
-  //  This means currentDataSet is AlertFrequencyType
   return currentDateSet.filter(
-    (dateNumber) => dateNumber.timestamp < Date.now()
+    (dateNumber) => dateNumber.timestamp <= Date.now()
   ).length;
 };
 
 export const getFrequency = async (): Promise<GetFrequencyType> => {
   const alertFrequencyJSON = await AsyncStorage.getItem(
-    STORAGE_KEYS.AlertFrequency
+    STORAGE_KEYS.ALERT_FREQUENCY
   );
   const washFrequencyJSON = await AsyncStorage.getItem(
-    STORAGE_KEYS.WashFrequency
+    STORAGE_KEYS.WASH_FREQUENCY
   );
 
   const result: GetFrequencyType = {
@@ -83,11 +72,11 @@ export const setFrequency = async ({
   dataTobeSet,
   type,
 }: {
-  frequency?: AlertFrequencyType | WashFrequencyType | null;
+  frequency?: FrequencyType | null;
   dataTobeSet: number;
   type: string;
 }): Promise<void> => {
-  let newFrequency: AlertFrequencyType | WashFrequencyType = {};
+  let newFrequency: FrequencyType = {};
   if (frequency) {
     newFrequency = JSON.parse(JSON.stringify(frequency));
   }
@@ -102,15 +91,6 @@ export const setFrequency = async ({
     newFrequency[year][month] = {};
   }
   const currentDateSet = newFrequency[year][month][date];
-  if (type === STORAGE_KEYS.WashFrequency) {
-    newFrequency[year][month][date] = dataTobeSet;
-    await AsyncStorage.setItem(
-      STORAGE_KEYS.WashFrequency,
-      JSON.stringify(newFrequency)
-    );
-    return;
-  }
-
   if (!currentDateSet) {
     newFrequency[year][month][date] = [{ timestamp: dataTobeSet }];
   } else {
@@ -118,30 +98,27 @@ export const setFrequency = async ({
     // @ts-ignore
     newFrequency[year][month][date].push({ timestamp: dataTobeSet });
   }
-  await AsyncStorage.setItem(
-    STORAGE_KEYS.AlertFrequency,
-    JSON.stringify(newFrequency)
-  );
+  await AsyncStorage.setItem(type, JSON.stringify(newFrequency));
 };
 
 export const storeFrequency = async (dataTobeSet: number): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
-  let frequency: AlertFrequencyType = {};
+  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.ALERT_FREQUENCY);
+  let frequency: FrequencyType = {};
   if (dataSet) {
     frequency = JSON.parse(dataSet);
   }
   await setFrequency({
     frequency,
     dataTobeSet,
-    type: STORAGE_KEYS.AlertFrequency,
+    type: STORAGE_KEYS.ALERT_FREQUENCY,
   });
 };
 
 export const storeFrequencies = async (
   dataTobeSet: number[]
 ): Promise<void> => {
-  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.AlertFrequency);
-  let frequency: AlertFrequencyType = {};
+  const dataSet = await AsyncStorage.getItem(STORAGE_KEYS.ALERT_FREQUENCY);
+  let frequency: FrequencyType = {};
   if (dataSet) {
     frequency = JSON.parse(dataSet);
   }
@@ -150,7 +127,7 @@ export const storeFrequencies = async (
       await setFrequency({
         frequency,
         dataTobeSet: eachData,
-        type: STORAGE_KEYS.AlertFrequency,
+        type: STORAGE_KEYS.ALERT_FREQUENCY,
       });
     })
   );

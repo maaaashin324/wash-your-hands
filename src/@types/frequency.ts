@@ -1,32 +1,21 @@
 export type GetFrequencyType = {
   alertTimes: number;
   todayTimes: number;
-  alertFrequency: AlertFrequencyType | null;
-  washFrequency: WashFrequencyType | null;
+  alertFrequency: FrequencyType | null;
+  washFrequency: FrequencyType | null;
 };
 
-export type AlertTimeType = {
+export type FrequencyTimeType = {
   timestamp: number;
 };
 
-export type AlertFrequencyType = {
+export type FrequencyType = {
   // year
   [key: number]: {
     // month
     [key: number]: {
       // day
-      [key: number]: AlertTimeType[];
-    };
-  };
-};
-
-export type WashFrequencyType = {
-  // year
-  [key: number]: {
-    // month
-    [key: number]: {
-      // day
-      [key: number]: number;
+      [key: number]: FrequencyTimeType[];
     };
   };
 };
