@@ -9,7 +9,7 @@ import {
 } from '@/constants';
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
-import { storeFrequency, storeFrequencies } from './frequency';
+import { storeFrequency } from './frequency';
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
@@ -59,7 +59,10 @@ export const makeLocationNotification = async (
     },
     { time }
   );
-  await storeFrequency(time);
+  await storeFrequency({
+    type: STORAGE_KEYS.ALERT_FREQUENCY,
+    dataTobeSet: time,
+  });
 };
 
 // https://github.com/expo/expo/pull/7035#discussion_r390141822
@@ -93,7 +96,10 @@ export const makeTimerNotification = async (): Promise<boolean> => {
       );
     })
   );
-  await storeFrequencies(timer);
+  await storeFrequency({
+    type: STORAGE_KEYS.ALERT_FREQUENCY,
+    dataTobeSets: timer,
+  });
   await setLastTimeNotification(timer[timer.length - 1]);
   return true;
 };
