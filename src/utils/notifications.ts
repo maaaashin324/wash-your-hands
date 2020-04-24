@@ -9,7 +9,7 @@ import {
 } from '@/constants';
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
-import { storeFrequency } from './frequency';
+import { storeAlertFrequency } from './frequency';
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
@@ -59,8 +59,7 @@ export const makeLocationNotification = async (
     },
     { time }
   );
-  await storeFrequency({
-    type: STORAGE_KEYS.ALERT_FREQUENCY,
+  await storeAlertFrequency({
     dataTobeSet: time,
   });
 };
@@ -96,8 +95,7 @@ export const makeTimerNotification = async (): Promise<boolean> => {
       );
     })
   );
-  await storeFrequency({
-    type: STORAGE_KEYS.ALERT_FREQUENCY,
+  await storeAlertFrequency({
     dataTobeSets: timer,
   });
   await setLastTimeNotification(timer[timer.length - 1]);

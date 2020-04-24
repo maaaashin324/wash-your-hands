@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
-import { GetFrequencyType } from '@types';
 import MyPortal from '@components/myPortal';
-import { COLORS, STORAGE_KEYS } from '@/constants';
+import { COLORS } from '@/constants';
 import {
   initTask,
   getFrequency,
-  setFrequency,
+  storeWashFrequency,
   getNecessaryPermissions,
 } from '@/utils';
 
@@ -64,7 +63,6 @@ const styles = StyleSheet.create({
 });
 
 const HomeScreen: React.FC<{}> = () => {
-  const [frequencyData, setFrequencyData] = useState<GetFrequencyType>(null);
   const [todayAlertTimes, setTodayAlertTimes] = useState<number>(0);
   const [todayWashTimes, setTodayWashTimes] = useState<number>(0);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -77,11 +75,7 @@ const HomeScreen: React.FC<{}> = () => {
       dataTobeSet -= 1;
     }
     setTodayWashTimes(dataTobeSet);
-    await setFrequency({
-      frequency: frequencyData.washFrequency,
-      dataTobeSet,
-      type: STORAGE_KEYS.WASH_FREQUENCY,
-    });
+    await storeWashFrequency({ dataTobeSet });
   };
 
   const hideDialog = (): void => {
@@ -97,7 +91,6 @@ const HomeScreen: React.FC<{}> = () => {
 
   const initCurrentFrequency = async (): Promise<void> => {
     const result = await getFrequency();
-    setFrequencyData(result);
     setTodayAlertTimes(result.alertTimes);
     setTodayWashTimes(result.washTimes);
   };
