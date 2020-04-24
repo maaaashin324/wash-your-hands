@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { AppState, StyleSheet, View } from 'react-native';
 import { Title, Text, FAB } from 'react-native-paper';
 import i18n from 'i18n-js';
 import MyPortal from '@components/myPortal';
@@ -91,8 +91,15 @@ const HomeScreen: React.FC<{}> = () => {
 
   const initCurrentFrequency = async (): Promise<void> => {
     const result = await getFrequency();
-    setTodayAlertTimes(result.alertTimes);
     setTodayWashTimes(result.washTimes);
+    setTodayAlertTimes(result.alertTimes);
+    // eslint-disable-next-line
+    AppState.addEventListener('change', async (state) => {
+      if (state === 'active') {
+        const currentResult = await getFrequency();
+        setTodayAlertTimes(currentResult.alertTimes);
+      }
+    });
   };
 
   useEffect(() => {
