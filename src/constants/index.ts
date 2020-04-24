@@ -1,5 +1,5 @@
-export { default as Colors } from './colors';
-export { default as Layout } from './layout';
+export { default as COLORS } from './colors';
+export { default as LAYOUT } from './layout';
 export * from './navigations';
 export * from './notifications';
 export { default as STORAGE_KEYS } from './storage';
