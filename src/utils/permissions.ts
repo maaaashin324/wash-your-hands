@@ -1,5 +1,5 @@
 import * as Permissions from 'expo-permissions';
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 import STORAGE_KEYS from '@constants/storage';
 
 export const getLocationPermission = async (): Promise<boolean> => {

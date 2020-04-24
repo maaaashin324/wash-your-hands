@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 import { FrequencyType, GetFrequencyType, FrequencyTimeType } from '@types';
 import {
   calcToday,
@@ -7,11 +7,11 @@ import {
   setFrequency,
   storeFrequency,
 } from '@utils/frequency';
-import { STORAGE_KEYS } from '@/constants';
+import STORAGE_KEYS from '@/constants/storage';
 
 const mockGetItemKey = STORAGE_KEYS.ALERT_FREQUENCY;
-jest.mock('@react-native-community/async-storage', () => {
-  return {
+jest.mock('react-native', () => ({
+  AsyncStorage: {
     setItem: jest.fn(() => {
       return new Promise((resolve) => {
         resolve(null);
@@ -50,8 +50,8 @@ jest.mock('@react-native-community/async-storage', () => {
         );
       });
     }),
-  };
-});
+  },
+}));
 
 describe('Frequency', () => {
   describe('calcToday', () => {
