@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Notifications } from 'expo';
 import * as Locations from 'expo-location';
 import i18n from 'i18n-js';

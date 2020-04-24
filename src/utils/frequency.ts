@@ -1,9 +1,9 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   AlertFrequencyType,
   WashFrequencyType,
   GetFrequencyType,
 } from '@types';
-import { AsyncStorage } from 'react-native';
 import STORAGE_KEYS from '@constants/storage';
 
 interface CalcToday {
