@@ -1,6 +1,7 @@
 import React from 'react';
 import { StackHeaderProps } from '@react-navigation/stack';
 import { Appbar } from 'react-native-paper';
+import { COLORS } from '@/constants';
 
 export default function Header({
   navigation: { canGoBack, goBack },
@@ -9,7 +10,7 @@ export default function Header({
   },
 }: StackHeaderProps): React.FunctionComponentElement<StackHeaderProps> {
   return (
-    <Appbar.Header>
+    <Appbar.Header style={{ backgroundColor: COLORS.bar }}>
       {canGoBack() && <Appbar.BackAction onPress={goBack} />}
       <Appbar.Content title={name} />
     </Appbar.Header>

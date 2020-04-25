@@ -29,7 +29,7 @@ const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = () => {
   return (
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      barStyle={{ backgroundColor: COLORS.tabBar }}
+      barStyle={{ backgroundColor: COLORS.bar }}
     >
       <BottomTab.Screen
         name="Home"
