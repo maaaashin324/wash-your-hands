@@ -10,7 +10,7 @@ const Navigator: React.FC<{}> = () => (
   <>
     {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Root" component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
