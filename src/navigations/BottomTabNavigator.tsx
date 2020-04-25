@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {
   createBottomTabNavigator,
@@ -6,7 +6,7 @@ import {
 } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '@components/tabBarIcon';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
-import { getHeaderTitle } from '@utils/navigations';
+// import { getHeaderTitle } from '@utils/navigations';
 import HomeStackNavigator from './homeStackNavigator';
 import HowToWashStackNavigator from './howToWashStackNavigator';
 import StatisticsStackNavigator from './statisticsStackNavigator';
@@ -28,14 +28,7 @@ type BottomTabNavigatorProps = {
   navigation: BottomTabScreenNavigationProp;
 };
 
-const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = ({
-  navigation,
-  route,
-}) => {
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerTitle: getHeaderTitle(route) });
-  }, [navigation, route]);
-
+const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = () => {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen

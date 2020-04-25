@@ -5,7 +5,7 @@ import HomeScreen from '@screens/home';
 const HomeStack = createStackNavigator();
 
 const HomeStackNavigator: React.FC<{}> = () => (
-  <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+  <HomeStack.Navigator>
     <HomeStack.Screen name="Home" component={HomeScreen} />
   </HomeStack.Navigator>
 );
