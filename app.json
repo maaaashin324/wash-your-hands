@@ -20,7 +20,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.maaaashin324.wash-ur-hands",
-      "buildNumber": "1.0.11",
+      "buildNumber": "1.0.12",
       "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["location", "fetch"],
