@@ -1,9 +1,7 @@
 import React from 'react';
 import { StackNavigationProp } from '@react-navigation/stack';
-import {
-  createBottomTabNavigator,
-  BottomTabBarProps,
-} from '@react-navigation/bottom-tabs';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import TabBarIcon from '@components/tabBarIcon';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 import HomeStackNavigator from './homeStackNavigator';
@@ -11,7 +9,7 @@ import HowToWashStackNavigator from './howToWashStackNavigator';
 import StatisticsStackNavigator from './statisticsStackNavigator';
 import SettingsStackNavigator from './settingsStackNavigator';
 
-const BottomTab = createBottomTabNavigator();
+const BottomTab = createMaterialBottomTabNavigator();
 
 type RootStackParamList = {
   BottomTab: undefined;
