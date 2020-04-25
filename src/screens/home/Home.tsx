@@ -9,6 +9,7 @@ import {
   getFrequency,
   storeWashFrequency,
   getNecessaryPermissions,
+  makeTimerNotification,
 } from '@/utils';
 
 const styles = StyleSheet.create({
@@ -102,10 +103,20 @@ const HomeScreen: React.FC<{}> = () => {
     });
   };
 
+  const makeTimerNotificationWhenForeGround = (): void => {
+    // eslint-disable-next-line
+    AppState.addEventListener('change', async (state) => {
+      if (state === 'active') {
+        await makeTimerNotification();
+      }
+    });
+  };
+
   useEffect(() => {
     initTask();
     judgePermissionWhenRendered();
     initCurrentFrequency();
+    makeTimerNotificationWhenForeGround();
     // eslint-disable-next-line
   }, []);
 
