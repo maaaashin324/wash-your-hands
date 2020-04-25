@@ -119,6 +119,7 @@ const HomeScreen: React.FC<{}> = () => {
     initCurrentFrequency();
     makeTimerNotificationWhenForeGround();
     addNotificationEvent();
+    makeTimerNotification();
     // eslint-disable-next-line
   }, []);
 
