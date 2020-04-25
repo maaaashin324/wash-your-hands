@@ -65,7 +65,6 @@ const defineTimerTask = (): void => {
 const initTimerTask = async (): Promise<void> => {
   const isBackPermitted = await BackgroundFetch.getStatusAsync();
   if (isBackPermitted === BackgroundFetch.Status.Available) {
-    await makeTimerNotification();
     await BackgroundFetch.registerTaskAsync(TIMER_TASK_NAME, {
       minimumInterval: 60,
     });
