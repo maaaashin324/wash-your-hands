@@ -13,7 +13,7 @@ export default Object.freeze([
     thumbnail: 'https://img.youtube.com/vi/VzMT7btiwwI/hqdefault.jpg',
   },
   {
-    title: 'Coronavirus | How to wash your hands',
+    title: 'How to wash your hands',
     subTitle: 'Babylon Health',
     videoURL: 'https://youtu.be/seA1wbXUQTs',
     thumbnail: 'https://img.youtube.com/vi/seA1wbXUQTs/hqdefault.jpg',
