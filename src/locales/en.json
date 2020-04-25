@@ -56,7 +56,8 @@
     "title": "Permission",
     "location": "Location",
     "notification": "Notification",
-    "timer": "Repeat Alert"
+    "timer": "Repeat Alert",
+    "timerPlaceHolder": "Timer by hour"
   },
   "notification": {
     "title": "Wash your hands!",

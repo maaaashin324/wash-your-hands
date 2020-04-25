@@ -55,7 +55,8 @@
     "title": "パーミッション",
     "location": "GPS",
     "notification": "通知",
-    "timer": "定期的に通知"
+    "timer": "定期的に通知",
+    "timerPlaceHolder": "1時間単位で設定できます"
   },
   "notification": {
     "title": "手を洗おう！",
