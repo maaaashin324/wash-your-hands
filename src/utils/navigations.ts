@@ -6,7 +6,6 @@ import {
   StatisticsScreenRouteProp,
   RouteType,
 } from '@types';
-import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 
 type GetHeaderTitleParamType =
   | HomeScreenRouteProp
@@ -18,9 +17,7 @@ type GetHeaderTitleParamType =
 export const getHeaderTitle = (
   route: GetHeaderTitleParamType | RouteType
 ): string => {
-  const routeName = route.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
+  switch (route.name) {
     case 'Home':
       return i18n.t('tab.home');
     case 'HowToWash':

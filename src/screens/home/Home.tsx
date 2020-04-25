@@ -5,13 +5,11 @@ import i18n from 'i18n-js';
 import MyPortal from '@components/myPortal';
 import { COLORS } from '@/constants';
 import {
-  initTask,
-  getFrequency,
-  storeWashFrequency,
-  getNecessaryPermissions,
-  makeTimerNotification,
-  addNotificationEvent,
-} from '@/utils';
+  Frequency,
+  PermissionService,
+  NotificationService,
+  TaskService,
+} from '@/class';
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +75,7 @@ const HomeScreen: React.FC<{}> = () => {
       dataTobeSet -= 1;
     }
     setTodayWashTimes(dataTobeSet);
-    await storeWashFrequency({ dataTobeSet });
+    await Frequency.storeWashFrequency({ dataTobeSet });
   };
 
   const hideDialog = (): void => {
@@ -85,20 +83,20 @@ const HomeScreen: React.FC<{}> = () => {
   };
 
   const judgePermissionWhenRendered = async (): Promise<void> => {
-    const result = await getNecessaryPermissions();
+    const result = await PermissionService.getNecessaryPermissions();
     if (!result.granted) {
       setDialogOpen(true);
     }
   };
 
   const initCurrentFrequency = async (): Promise<void> => {
-    const result = await getFrequency();
+    const result = await Frequency.getFrequency();
     setTodayWashTimes(result.washTimes);
     setTodayAlertTimes(result.alertTimes);
     // eslint-disable-next-line
     AppState.addEventListener('change', async (state) => {
       if (state === 'active') {
-        const currentResult = await getFrequency();
+        const currentResult = await Frequency.getFrequency();
         setTodayAlertTimes(currentResult.alertTimes);
       }
     });
@@ -108,18 +106,18 @@ const HomeScreen: React.FC<{}> = () => {
     // eslint-disable-next-line
     AppState.addEventListener('change', async (state) => {
       if (state === 'active') {
-        await makeTimerNotification();
+        await NotificationService.makeTimerNotification();
       }
     });
   };
 
   useEffect(() => {
-    initTask();
+    TaskService.initTask();
     judgePermissionWhenRendered();
     initCurrentFrequency();
     makeTimerNotificationWhenForeGround();
-    addNotificationEvent();
-    makeTimerNotification();
+    NotificationService.addNotificationEvent();
+    NotificationService.makeTimerNotification();
     // eslint-disable-next-line
   }, []);
 

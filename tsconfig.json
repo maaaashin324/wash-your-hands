@@ -10,6 +10,7 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
+      "@class/*": ["class/*"],
       "@constants/*": ["constants/*"],
       "@components/*": ["components/*"],
       "@navigations/*": ["navigations/*"],
