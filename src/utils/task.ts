@@ -7,7 +7,6 @@ import { startLocationUpdates } from './location';
 import {
   makeLocationNotification,
   makeTimerNotification,
-  addNotificationEvent,
 } from './notifications';
 import { getLocationPermission } from './permissions';
 
@@ -81,7 +80,6 @@ export const initTask = async (): Promise<void> => {
   await initTimerTask();
   await initLocationTask();
   await BackgroundFetch.setMinimumIntervalAsync(60);
-  addNotificationEvent();
 };
 
 export const restartTimerTask = async (): Promise<void> => {
