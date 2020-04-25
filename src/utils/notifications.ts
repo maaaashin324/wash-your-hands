@@ -1,6 +1,7 @@
 import { AsyncStorage, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Locations from 'expo-location';
+import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import {
   DEFAULT_TIMER_INTERVAL,
@@ -10,6 +11,12 @@ import {
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
 import { storeAlertFrequency } from './frequency';
+import en from '../locales/en.json';
+import ja from '../locales/ja.json';
+
+i18n.translations = { en, ja };
+i18n.locale = Localization.locale;
+i18n.fallbacks = true;
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
