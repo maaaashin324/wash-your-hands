@@ -56,12 +56,12 @@
     "title": "Permission",
     "location": "Location",
     "notification": "Notification",
-    "timer": "Repeat Alert"
+    "timer": "Repeat Alert",
+    "timerPlaceHolder": "Timer by hour"
   },
   "notification": {
     "title": "Wash your hands!",
     "body": "You started to stay somewhere? Wash your hands!",
-    "testTitle": "Test!",
-    "testBody": "This is test notification!"
+    "timerBody": "It's time to wash your hands!"
   }
 }

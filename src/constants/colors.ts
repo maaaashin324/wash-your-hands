@@ -2,11 +2,11 @@ const themeColor = '#4297BF';
 
 export default Object.freeze({
   themeColor,
-  accentColor: '#3DCCAC',
+  accentColor: '#40CED6',
   tintColor: themeColor,
   tabIconDefault: '#ccc',
-  tabIconSelected: themeColor,
-  tabBar: '#fefefe',
+  tabIconSelected: '#40CED6',
+  bar: '#407FD6',
   errorBackground: 'red',
   errorText: '#fff',
   warningBackground: '#EAEB5E',

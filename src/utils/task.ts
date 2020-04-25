@@ -85,4 +85,5 @@ export const initTask = async (): Promise<void> => {
 export const restartTimerTask = async (): Promise<void> => {
   await Notifications.cancelAllScheduledNotificationsAsync();
   await initTimerTask();
+  await makeTimerNotification();
 };

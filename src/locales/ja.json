@@ -7,9 +7,9 @@
   },
   "home": {
     "title": "手を洗おう！",
-    "description": "みんなで協力して新型コロナを収めよう",
-    "warningTimes": "回洗った？",
-    "washTimes": "回洗った！",
+    "description": "手を洗って感染を予防しよう",
+    "warningTimes": "今日洗うべき回数",
+    "washTimes": "今日洗った回数",
     "dialogTitle": "パーミッション設定",
     "dialogContent": "通知とGPSの設定を許可してください。"
   },
@@ -55,12 +55,11 @@
     "title": "パーミッション",
     "location": "GPS",
     "notification": "通知",
-    "timer": "定期的に通知"
+    "timer": "定期的に通知",
+    "timerPlaceHolder": "1時間単位で設定できます"
   },
   "notification": {
     "title": "手を洗おう！",
-    "body": "近くにお手洗いある？手を洗おう！",
-    "testTitle": "これはテスト！",
-    "testBody": "こんな形で通知しますね。"
+    "body": "近くにお手洗いある？手を洗おう！"
   }
 }

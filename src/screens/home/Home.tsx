@@ -119,6 +119,7 @@ const HomeScreen: React.FC<{}> = () => {
     initCurrentFrequency();
     makeTimerNotificationWhenForeGround();
     addNotificationEvent();
+    makeTimerNotification();
     // eslint-disable-next-line
   }, []);
 
@@ -145,7 +146,7 @@ const HomeScreen: React.FC<{}> = () => {
           <View style={styles.washFAB}>
             <FAB
               icon="minus"
-              style={{ backgroundColor: COLORS.themeColor }}
+              style={{ backgroundColor: COLORS.accentColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('minus');
@@ -153,7 +154,7 @@ const HomeScreen: React.FC<{}> = () => {
             />
             <FAB
               icon="plus"
-              style={{ backgroundColor: COLORS.themeColor }}
+              style={{ backgroundColor: COLORS.accentColor }}
               // eslint-disable-next-line
               onPress={(): any => {
                 editWashFrequency('plus');

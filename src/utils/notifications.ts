@@ -54,8 +54,8 @@ export const makeLocationNotification = async (
   const time = Date.now() + SCHEDULE_NOTIFICATION_BUFFER;
   await Notifications.scheduleLocalNotificationAsync(
     {
-      title: i18n.t('notification:title'),
-      body: i18n.t('notification:body'),
+      title: i18n.t('notification.title'),
+      body: i18n.t('notification.body'),
     },
     { time }
   );
@@ -88,8 +88,8 @@ export const makeTimerNotification = async (): Promise<boolean> => {
     timer.map(async (time) => {
       await Notifications.scheduleLocalNotificationAsync(
         {
-          title: i18n.t('notification:title'),
-          body: i18n.t('notification:body'),
+          title: i18n.t('notification.title'),
+          body: i18n.t('notification.timerBody'),
         },
         { time }
       );
@@ -105,11 +105,15 @@ export const makeTimerNotification = async (): Promise<boolean> => {
 export const addNotificationEvent = (): void => {
   Notifications.addListener((notification) => {
     if (notification.origin === 'received') {
-      Alert.alert(i18n.t('notification:title'), i18n.t('notification:body'), [
-        {
-          text: 'Ok',
-        },
-      ]);
+      Alert.alert(
+        i18n.t('notification.title'),
+        i18n.t('notification.timerBody'),
+        [
+          {
+            text: 'Ok',
+          },
+        ]
+      );
     }
   });
 };

@@ -133,7 +133,7 @@ const SettingScreen: React.FC<{}> = () => {
         <TextInput
           defaultValue={String(DEFAULT_TIMER_INTERVAL)}
           disabled={!isTimerPermitted}
-          label="Timer by hours"
+          label={i18n.t('settings.timerPlaceHolder')}
           keyboardType="numeric"
           onChangeText={(text): void => setDuration(+text)}
           onBlur={async (): Promise<void> => {
