@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Locations from 'expo-location';
 import i18n from 'i18n-js';
@@ -100,4 +100,16 @@ export const makeTimerNotification = async (): Promise<boolean> => {
   });
   await setLastTimeNotification(timer[timer.length - 1]);
   return true;
+};
+
+export const addNotificationEvent = (): void => {
+  Notifications.addListener((notification) => {
+    if (notification.origin === 'received') {
+      Alert.alert(i18n.t('notification:title'), i18n.t('notification:body'), [
+        {
+          text: 'Ok',
+        },
+      ]);
+    }
+  });
 };
