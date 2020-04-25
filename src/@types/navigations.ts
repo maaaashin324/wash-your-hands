@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, Route } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export type HomeStackParamList = {
@@ -74,3 +74,7 @@ export type StatisticsScreenProps = {
   route: StatisticsScreenRouteProp;
   navigation: StatisticsScreenNavigationProp;
 };
+
+export type RouteType = Route<
+  'Home' | 'HowToWash' | 'YouTube' | 'Settings' | 'Statistics'
+>;

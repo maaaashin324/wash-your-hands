@@ -6,7 +6,7 @@ export default Object.freeze({
   tintColor: themeColor,
   tabIconDefault: '#ccc',
   tabIconSelected: '#40CED6',
-  tabBar: '#407FD6',
+  bar: '#407FD6',
   errorBackground: 'red',
   errorText: '#fff',
   warningBackground: '#EAEB5E',

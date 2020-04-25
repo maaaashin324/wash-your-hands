@@ -4,6 +4,7 @@ import {
   HowToWashScreenRouteProp,
   SettingsScreenRouteProp,
   StatisticsScreenRouteProp,
+  RouteType,
 } from '@types';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 
@@ -14,7 +15,9 @@ type GetHeaderTitleParamType =
   | StatisticsScreenRouteProp;
 
 // eslint-disable-next-line
-export const getHeaderTitle = (route: GetHeaderTitleParamType): string => {
+export const getHeaderTitle = (
+  route: GetHeaderTitleParamType | RouteType
+): string => {
   const routeName = route.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
