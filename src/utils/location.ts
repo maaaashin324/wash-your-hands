@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import * as Location from 'expo-location';
 import { LOCATION_TASK_NAME } from '@constants/task';
 import { getLocationPermission } from './permissions';
@@ -18,9 +19,20 @@ export const startLocationUpdates = async (): Promise<void> => {
   if (!status) {
     return;
   }
-  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+  const options: Location.LocationTaskOptions = {
     accuracy: Location.Accuracy.Balanced,
-  });
+    distanceInterval: 100,
+    deferredUpdatesDistance: 100,
+    deferredUpdatesInterval: 60000,
+  };
+  if (Platform.OS === 'ios') {
+    options.showsBackgroundLocationIndicator = true;
+    options.pausesUpdatesAutomatically = false;
+    options.activityType = Location.ActivityType.Other;
+  } else {
+    options.timeInterval = 60000;
+  }
+  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, options);
 };
 
 // https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
