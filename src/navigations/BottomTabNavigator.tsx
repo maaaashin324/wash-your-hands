@@ -6,7 +6,6 @@ import {
 } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '@components/tabBarIcon';
 import { INITIAL_ROUTE_NAME } from '@constants/navigations';
-// import { getHeaderTitle } from '@utils/navigations';
 import HomeStackNavigator from './homeStackNavigator';
 import HowToWashStackNavigator from './howToWashStackNavigator';
 import StatisticsStackNavigator from './statisticsStackNavigator';
