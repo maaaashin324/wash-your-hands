@@ -48,7 +48,8 @@ export const setTimerDurationByHours = async (
 export const makeLocationNotification = async (
   locations: Locations.LocationData[]
 ): Promise<void> => {
-  if (!isMovedFarEnough(locations)) {
+  const isMoved = await isMovedFarEnough(locations);
+  if (!isMoved) {
     return;
   }
   const time = Date.now() + SCHEDULE_NOTIFICATION_BUFFER;

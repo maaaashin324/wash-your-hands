@@ -4,24 +4,14 @@ exports[`TabBarIcon should be rendered with default color if not focused 1`] = `
 <MaterialIcons
   color="#ccc"
   name="home"
-  size={30}
-  style={
-    Object {
-      "marginBottom": -3,
-    }
-  }
+  size={26}
 />
 `;
 
 exports[`TabBarIcon should be rendered with main theme color if focused 1`] = `
 <MaterialIcons
-  color="#4297BF"
+  color="#40CED6"
   name="home"
-  size={30}
-  style={
-    Object {
-      "marginBottom": -3,
-    }
-  }
+  size={26}
 />
 `;

@@ -1,6 +1,6 @@
-import { Platform } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 import * as Location from 'expo-location';
-import { LOCATION_TASK_NAME } from '@constants/task';
+import { LOCATION_TASK_NAME, STORAGE_KEYS } from '@/constants';
 import { getLocationPermission } from './permissions';
 
 export const hasStartedLocationUpdates = async (): Promise<boolean> => {
@@ -60,14 +60,27 @@ export const measureMeters = (lat1, lon1, lat2, lon2): number => {
   return d * 1000; // meters
 };
 
-export const isMovedFarEnough = (
+export const isMovedFarEnough = async (
   locations: Location.LocationData[]
-): boolean => {
+): Promise<boolean> => {
   const lastLocation = locations[locations.length - 1];
   // This speed is meter per second
   if (lastLocation.coords.speed > 0) {
+    await AsyncStorage.setItem(
+      STORAGE_KEYS.LOCATIONS,
+      JSON.stringify(locations)
+    );
     return false;
   }
+
+  const locationsStoredJSON = await AsyncStorage.getItem(
+    STORAGE_KEYS.LOCATIONS
+  );
+  const locationsStored: Location.LocationData[] = [];
+  if (locationsStoredJSON) {
+    locationsStored.push(...JSON.parse(locationsStoredJSON));
+  }
+  locationsStored.push(...locations);
   let meters = 0;
   for (let i = 0; i < locations.length - 1; i += 1) {
     meters += measureMeters(
@@ -78,7 +91,12 @@ export const isMovedFarEnough = (
     );
   }
   if (meters < 500) {
+    await AsyncStorage.setItem(
+      STORAGE_KEYS.LOCATIONS,
+      JSON.stringify(locationsStored)
+    );
     return false;
   }
+  await AsyncStorage.removeItem(STORAGE_KEYS.LOCATIONS);
   return true;
 };
