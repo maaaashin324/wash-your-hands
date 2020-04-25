@@ -60,8 +60,6 @@
   },
   "notification": {
     "title": "Wash your hands!",
-    "body": "You started to stay somewhere? Wash your hands!",
-    "testTitle": "Test!",
-    "testBody": "This is test notification!"
+    "body": "You started to stay somewhere? Wash your hands!"
   }
 }
