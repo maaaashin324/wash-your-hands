@@ -1,7 +1,6 @@
 import { AsyncStorage, Alert } from 'react-native';
 import { Notifications } from 'expo';
 import * as Locations from 'expo-location';
-import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import {
   DEFAULT_TIMER_INTERVAL,
@@ -11,12 +10,6 @@ import {
 import { getTimerPermission } from './permissions';
 import { isMovedFarEnough } from './location';
 import { storeAlertFrequency } from './frequency';
-import en from '../locales/en.json';
-import ja from '../locales/ja.json';
-
-i18n.translations = { en, ja };
-i18n.locale = Localization.locale;
-i18n.fallbacks = true;
 
 export const setLastTimeNotification = async (time: number): Promise<void> => {
   await AsyncStorage.setItem(
@@ -61,8 +54,8 @@ export const makeLocationNotification = async (
   const time = Date.now() + SCHEDULE_NOTIFICATION_BUFFER;
   await Notifications.scheduleLocalNotificationAsync(
     {
-      title: i18n.t('notification:title'),
-      body: i18n.t('notification:body'),
+      title: i18n.t('notification.title'),
+      body: i18n.t('notification.body'),
     },
     { time }
   );
@@ -95,8 +88,8 @@ export const makeTimerNotification = async (): Promise<boolean> => {
     timer.map(async (time) => {
       await Notifications.scheduleLocalNotificationAsync(
         {
-          title: i18n.t('notification:title'),
-          body: i18n.t('notification:body'),
+          title: i18n.t('notification.title'),
+          body: i18n.t('notification.timerBody'),
         },
         { time }
       );
@@ -112,11 +105,15 @@ export const makeTimerNotification = async (): Promise<boolean> => {
 export const addNotificationEvent = (): void => {
   Notifications.addListener((notification) => {
     if (notification.origin === 'received') {
-      Alert.alert(i18n.t('notification:title'), i18n.t('notification:body'), [
-        {
-          text: 'Ok',
-        },
-      ]);
+      Alert.alert(
+        i18n.t('notification.title'),
+        i18n.t('notification.timerBody'),
+        [
+          {
+            text: 'Ok',
+          },
+        ]
+      );
     }
   });
 };

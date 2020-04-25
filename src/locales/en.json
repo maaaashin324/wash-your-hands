@@ -61,6 +61,7 @@
   },
   "notification": {
     "title": "Wash your hands!",
-    "body": "You started to stay somewhere? Wash your hands!"
+    "body": "You started to stay somewhere? Wash your hands!",
+    "timerBody": "It's time to wash your hands!"
   }
 }
