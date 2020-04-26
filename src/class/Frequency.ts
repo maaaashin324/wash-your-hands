@@ -16,7 +16,7 @@ class Frequency {
 
   private washFrequencyStorageKey = 'WASH_FREQUENCY';
 
-  static calcToday = (): CalcToday => {
+  private calcToday = (): CalcToday => {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth();
@@ -29,10 +29,10 @@ class Frequency {
    * @param frequency This should be AlertFrequencyType or WashFrequencyType
    * @returns {Number}
    */
-  static calcTodayFrequency = (
+  private calcTodayFrequency = (
     frequency: AlertFrequencyType | WashFrequencyType
   ): number => {
-    const { year, month, date } = Frequency.calcToday();
+    const { year, month, date } = this.calcToday();
     if (!frequency) {
       return 0;
     }
@@ -72,11 +72,11 @@ class Frequency {
     };
     if (alertFrequencyJSON) {
       result.alertFrequency = JSON.parse(alertFrequencyJSON);
-      result.alertTimes = Frequency.calcTodayFrequency(result.alertFrequency);
+      result.alertTimes = this.calcTodayFrequency(result.alertFrequency);
     }
     if (washFrequencyJSON) {
       result.washFrequency = JSON.parse(washFrequencyJSON);
-      result.washTimes = Frequency.calcTodayFrequency(result.washFrequency);
+      result.washTimes = this.calcTodayFrequency(result.washFrequency);
     }
     return result;
   };
@@ -97,7 +97,7 @@ class Frequency {
     if (frequency) {
       newFrequency = JSON.parse(JSON.stringify(frequency));
     }
-    const { year, month, date } = Frequency.calcToday();
+    const { year, month, date } = this.calcToday();
 
     const currentYearSet = newFrequency[year];
     if (!currentYearSet) {
@@ -142,7 +142,7 @@ class Frequency {
     if (frequency) {
       newFrequency = JSON.parse(JSON.stringify(frequency));
     }
-    const { year, month, date } = Frequency.calcToday();
+    const { year, month, date } = this.calcToday();
 
     const currentYearSet = newFrequency[year];
     if (!currentYearSet) {

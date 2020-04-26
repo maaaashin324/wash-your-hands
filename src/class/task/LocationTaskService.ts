@@ -6,11 +6,9 @@ import NotificationService from '@/class/NotificationService';
 import PermissionService from '@/class/PermissionService';
 
 export default class LocationTaskService {
-  private taskName = 'LOCATION_TASK_NAME';
-
   defineTask = (): void => {
     TaskManager.defineTask(
-      this.taskName,
+      LocationService.getTaskName(),
       // https://github.com/expo/expo/blob/sdk-37/packages/expo-task-manager/src/TaskManager.ts
       // Since taskExecutor is invoked with await in line 182, this should be return promise.
       // eslint-disable-next-line

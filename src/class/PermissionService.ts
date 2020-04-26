@@ -10,28 +10,28 @@ export type GetNecessaryPermissions = {
 
 const IS_TIMER_GRANTED = 'IS_TIMER_GRANTED';
 
-export default class PermissionService {
-  static getLocationPermission = async (): Promise<boolean> => {
+class PermissionService {
+  public getLocationPermission = async (): Promise<boolean> => {
     const { granted } = await Permissions.getAsync(Permissions.LOCATION);
     return granted;
   };
 
-  static askLocationPermission = async (): Promise<boolean> => {
+  public askLocationPermission = async (): Promise<boolean> => {
     const { granted } = await Permissions.askAsync(Permissions.LOCATION);
     return granted;
   };
 
-  static getNotificationPermission = async (): Promise<boolean> => {
+  public getNotificationPermission = async (): Promise<boolean> => {
     const { granted } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
     return granted;
   };
 
-  static askNotificationPermission = async (): Promise<boolean> => {
+  public askNotificationPermission = async (): Promise<boolean> => {
     const { granted } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     return granted;
   };
 
-  static getTimerPermission = async (): Promise<boolean> => {
+  public getTimerPermission = async (): Promise<boolean> => {
     const grantedJSON = await AsyncStorage.getItem(IS_TIMER_GRANTED);
     if (!grantedJSON) {
       return false;
@@ -39,16 +39,16 @@ export default class PermissionService {
     return JSON.parse(grantedJSON);
   };
 
-  static setTimerPermission = async (granted: boolean): Promise<void> => {
+  public setTimerPermission = async (granted: boolean): Promise<void> => {
     await AsyncStorage.setItem(IS_TIMER_GRANTED, JSON.stringify(granted));
   };
 
   // https://docs.expo.io/versions/latest/sdk/permissions/
-  static getNecessaryPermissions = async (): Promise<
+  public getNecessaryPermissions = async (): Promise<
     GetNecessaryPermissions
   > => {
-    const isLocationPermitted = await PermissionService.getLocationPermission();
-    const isNotificationPermitted = await PermissionService.getNotificationPermission();
+    const isLocationPermitted = await this.getLocationPermission();
+    const isNotificationPermitted = await this.getNotificationPermission();
     return {
       granted: isLocationPermitted && isNotificationPermitted,
       detail: {
@@ -58,3 +58,6 @@ export default class PermissionService {
     };
   };
 }
+
+const permissionService = new PermissionService();
+export default permissionService;

@@ -1,11 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import * as Location from 'expo-location';
-import {
-  hasStartedLocationUpdates,
-  startLocationUpdates,
-  isMovedFarEnough,
-} from '@utils/location';
-import { LOCATION_TASK_NAME } from '@/constants/task';
+import LocationService from '@/class/LocationService';
+import PermissionService from '@/class/PermissionService';
 
 jest.mock('react-native', () => ({
   AsyncStorage: {
@@ -55,15 +51,13 @@ jest.mock('expo-location', () => {
     },
   };
 });
-jest.mock('@/utils/permissions', () => {
-  return {
-    getLocationPermission: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(true);
-      });
-    }),
-  };
-});
+jest.mock('@/class/PermissionService', () => ({
+  getLocationPermission: jest.fn(() => {
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }),
+}));
 
 describe('Location', () => {
   describe('hasStartedLocationUpdatesAsync', () => {
@@ -81,36 +75,43 @@ describe('Location', () => {
     });
 
     test('should return true since mock always returns true', async () => {
-      const result = await hasStartedLocationUpdates();
+      const result = await LocationService.hasStartedLocationUpdates();
 
       expect(result).toBe(true);
       expect(spyOnHasStartedLocationUpdatesAsync).toHaveBeenCalledTimes(1);
       expect(spyOnHasStartedLocationUpdatesAsync).toHaveBeenCalledWith(
-        LOCATION_TASK_NAME
+        LocationService.getTaskName()
       );
     });
   });
 
   describe('startLocationUpdates', () => {
     let spyOnStartLocationUpdatesAsync;
+    let spyOnGetLoactionPermission;
 
     beforeEach(() => {
       spyOnStartLocationUpdatesAsync = jest.spyOn(
         Location,
         'startLocationUpdatesAsync'
       );
+      spyOnGetLoactionPermission = jest.spyOn(
+        PermissionService,
+        'getLocationPermission'
+      );
     });
 
     afterEach(() => {
       spyOnStartLocationUpdatesAsync.mockClear();
+      spyOnGetLoactionPermission.mockClear();
     });
 
     test('should execute startLocationUpdatesAsync in ios', async () => {
-      await startLocationUpdates();
+      await LocationService.startLocationUpdates();
 
+      expect(spyOnGetLoactionPermission).toHaveBeenCalledTimes(1);
       expect(spyOnStartLocationUpdatesAsync).toHaveBeenCalledTimes(1);
       expect(spyOnStartLocationUpdatesAsync).toHaveBeenCalledWith(
-        LOCATION_TASK_NAME,
+        LocationService.getTaskName(),
         {
           accuracy: Location.Accuracy.Balanced,
           activityType: 'other',
@@ -165,7 +166,7 @@ describe('Location', () => {
         timestamp: Date.now(),
       };
 
-      const result = await isMovedFarEnough([xPoint, yPoint]);
+      const result = await LocationService.isMovedFarEnough([xPoint, yPoint]);
       expect(spyOnAsyncStorageGetItem).toHaveBeenCalledTimes(1);
       expect(spyOnAsyncStorageRemoveItem).toHaveBeenCalledTimes(1);
       expect(result).toBe(true);
@@ -195,7 +196,7 @@ describe('Location', () => {
         timestamp: Date.now(),
       };
 
-      const result = await isMovedFarEnough([xPoint, yPoint]);
+      const result = await LocationService.isMovedFarEnough([xPoint, yPoint]);
       expect(spyOnAsyncStorageSetItem).toHaveBeenCalledTimes(1);
       expect(result).toBe(false);
     });
@@ -224,7 +225,7 @@ describe('Location', () => {
         timestamp: Date.now(),
       };
 
-      const result = await isMovedFarEnough([xPoint, yPoint]);
+      const result = await LocationService.isMovedFarEnough([xPoint, yPoint]);
       expect(spyOnAsyncStorageGetItem).toHaveBeenCalledTimes(1);
       expect(spyOnAsyncStorageSetItem).toHaveBeenCalledTimes(1);
       expect(result).toBe(false);

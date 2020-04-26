@@ -25,6 +25,10 @@ class LocationService {
     }
   }
 
+  getTaskName = (): string => {
+    return this.taskName;
+  };
+
   hasStartedLocationUpdates = async (): Promise<boolean> => {
     const result = await Location.hasStartedLocationUpdatesAsync(this.taskName);
     return result;

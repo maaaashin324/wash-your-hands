@@ -4,18 +4,9 @@ import {
   WashFrequencyType,
   GetFrequencyType,
 } from '@types';
-import {
-  calcToday,
-  calcTodayFrequency,
-  getFrequency,
-  setAlertFrequency,
-  setWashFrequency,
-  storeAlertFrequency,
-  storeWashFrequency,
-} from '@utils/frequency';
-import STORAGE_KEYS from '@/constants/storage';
+import Frequency from '@/class/Frequency';
 
-const mockAlertKey = STORAGE_KEYS.ALERT_FREQUENCY;
+const mockAlertKey = Frequency['alertFrequencyStorageKey'];
 jest.mock('react-native', () => ({
   AsyncStorage: {
     setItem: jest.fn(() => {
@@ -59,7 +50,7 @@ jest.mock('react-native', () => ({
 describe('Frequency', () => {
   describe('calcToday', () => {
     test('should return year, month, date of today', () => {
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
 
       expect(year).toBe(new Date().getFullYear());
       expect(month).toBe(new Date().getMonth());
@@ -70,7 +61,7 @@ describe('Frequency', () => {
   describe('calcFrequency', () => {
     test('should return 0 when frequency is falsy', () => {
       const frequency = null;
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(0);
     });
@@ -78,7 +69,7 @@ describe('Frequency', () => {
     test('should return 0 when month is not set', () => {
       const now = new Date();
       const frequency = { [now.getFullYear()]: null };
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(0);
     });
@@ -86,7 +77,7 @@ describe('Frequency', () => {
     test('should return 0 when date is not set', () => {
       const now = new Date();
       const frequency = { [now.getFullYear()]: { [now.getMonth()]: null } };
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(0);
     });
@@ -98,7 +89,7 @@ describe('Frequency', () => {
           [now.getMonth()]: { [now.getDate()]: [{ timestamp: Date.now() }] },
         },
       };
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(1);
     });
@@ -115,7 +106,7 @@ describe('Frequency', () => {
           },
         },
       };
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(2);
     });
@@ -129,7 +120,7 @@ describe('Frequency', () => {
           },
         },
       };
-      const result = calcTodayFrequency(frequency);
+      const result = Frequency['calcTodayFrequency'](frequency);
 
       expect(result).toBe(2);
     });
@@ -147,7 +138,7 @@ describe('Frequency', () => {
     });
 
     test('should get GetFrequencyType', async () => {
-      const result = await getFrequency();
+      const result = await Frequency.getFrequency();
       const today = new Date();
       today.setHours(0);
       today.setMinutes(0);
@@ -175,10 +166,10 @@ describe('Frequency', () => {
       expect(spyOnGetItem).toHaveBeenCalledTimes(2);
       expect(spyOnGetItem).toHaveBeenNthCalledWith(
         1,
-        STORAGE_KEYS.ALERT_FREQUENCY
+        Frequency['alertFrequencyStorageKey']
       );
       expect(spyOnGetItem).toHaveBeenLastCalledWith(
-        STORAGE_KEYS.WASH_FREQUENCY
+        Frequency['washFrequencyStorageKey']
       );
     });
   });
@@ -195,12 +186,12 @@ describe('Frequency', () => {
     });
 
     test('should throw error if neither dataTobeSet nor dataTobeSets is set as arguments', async () => {
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
       const oldFrequency: AlertFrequencyType = {
         [year]: { [month]: { [date]: [{ timestamp: Date.now() }] } },
       };
       try {
-        await setAlertFrequency({ frequency: oldFrequency });
+        await Frequency.setAlertFrequency({ frequency: oldFrequency });
       } catch (error) {
         expect(error).toBeInstanceOf(TypeError);
       }
@@ -208,10 +199,10 @@ describe('Frequency', () => {
 
     test('store alert frequency at the very first time', async () => {
       const dataTobeSet = Date.now();
-      const type = STORAGE_KEYS.ALERT_FREQUENCY;
-      await setAlertFrequency({ dataTobeSet });
+      const type = Frequency['alertFrequencyStorageKey'];
+      await Frequency.setAlertFrequency({ dataTobeSet });
 
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
       const expected: AlertFrequencyType = {
         [year]: { [month]: { [date]: [{ timestamp: dataTobeSet }] } },
       };
@@ -221,13 +212,16 @@ describe('Frequency', () => {
     });
 
     test('store alert frequency at the second time', async () => {
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
       const oldFrequency = {
         [year]: { [month]: { [date]: [{ timestamp: Date.now() }] } },
       };
       const dataTobeSet = Date.now();
-      const type = STORAGE_KEYS.ALERT_FREQUENCY;
-      await setAlertFrequency({ frequency: oldFrequency, dataTobeSet });
+      const type = Frequency['alertFrequencyStorageKey'];
+      await Frequency.setAlertFrequency({
+        frequency: oldFrequency,
+        dataTobeSet,
+      });
 
       const expected: AlertFrequencyType = oldFrequency;
       expected[year][month][date].push({
@@ -252,10 +246,10 @@ describe('Frequency', () => {
 
     test('store wash frequency at the very first time', async () => {
       const dataTobeSet = 1;
-      const type = STORAGE_KEYS.WASH_FREQUENCY;
-      await setWashFrequency({ dataTobeSet });
+      const type = Frequency['washFrequencyStorageKey'];
+      await Frequency.setWashFrequency({ dataTobeSet });
 
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
       const expected: WashFrequencyType = {
         [year]: { [month]: { [date]: 1 } },
       };
@@ -265,13 +259,16 @@ describe('Frequency', () => {
     });
 
     test('store wash frequency at the second time', async () => {
-      const { year, month, date } = calcToday();
+      const { year, month, date } = Frequency['calcToday']();
       const oldFrequency: WashFrequencyType = {
         [year]: { [month]: { [date]: 2 } },
       };
       const dataTobeSet = 3;
-      const type = STORAGE_KEYS.WASH_FREQUENCY;
-      await setWashFrequency({ frequency: oldFrequency, dataTobeSet });
+      const type = Frequency['washFrequencyStorageKey'];
+      await Frequency.setWashFrequency({
+        frequency: oldFrequency,
+        dataTobeSet,
+      });
 
       const expected = oldFrequency;
       expected[year][month][date] = 3;
@@ -299,14 +296,14 @@ describe('Frequency', () => {
       try {
         // eslint-disable-next-line
         // @ts-ignore
-        await storeAlertFrequency();
+        await Frequency.storeAlertFrequency();
       } catch (error) {
         expect(error).toBeInstanceOf(TypeError);
       }
     });
 
     test('should store alert frequency with one frequency', async () => {
-      const type = STORAGE_KEYS.ALERT_FREQUENCY;
+      const type = Frequency['alertFrequencyStorageKey'];
       const today = new Date();
       today.setHours(0);
       today.setMinutes(0);
@@ -325,9 +322,11 @@ describe('Frequency', () => {
         },
       };
 
-      await storeAlertFrequency({ dataTobeSet: newTimestamp });
+      await Frequency.storeAlertFrequency({ dataTobeSet: newTimestamp });
       expect(spyOnGetItem).toHaveBeenCalledTimes(1);
-      expect(spyOnGetItem).toHaveBeenCalledWith(STORAGE_KEYS.ALERT_FREQUENCY);
+      expect(spyOnGetItem).toHaveBeenCalledWith(
+        Frequency['alertFrequencyStorageKey']
+      );
       expect(spyOnSetItem).toHaveBeenCalledTimes(1);
       expect(spyOnSetItem).toHaveBeenCalledWith(type, JSON.stringify(expected));
     });
@@ -348,7 +347,7 @@ describe('Frequency', () => {
     });
 
     test('should store alert frequency with one frequency', async () => {
-      const type = STORAGE_KEYS.WASH_FREQUENCY;
+      const type = Frequency['washFrequencyStorageKey'];
       const today = new Date();
       today.setHours(0);
       today.setMinutes(0);
@@ -363,9 +362,11 @@ describe('Frequency', () => {
         },
       };
 
-      await storeWashFrequency({ dataTobeSet: 2 });
+      await Frequency.storeWashFrequency({ dataTobeSet: 2 });
       expect(spyOnGetItem).toHaveBeenCalledTimes(1);
-      expect(spyOnGetItem).toHaveBeenCalledWith(STORAGE_KEYS.WASH_FREQUENCY);
+      expect(spyOnGetItem).toHaveBeenCalledWith(
+        Frequency['washFrequencyStorageKey']
+      );
       expect(spyOnSetItem).toHaveBeenCalledTimes(1);
       expect(spyOnSetItem).toHaveBeenCalledWith(type, JSON.stringify(expected));
     });
