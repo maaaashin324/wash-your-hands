@@ -13,10 +13,10 @@ export default Object.freeze([
     thumbnail: 'https://img.youtube.com/vi/VzMT7btiwwI/hqdefault.jpg',
   },
   {
-    title: 'How to wash your hands',
-    subTitle: 'Babylon Health',
-    videoURL: 'https://youtu.be/seA1wbXUQTs',
-    thumbnail: 'https://img.youtube.com/vi/seA1wbXUQTs/hqdefault.jpg',
+    title: 'WHO: How to handwash? With soap and water',
+    subTitle: 'WHO',
+    videoURL: 'https://youtu.be/3PmVJQUCm4E',
+    thumbnail: 'https://img.youtube.com/vi/3PmVJQUCm4E/hqdefault.jpg',
   },
   {
     title: 'Hand-washing Steps Using the WHO Technique',
