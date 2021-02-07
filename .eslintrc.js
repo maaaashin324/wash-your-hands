@@ -20,6 +20,7 @@ module.exports = {
       'eslint-import-resolver-custom-alias': {
         alias: {
           '@': './src',
+          '@class': './src/class',
           '@constants': './src/constants',
           '@components': './src/components',
           '@navigations': './src/navigations',

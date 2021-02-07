@@ -3,19 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { List, Switch, TextInput } from 'react-native-paper';
 import i18n from 'i18n-js';
-import {
-  askLocationPermission,
-  askNotificationPermission,
-  getNecessaryPermissions,
-  getTimerPermission,
-  setTimerPermission,
-  setTimerDurationByHours,
-  initTask,
-  restartTimerTask,
-  getTimerDurationByHours,
-} from '@/utils';
+import { NotificationService, PermissionService, TaskService } from '@/class';
 import MyPortal from '@components/myPortal';
-import { DEFAULT_TIMER_INTERVAL } from '@constants/notifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,6 +18,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const defaultTimerInterval = NotificationService.getDefaultTimeInterval();
+
 const SettingScreen: React.FC<{}> = () => {
   let initTimerDurationByHours = 0;
   const [isLocationPermitted, setLocationPermitted] = useState<boolean>(false);
@@ -36,7 +27,7 @@ const SettingScreen: React.FC<{}> = () => {
     false
   );
   const [isTimerPermitted, setTimerPermitted] = useState<boolean>(false);
-  const [duration, setDuration] = useState<number>(DEFAULT_TIMER_INTERVAL);
+  const [duration, setDuration] = useState<number>(defaultTimerInterval);
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const hideDialog = (): void => {
@@ -44,31 +35,31 @@ const SettingScreen: React.FC<{}> = () => {
   };
 
   const getPermissionStatus = async (): Promise<void> => {
-    const result = await getNecessaryPermissions();
+    const result = await PermissionService.getNecessaryPermissions();
     if (result.detail[Permissions.LOCATION]) {
       setLocationPermitted(true);
     }
     if (result.detail[Permissions.NOTIFICATIONS]) {
       setNotificationPermitted(true);
     }
-    const timerResult = await getTimerPermission();
+    const timerResult = await PermissionService.getTimerPermission();
     setTimerPermitted(timerResult);
   };
 
   const setPermissions = async (whichPermission: string): Promise<void> => {
     let result = false;
     if (whichPermission === 'location') {
-      result = await askLocationPermission();
+      result = await PermissionService.askLocationPermission();
       setLocationPermitted(result);
     } else if (whichPermission === 'notification') {
-      result = await askNotificationPermission();
+      result = await PermissionService.askNotificationPermission();
       setNotificationPermitted(result);
     } else {
-      await setTimerPermission(!isTimerPermitted);
+      await PermissionService.setTimerPermission(!isTimerPermitted);
       setTimerPermitted(!isTimerPermitted);
       result = true;
     }
-    await initTask();
+    await TaskService.initTask();
     if (!result) {
       setDialogOpen(true);
     }
@@ -78,12 +69,12 @@ const SettingScreen: React.FC<{}> = () => {
     if (initTimerDurationByHours === newDuration) {
       return;
     }
-    await setTimerDurationByHours(newDuration);
-    await restartTimerTask();
+    await NotificationService.setTimerDurationByHours(newDuration);
+    await TaskService.resetTimerTask();
   };
 
   const setInitTimerDuration = async (): Promise<void> => {
-    const initDuration = await getTimerDurationByHours();
+    const initDuration = await NotificationService.getTimerDurationByHours();
     initTimerDurationByHours = initDuration;
     setDuration(initDuration);
   };
@@ -131,15 +122,15 @@ const SettingScreen: React.FC<{}> = () => {
           )}
         />
         <TextInput
-          defaultValue={String(DEFAULT_TIMER_INTERVAL)}
+          defaultValue={String(defaultTimerInterval)}
           disabled={!isTimerPermitted}
           label={i18n.t('settings.timerPlaceHolder')}
           keyboardType="numeric"
           onChangeText={(text): void => setDuration(+text)}
           onBlur={async (): Promise<void> => {
             if (duration <= 0) {
-              await setTimer(DEFAULT_TIMER_INTERVAL);
-              setDuration(DEFAULT_TIMER_INTERVAL);
+              await setTimer(defaultTimerInterval);
+              setDuration(defaultTimerInterval);
             } else {
               await setTimer(duration);
             }

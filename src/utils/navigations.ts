@@ -6,7 +6,6 @@ import {
   StatisticsScreenRouteProp,
   RouteType,
 } from '@types';
-import { INITIAL_ROUTE_NAME } from '@constants/navigations';
 
 type GetHeaderTitleParamType =
   | HomeScreenRouteProp
@@ -14,13 +13,10 @@ type GetHeaderTitleParamType =
   | SettingsScreenRouteProp
   | StatisticsScreenRouteProp;
 
-// eslint-disable-next-line
 export const getHeaderTitle = (
   route: GetHeaderTitleParamType | RouteType
 ): string => {
-  const routeName = route.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
+  switch (route.name) {
     case 'Home':
       return i18n.t('tab.home');
     case 'HowToWash':
@@ -34,4 +30,14 @@ export const getHeaderTitle = (
     default:
       return i18n.t('tab.home');
   }
+};
+
+const topScreenName = ['Home', 'HowToWash', 'Statistics', 'Settings'];
+export const isTopScreenName = (
+  route: GetHeaderTitleParamType | RouteType
+): boolean => {
+  if (topScreenName.includes(route.name)) {
+    return true;
+  }
+  return false;
 };

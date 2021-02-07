@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import TabBarIcon from '@components/tabBarIcon';
-import { INITIAL_ROUTE_NAME, COLORS } from '@/constants';
+import { COLORS } from '@/constants';
 import HomeStackNavigator from './homeStackNavigator';
 import HowToWashStackNavigator from './howToWashStackNavigator';
 import StatisticsStackNavigator from './statisticsStackNavigator';
@@ -28,7 +28,7 @@ type BottomTabNavigatorProps = {
 const BottomTabNavigator: React.FC<BottomTabNavigatorProps> = () => {
   return (
     <BottomTab.Navigator
-      initialRouteName={INITIAL_ROUTE_NAME}
+      initialRouteName="Home"
       barStyle={{ backgroundColor: COLORS.bar }}
     >
       <BottomTab.Screen
