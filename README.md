@@ -4,6 +4,10 @@
 
 This app notifies you should wash your hands when you stay somewhere after you move and at intervals.
 
+## The reason I made this app public
+
+I was not able to make this app available in Apple Store because this app is related to covid19. I and my partner wanted to contribute to encourage people wash their hands and prevent themselves from being infected, but we couldn't because of Apple guideline. I mean I won't blame Apple because it does make sense. So I made this app public in case anyone can make use of this app codebase.
+
 ## Installing / Getting started
 
 A quick introduction of the minimal setup you need to get running.
