@@ -17,7 +17,7 @@ In order to install dependencies, you should execute `yarn install`. With `yarn 
 
 ### Initial Configuration
 
-As I told you above, you need to execute `yarn install` in order to download and install dependencies.
+As I told you above, you need to execute `yarn install` in order to download and install dependencies. That command runs expo. You should install [expo cli](https://docs.expo.io/).
 
 ## Developing
 
@@ -31,11 +31,11 @@ yarn install
 
 ### Linter and code formatter
 
-This project uses Eslint and Prettier. Please make sure that you have eslint and prettier extension installed on your IDE.
+This project uses eslint and Prettier. Please make sure that you have eslint and prettier extension installed on your IDE.
 
 ### TDD/BDD
 
-This project uses jest and react-test-renderer.
+This project uses jest and react-test-renderer. Ideally I should have done TDD/BDD, but I actually did that partially. My future work is to add all of tests that are necessary. (I love TDD/BDD!)
 
 ### Building
 
@@ -53,39 +53,6 @@ expo build:android
 
 You can know the detail [here](https://docs.expo.io/versions/latest/distribution/building-standalone-apps/).
 
-### Deploying / Publishing
-
-<!-- FIXME: This should be updated -->
-In case there's some step you have to take that publishes this project to a
-server, this is the right time to state it.
-
-```shell
-packagemanager deploy awesome-project -s server.com -u username -p password
-```
-
-And again you'd need to tell what the previous code actually does.
-
-## Features
-
-What's all the bells and whistles this project can perform?
-
-* Track where you go and if you move or not now
-* Notify that you shuld wash your hands when you stay somewhere or at interval
-
-## Contributing
-
-If you'd like to contribute, please fork the repository and use a feature
-branch. Pull requests are warmly welcome.
-
-## Links
-
-* Project homepage: <https://your.github.com/awesome-project/>
-* Repository: <https://github.com/maaaashin324/wash-your-hands/>
-* Issue tracker: <https://github.com/maaaashin324/wash-your-hands/issues>
-  * In case of sensitive bugs like security vulnerabilities, please contact
-    masataka.shintoku@email.com directly instead of using issue tracker. We value your effort
-    to improve the security and privacy of this project!
-
 ## Licensing
 
-This project is private project.
+Masataka Shintoku
